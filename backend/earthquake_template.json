@@ -1,0 +1,3425 @@
+{
+  "templateId": "earthquake",
+  "templateName": "גלופת רעד",
+  "sheets": [
+    {
+      "sheetId": "מטה_חירום",
+      "sheetName": "מטה חירום",
+      "rows": [
+        {
+          "id": "00d52f38-5174-4e56-9fde-bba201b26dc3",
+          "component": "אמצעים",
+          "category": "תקשורת ",
+          "metric": "קיום אמצעי קשר פנימיים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "24ed716c-7873-4b12-8689-778ad286b870",
+          "component": "אמצעים",
+          "category": "תקשורת ",
+          "metric": "קיום תכנית חלוקת אמצעי קשר לבע\"ת מוגדרים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "6a24885d-316a-46d4-86ba-687d3b9d5454",
+          "component": "אמצעים",
+          "category": "תקשורת ",
+          "metric": "קיים טלפון לוויני זמין למטה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "7f7922ba-6266-4264-b942-5a68f49eb001",
+          "component": "אמצעים",
+          "category": "תקשורת ",
+          "metric": "האם ישנם מספרי טלפון זמינים של גורמי חוץ (אגף לשע\"ח, פקע\"ר, ארגוני החירום והעזר) זמינים ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "c00811d0-f65d-4299-8947-1af8168e03fb",
+          "component": "אמצעים",
+          "category": "תקשורת ",
+          "metric": "האם ישנם מספרי טלפון לויינים זמינים ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "8b1dfdfa-6687-4da0-a5df-c436f1ea8f4b",
+          "component": "אמצעים",
+          "category": "עזרים",
+          "metric": "קיום עותק של נוהל עבודת המטה ברעידת אדמה ורשימות תיוג זמין",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "5082f918-c8a7-44db-aa46-7b3ca3a594b3",
+          "component": "אמצעים",
+          "category": "עזרים",
+          "metric": "קיום עזרי מטה ידניים ליצירת תמ\"צ (כגון: תצלום אווירי של ביה\"ח, עזר למעקב אחר סטטוס נזקים מבניים ונזקים לתשתיות, נתוני נפגעים וכו') או חלופה מחשובית אוטונומית",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "03db0a31-b1d7-4fe5-91de-0d5961f72617",
+          "component": "אמצעים",
+          "category": "עזרים",
+          "metric": "האם נעשה שימוש בעזרי מטה - מילוי העזרים?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "6257ca23-e8b0-45a8-a09b-c56b1044e2d6",
+          "component": "אמצעים",
+          "category": "עזרים",
+          "metric": "האם עזרי המטה מאפשרים שליטה באירוע ובתמונת המצב?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "1f816e3a-5d74-499a-beff-93caa8217d79",
+          "component": "שיטת הפעלת המטה",
+          "category": "מבנה",
+          "metric": "התוכנית לפריסת מלר\"ד חיצוני כוללת חלוקה לתת אתרים (טריאז', מיידיים, ממתינים, פינת יולדות, אנושים ופינת חללים)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "bd19baf8-c97e-4262-a53e-3a6c2a18c5a4",
+          "component": "שיטת הפעלת המטה",
+          "category": "מבנה",
+          "metric": "האם האתרים החיצוניים משולטים בצורה ברורה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "aa7061b7-74c9-4fad-80f3-47e2b813a8f6",
+          "component": "שיטת הפעלת המטה",
+          "category": "פריסה חיצונית",
+          "metric": "מוגדר מיקום פריסת מטה החירום בשטח פתוח",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "4d2200ba-6cd7-4e8e-a018-5571327d43b1",
+          "component": "שיטת הפעלת המטה",
+          "category": "פריסה חיצונית",
+          "metric": "האם הצוותים בביה\"ח מכירים את מיקומו של מטה החירום במתאר רעידת אדמה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "c39d2480-dc40-4746-b794-95c058f64bf6",
+          "component": "שיטת הפעלת המטה",
+          "category": "אופן הפעלה",
+          "metric": "האם מנוהל יומן ארועים או שיטת תיעוד מסודרת אחרת",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "59766012-4ee8-43d2-9548-8c418d8d12af",
+          "component": "שיטת הפעלת המטה",
+          "category": "אופן הפעלה",
+          "metric": "האם האירועים מנוהלים תוך שימוש ברשימת תיוג רלוונטיות?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "ea14e2dd-f59c-4646-aeb1-29b0a654dccd",
+          "component": "שיטת הפעלת המטה",
+          "category": "אופן הפעלה",
+          "metric": "האם בוצעו לפחות 80% מהמשימות ברשימת התיוג ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "66c92610-6bcf-4f9b-957e-2f96bd198275",
+          "component": "שיטת הפעלת המטה",
+          "category": "אופן הפעלה",
+          "metric": "האם קיים קשר בין האתרים למטה ביה\"ח",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "96788e3d-79bf-4046-bb29-ba0aecce36d8",
+          "component": "שיטת הפעלת המטה",
+          "category": "אופן הפעלה",
+          "metric": "האם מטה חירום מעביר עדכונים רלוונטיים לבעלי התפקידים ונותן הנחיות בהתאם לנדרש (לדוגמא - הנחיה לפינוי סדור בהתאם לנזק למבנה)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "c9624686-d62e-4960-b425-40c67bbb0b41",
+          "component": "שיטת הפעלת המטה",
+          "category": "אופן הפעלה",
+          "metric": "האם מבוצע מעקב אחר ביצוע ההנחיות שניתנות",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "3102dc70-b7d6-466b-b8d0-0ce403e54ab9",
+          "component": "שיטת הפעלת המטה",
+          "category": "אופן הפעלה",
+          "metric": "ווידוא הפעלת צוותי סריקה ראשוניים (לא מקצועיים)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "35c5da71-1c43-4980-85c2-e5ee8fd43478",
+          "component": "שיטת הפעלת המטה",
+          "category": "אופן הפעלה",
+          "metric": "ווידוא הפעלת צוותי סריקה של הנדסה ואחזקה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "996ec463-838c-4f8b-8d0c-be67315fcf1d",
+          "component": "שיטת הפעלת המטה",
+          "category": "בניית תמונת מצב והפקת משמעויות",
+          "metric": "האם מטה ביה\"ח מייצר תמונת מצב לגבי קווים אדומים בביה\"ח בהתאם לתמונת המצב המתקבלת מהאתרים.",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "1d188a1c-3bd6-4e4a-a761-062618298263",
+          "component": "שיטת הפעלת המטה",
+          "category": "בניית תמונת מצב והפקת משמעויות",
+          "metric": "איסוף נתונים מהמחלקות השונות ועיבודם לתמונת מצב לגבי מחלקות ביה\"ח ומצבן",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "ca1ee640-8d52-4135-9621-20912316189f",
+          "component": "שיטת הפעלת המטה",
+          "category": "בניית תמונת מצב והפקת משמעויות",
+          "metric": "איסוף נתונים מהמחלקות השונות ועיבודם לתמונת מצב תשתיות ומערכות חיוניות",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "c62e554a-6660-4ea1-a7db-f8f4a0d96530",
+          "component": "שיטת הפעלת המטה",
+          "category": "בניית תמונת מצב והפקת משמעויות",
+          "metric": "איסוף נתונים והבנת משמעויות של פריסת מלר\"ד חיצוני",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "02c6da38-7c47-4c31-9833-1b5c6401861f",
+          "component": "שיטת הפעלת המטה",
+          "category": "בניית תמונת מצב והפקת משמעויות",
+          "metric": "איסוף נתונים אודות תמונת מצב נפגעים (מאושפזים וצוות שנפגעו והן מטופלים שנקלטים במלר\"ד)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "74a08044-7fb0-4cbf-bb0b-c8882a5c5b2a",
+          "component": "שיטת הפעלת המטה",
+          "category": "בניית תמונת מצב והפקת משמעויות",
+          "metric": "איסוף נתונים אודות גישה לצר\"פ ומחסני חירום, מלאי ציוד שזמין לביה\"ח",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "d788d40e-8fcf-476d-89c3-d55238acbd40",
+          "component": "שיטת הפעלת המטה",
+          "category": "בניית תמונת מצב והפקת משמעויות",
+          "metric": "איסוף נתונים ייזום של מטה החירום על תמונת מצב בביה\"ח (לדוג' שליחת רץ למחלקה שלא יצרה קשר)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "a27f2767-04eb-4954-95c4-691c27d0a322",
+          "component": "שיטת הפעלת המטה",
+          "category": "בניית תמונת מצב והפקת משמעויות",
+          "metric": "קבלת החלטות ופעולה באופן עצמאי, ללא תאום וללא קבלת אישורים מהמוסדות הממונים.",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "f7d7e748-6d5e-4ebb-a4f7-737d088bb248",
+          "component": "שיטת הפעלת המטה",
+          "category": "בניית תמונת מצב והפקת משמעויות",
+          "metric": "מטה החירום ביצע תיעדוף של בעיות וקבע קדימויות",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "94e2db11-584f-4b52-bad6-6e5d87f8252c",
+          "component": "שיטת הפעלת המטה",
+          "category": "בניית תמונת מצב והפקת משמעויות",
+          "metric": "האם מנהל המטה שולט בנתונים ומפיק משמעויות מתמונת המצב",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "709d770c-11e4-42c8-aa55-ebbea2206138",
+          "component": "שיטת הפעלת המטה",
+          "category": "בניית תמונת מצב והפקת משמעויות",
+          "metric": "האם מבוצעת הערכת יכולת תפקודית של ביה\"ח וקבלת החלטות בהתאם (יכולות ניתוחיות, יכולות קליטה וטיפול)?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "3b55d387-74ac-48b6-a851-b674eb2ca612",
+          "component": "שיטת הפעלת המטה",
+          "category": "בניית תמונת מצב והפקת משמעויות",
+          "metric": "האם ביה\"ח שולט במצבת כ\"א בביה\"ח בתחילת האירוע?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "98ee9bea-16c7-40ee-8ba7-a73d6cbb5752",
+          "component": "שיטת הפעלת המטה",
+          "category": "בניית תמונת מצב והפקת משמעויות",
+          "metric": "האם נבחן הצורך בהפעלת ביה\"ח במתכונת בית חולים ממיין בהתאם למגבלות הקיימות",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "32acd2aa-aa13-415f-8a94-07103b913d81",
+          "component": "שיטת הפעלת המטה",
+          "category": "בניית תמונת מצב והפקת משמעויות",
+          "metric": "הגדרת בע\"ת אחראי לקליטת כ\"א מתנדבים / משלחות סיוע",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "fb6ae800-6f23-498e-a94a-e508849165b2",
+          "component": "שיטת הפעלת המטה",
+          "category": "בניית תמונת מצב והפקת משמעויות",
+          "metric": "הגדרת מיקום יעודי לקליטת כ\"א מתנדבים / משלחות סיוע",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "c643637f-1c58-4c31-a05e-f8d74e8ee292",
+          "component": "שיטת הפעלת המטה",
+          "category": "בניית תמונת מצב והפקת משמעויות",
+          "metric": "בקיאות במספר אנשי צוות שיוצאים מביה\"ח ומצבת כ\"א זמינה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "e9c7d27b-ebff-4538-827f-76f849f96d0f",
+          "component": "שיטת הפעלת המטה",
+          "category": "בניית תמונת מצב והפקת משמעויות",
+          "metric": "התייצבות כח אדם מהבית בנקודות ריכוז שנקבעו מראש",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "fb77d87e-8f6a-4ba4-bcbe-9d19a56e1e53",
+          "component": "שיטת הפעלת המטה",
+          "category": "בניית תמונת מצב והפקת משמעויות",
+          "metric": "האם ביה\"ח פועל להשלמת הפערים במלאי ביה\"ח (ציוד רפואי, ציוד משקי, מלאים לשמירה על  רציפות התפקוד)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "c341d1f0-d2d7-49d2-be1b-819551e50ad7",
+          "component": "שיטת הפעלת המטה",
+          "category": "ביצוע חיתוך מצב והערכת מצב",
+          "metric": "האם הערכות המצב וחיתוכי המצב בוצעו על פי סדר דוברים? ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "9cfcaafe-e915-4ace-b6dc-180c4e995572",
+          "component": "שיטת הפעלת המטה",
+          "category": "ביצוע חיתוך מצב והערכת מצב",
+          "metric": "האם הערכות המצב וחיתוכי המצב בוצעו תוך שמירה על לוחות זמנים ונטרול רעשי רקע והפרעות?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "c8512a63-6218-4259-94ca-e3cc8602f15c",
+          "component": "שיטת הפעלת המטה",
+          "category": "ביצוע חיתוך מצב והערכת מצב",
+          "metric": "האם ניתנו החלטות והנחיות לביצוע ע\"י מנהל המטה בתום חיתוך המצב?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "4605bb4e-2266-432d-9556-ab447ab84edb",
+          "component": "שיטת הפעלת המטה",
+          "category": "ביצוע חיתוך מצב והערכת מצב",
+          "metric": "האם תועדו הנחיות המנהל בתום הערכת מצב?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "f3463e72-2eb4-43ed-8035-272fb7204e58",
+          "component": "שיטת הפעלת המטה",
+          "category": "ביצוע חיתוך מצב והערכת מצב",
+          "metric": "האם הייתה התייחסות לסטאטוס משימות מחיתוך מצב קודם?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "9818aaf5-8652-4038-9e44-87fb25e5380b",
+          "component": "שיטת הפעלת המטה",
+          "category": "ביצוע חיתוך מצב והערכת מצב",
+          "metric": "האם המטה מתכנן אופן המשך פעילות ביה\"ח בהיבט רציפות התפקוד והיערכות לשהיה ממושכת בשטח פתוח?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "63c1b475-091d-47f2-99b2-e50d6183afbe",
+          "component": "שיטת הפעלת המטה",
+          "category": "עבודה מול גורמי חוץ",
+          "metric": "העברת נתונים וקשר עם גורמי חוץ בהתאם לנדרש וליכולת - פקע\"ר, האגף לשעת חירום, אירגוני חירום (מד\"א, כב\"ה, מ\"י), רשות מקומית, מחוז פקע\"ר (באמצעות היחצ\"ב).",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "ab7e69b9-c5cf-4168-923b-4b6683e7efc9",
+          "component": "שיטת הפעלת המטה",
+          "category": "עבודה מול גורמי חוץ",
+          "metric": "האם הועלתה בקשה לויסות שניוני לחמ\"ל רפואה פקע\"ר במידת הצורך",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "3fd91fd2-c94e-4c05-b8bc-cd9cae05c56a",
+          "component": "שיטת הפעלת המטה",
+          "category": "עבודה מול גורמי חוץ",
+          "metric": "האם בוצע תיעדוף של המטופלים ונקבעו קדימויות לפינוי לויסות שניוני?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "1dc25f2e-3abb-4fa1-8331-1c5abd4869b3",
+          "component": "שיטת הפעלת המטה",
+          "category": "עבודה מול גורמי חוץ",
+          "metric": "האם בוצע שימוש מושכל בהפעלת חיילי היחצ\"ב בתיאום מול נציג היחצ\"ב?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        }
+      ]
+    },
+    {
+      "sheetId": "דוברות",
+      "sheetName": "דוברות",
+      "rows": [
+        {
+          "id": "1c18360d-9b68-41cf-ab21-eade62832332",
+          "component": "אמצעים",
+          "category": "טליתות",
+          "metric": "הדובר וצוותו מזוהים בטלית זיהוי",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "fb089fc8-a266-48c8-9dd8-96574734c97c",
+          "component": "אמצעים",
+          "category": "שטחי כינוס",
+          "metric": "האם נקבעו מקומות כינוס לאנשי התקשורת",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "216a88f7-bad7-4ffa-b7ff-d5311d036652",
+          "component": "אמצעים",
+          "category": "רשימת טלפונים",
+          "metric": "קיום רשימות טלפונים לאמצעי התקשורת השונים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "76900d5c-1ba2-486f-9741-5d56c043243f",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "האם נעשה שימוש ברשימת תיוג ובוצעו לפחות 80% מהמשימות ברשימת התיוג?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "f182be8c-bdf6-40a9-a7a9-0200783d4548",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הדובר/ת מעודכן אודות הפגיעה בביה\"ח ויכולות תפקודיות של ביה\"ח",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "08c5994e-2b0d-4f9c-a0b8-1cc7cc6cbc48",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "האם כלל אנשי התקשורת מרוכזים בנקודת הכינוס?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "53ff537e-e901-4eef-a739-1f786e60ff9d",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הדובר/ת מתאמת ההודעות לתקשורת מול מנהל בית החולים/מטה חירום",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "87358893-ca92-4631-841b-7829d65bfa43",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הכרות עם מסרים הרלוונטיים לציבור באירוע רעידת אדמה (הגעה לביה\"ח רק במקרים דחופים ביותר, הזעקת סגל העובדים מהבית, קריאה למתנדבים לסיוע בביה\"ח ועוד)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "422302d3-99dc-494a-b35d-847182541c2e",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "קיום הודעות נצורות מוכנות מראש לתרחיש של רעידת אדמה בתחנות רדיו מקומי למקרה של היעדר תקשורת",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "1bec7838-400b-44c3-abd9-5beb5c3150a1",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "תיאום והפעלת הצוות המסייע לדובר/ת באירוע",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "25754a62-0571-44b8-bfa2-bccf31f58493",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הנתונים המועברים בהודעות לתקשורת נכונים ומדויקים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "13853cdc-f2b2-4c05-a18d-fa19e3c4dddb",
+          "component": "תקשורת",
+          "category": "פנים",
+          "metric": "קיום קשר רציף בין הדובר/ת למנהל בי\"ח/ מטה חירום",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "a2bd4d57-25fb-4c54-a68d-62227147cc4f",
+          "component": "תקשורת",
+          "category": "פנים",
+          "metric": "האם הדוברת מקיימת קשר עם מרכז מידע ומקבלת ממנו נתונים הנדרשים לה?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "d92e310e-ee0e-454f-9843-cdaa071fbc69",
+          "component": "תקשורת",
+          "category": "חוץ",
+          "metric": "קיום קשר ותיאום מול דוברות של גורמי חוץ (משהב\"ר, פקע\"ר, מ\"י, מד\"א, עירייה וכו') במידת האפשר",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        }
+      ]
+    },
+    {
+      "sheetId": "מנהל_תורן_אחות_כללית",
+      "sheetName": "מנהל תורן אחות כללית",
+      "rows": [
+        {
+          "id": "c75de920-f052-403d-babe-1b1a0e54710d",
+          "component": "אמצעים",
+          "category": "טליתות",
+          "metric": "האחות הכללית מזוהה בטלית. ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "5a8ccbd1-1e40-4172-bc61-1c12388a49a9",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות ",
+          "metric": "האם האחות הכללית פועלת בהתאם להנחיות להתנהגות נכונה בעת רעידת אדמה? ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "81dd4195-93b5-4f3a-93d6-16b9f0d3df5b",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות ",
+          "metric": "האם נעשה שימוש ברשימת תיוג ובוצעו לפחות 80% מהמשימות ברשימת התיוג?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "5ece11e5-aa3b-4368-a73c-6cfec32fdd6d",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות ",
+          "metric": "האם בוצעה בדיקה האם יש תקשורת ונעשה נסיון ליצירת קשר עם ההנהלה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "e78cba3f-aa67-4154-b118-5399e2130b57",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות ",
+          "metric": "האם האחות הכללית התייצבה בנקודת פריסה של מטה חיצוני (או נקודת כינוס אחרת שנקבעה בשלב ראשוני לפי נוהל בית החולים)?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "aea26b8a-5666-48d5-9434-c9c7d5948f9b",
+          "component": "הפעלה",
+          "category": "יצירת תמונת מצב",
+          "metric": "האם מבוצע איסוף נתונים מדיווחי המחלקות? ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "c919e4b9-0ff0-45d9-8081-00da7a198b12",
+          "component": "הפעלה",
+          "category": "יצירת תמונת מצב",
+          "metric": "ווידוא הפעלת סורקים לא מקצועיים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "9827b5ed-f8be-41ec-a5c2-8695ef90a064",
+          "component": "הפעלה",
+          "category": "יצירת תמונת מצב",
+          "metric": "ווידוא הפעלת סורקים מקצועיים של תשתיות קריטיות: חשמל, גזים רפואיים, מים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "4b02ad10-36cc-47d0-970a-7492a12efe6f",
+          "component": "הפעלה",
+          "category": "יצירת תמונת מצב",
+          "metric": "שליחה באופן יזום של סורקים למחלקות אשפוז שלא  התקבל דיווח לגבי מצבם?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "ed365768-9d45-48d7-9751-2d45147274b0",
+          "component": "הפעלה",
+          "category": "יצירת תמונת מצב",
+          "metric": "ריכוז הנתונים ועיבודם לכדי יצירת תמ\"צ ראשוני (תמונת מצב נפגעים, תמונת מצב פגיעה במבנים ותשתיות, תמונת מצב מחלקות מתפנות)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "8024146f-a503-4a7f-abc2-d5a7f7fb0daf",
+          "component": "הפעלה",
+          "category": "ניהול האירוע",
+          "metric": "האם האחות הכללית פועלת לתחילת פריסת מטה חיצוני ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "9e022381-c69e-4424-8b8d-362b131453f4",
+          "component": "הפעלה",
+          "category": "ניהול האירוע",
+          "metric": "האם האחות הכללית מוודאת תחילת פריסת מלר\"ד חיצוני (בהתאם לצורך על פי תמונת המצב)?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "6463de50-f3a9-496b-8b40-d26f71726cf9",
+          "component": "הפעלה",
+          "category": "ניהול האירוע",
+          "metric": "וידוא הוצאת ציוד נדרש לפריסה חיצונית של ביה\"ח (למטה חיצוני, למלר\"ד חיצוני על כלל אתריו, לבית חולים מפונה)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "a05a1698-aa44-44ea-9cf0-d856a4f8b58b",
+          "component": "הפעלה",
+          "category": "ניהול האירוע",
+          "metric": "וידוא הוצאת ציוד תקשורת (טלפון לויני, חלוקת מכשירי קשר, מגפון וכו')",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "6968a15e-0670-43ad-9620-026b27e2a885",
+          "component": "הפעלה",
+          "category": "ניהול האירוע",
+          "metric": "האם האחות הכללית מוודאת פתיחת נקודת התייצבות לצוותים, קליטת כ\"א ושיבוצו למשימות",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "13f69a41-900e-4412-a386-af747594ff40",
+          "component": "הפעלה",
+          "category": "ניהול האירוע",
+          "metric": "האם האחות הכללית מנהלת תגבור כ\"א למשימות עפ\"י דרישה ועפ\"י החלטות המטה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        }
+      ]
+    },
+    {
+      "sheetId": "רישום_ודיווח",
+      "sheetName": "רישום ודיווח",
+      "rows": [
+        {
+          "id": "29041aee-8c89-4bea-851c-2f66bd618fe9",
+          "component": "אמצעים",
+          "category": "טליתות",
+          "metric": "ניתן לזהות את הרשמים באמצעות טליתות זיהוי ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "4b0ef8bf-e433-4f30-a2b1-7437b9c5294f",
+          "component": "אמצעים",
+          "category": "ציוד",
+          "metric": "המצאות ציוד הכרחי בסיסי במקום נגיש: גליונות, מספרי ברזל, ציוד משרדי ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "8c6560df-ad3c-4c32-aaf7-d5ce330d6362",
+          "component": "אמצעים",
+          "category": "ציוד",
+          "metric": "קיום עזרי שליטה ידניים לרשמים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "5ad0f9b0-b081-4107-a258-43156364b5e9",
+          "component": "אמצעים",
+          "category": "ציוד",
+          "metric": "קיום טופס קליטה לנפגע",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "103d4a4b-7fc2-4424-905d-1954a717118c",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הכרות צוות הרשמים עם נוהלי התייצבות אוטומטית בביה\"ח",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "2e356cc4-0497-4fb4-a59d-5f5f6bd96410",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "האם נעשה שימוש ברשימת תיוג ובוצעו לפחות 80% מהמשימות ברשימת התיוג?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "b8436dc0-de4d-4461-81a3-c289c513bea5",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הצמדת תיק לכל פצוע",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "8977217c-2268-4fa1-92f2-98941e6a1d27",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הצבת רשם בכל אתר לדיווח קליטה בכניסה וביציאה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "63d68b0b-e6ee-46df-9fd2-2e68373d3910",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "ביצוע עדכון שוטף של רשימות ידניות והעברתן בהתאם לדרישה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "97253f85-8c43-4294-97d1-a63b861e3e43",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "העברת מידע למטה חירום באופן ידני",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "6940f464-e389-4832-8d8c-5bb9f659469e",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "האם מבוצע צילום תמונות אלמונים עם זיהוי ברור של מספר ברזל וציון שם ביה\"ח ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        }
+      ]
+    },
+    {
+      "sheetId": "אלונקאות",
+      "sheetName": "אלונקאות",
+      "rows": [
+        {
+          "id": "46fac228-4c59-4228-b336-0a52cc5eba25",
+          "component": "אמצעים",
+          "category": "טליתות",
+          "metric": "האם ניתן לזהות את האלונקאים באמצעות טליתות זיהוי ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "88283306-4753-43b9-a17d-d526b578ca37",
+          "component": "הפעלה",
+          "category": "אופן ההפעלה",
+          "metric": "האם מונה אחראי אלונקאים לאירוע",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "e745fbd6-850a-40ea-9284-9f42a960b898",
+          "component": "הפעלה",
+          "category": "אופן ההפעלה",
+          "metric": "האם מבוצע גיוס אלונקאים ממקורות ביה\"ח ו/או ממקורות חוץ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "f3625443-cc56-4ac2-95f0-6bea1aa49b6a",
+          "component": "הפעלה",
+          "category": "אופן ההפעלה",
+          "metric": "האם ניתן תדרוך ע\"י אחראי אלונקאים אודות האירוע עימו נדרש להתמודד",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "bba6b4e4-a6a0-424a-b49c-f9cdcd329537",
+          "component": "הפעלה",
+          "category": "אופן ההפעלה",
+          "metric": "האלונקאים תודרכו על האתרים החיצוניים ומיקומם בביה\"ח.",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "2d342673-2e89-45e0-8309-0c952b9b4834",
+          "component": "הפעלה",
+          "category": "אופן ההפעלה",
+          "metric": "בוצע ציוות מושכל של האלונקאים באתרים השונים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "84a41007-2041-4d39-aa82-cab644bcdef3",
+          "component": "הפעלה",
+          "category": "אופן ההפעלה",
+          "metric": "האם מס' האלונקאים עונה על הצרכים ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "ba8b6c6f-109f-495c-ab31-f79b19000bbe",
+          "component": "הפעלה",
+          "category": "אופן ההפעלה",
+          "metric": "האם האלונקאים מכירים את אופן הפינוי של המחלקות וצירי הפינוי",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "48fa62a2-dcba-4bd9-8352-e05bcf934549",
+          "component": "הפעלה",
+          "category": "אופן ההפעלה",
+          "metric": "האם האלונקאים יודעים היכן מאוחסן ציוד יעודי לפינוי",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "aad19d1d-3539-4ea7-9a30-1ec41d6a5359",
+          "component": "הפעלה",
+          "category": "אופן ההפעלה",
+          "metric": "האלונקאים בקיאים במיקום האתרים הרלוונטיים בביה\"ח וצירי הגישה אליהם.",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "97e1759f-1994-4832-a956-c7f3a1fbb8c6",
+          "component": "הפעלה",
+          "category": "בטיחות",
+          "metric": "קיימת הקפדה על סגירת דפנות האלונקות.",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "e5b9ffcc-e137-4292-a07e-2d2207c0b191",
+          "component": "הפעלה",
+          "category": "בטיחות",
+          "metric": "האלונקאים מקפידים לנוע תוך שמירה על בטיחות הנפגע ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        }
+      ]
+    },
+    {
+      "sheetId": "מרכז_מידע",
+      "sheetName": "מרכז מידע",
+      "rows": [
+        {
+          "id": "5da291f9-bb12-4021-a3e7-732f59c7d36c",
+          "component": "אמצעים",
+          "category": "טליתות",
+          "metric": "כלל בעלי התפקידים באתר סומנו באמצעות טליתות זיהוי",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "2b4d4bc5-9f3e-498b-a83b-7f16e4ed7a4c",
+          "component": "אמצעים",
+          "category": "מבנה",
+          "metric": "מרכז המידע פרוס במקום נגיש לציבור, עם הפרעה מינימלית לפעילות אתרים אחרים בבית החולים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "fd808751-0767-4fd8-98c4-4e0ad6622e1d",
+          "component": "אמצעים",
+          "category": "ציוד",
+          "metric": "יש תוכנית מוסדרת להבאת הציוד הנדרש להקמת מרכז מידע ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "c87b1c0c-57f2-4c48-8bcf-afaa0fde4571",
+          "component": "אמצעים",
+          "category": "ציוד",
+          "metric": "קיום לוח ואמצעים לפרסום שמות/ תמונות נפגעים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "c27b6bfb-5219-4588-8b19-65ae91f0591c",
+          "component": "אמצעים",
+          "category": "ציוד",
+          "metric": "קיום טופס לקבלת סימנים מזהים לנעדרים/ אלמונים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "b3ccabd8-0dff-462f-ad1c-17c98aa7b266",
+          "component": "אמצעים",
+          "category": "ציוד",
+          "metric": "במקום קיימים אמצעים למתן שתייה ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "36d81a51-b7ab-43d8-837a-e2254b57461e",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "האם נעשה שימוש ברשימת תיוג ובוצעו לפחות 80% מהמשימות ברשימת התיוג?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "bfa5f9d0-4397-418c-b253-a64ac458aa99",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "האם יש ציוות של עובדות סוציאליות לאתרים השונים במלר\"ד החיצוני?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "efa60102-1985-4787-9bd6-0de8b9496d44",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "האם מבוצע תגבור בכ\"א למרכז מידע בהתאם לכמות כ\"א זמינה הנמצאת בביה\"ח",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "dcc077d1-c25f-45c8-9f7b-6aef543950cf",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "תגבור מרכז המידע ברופא/אחות למתן עזרה ראשונה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "7eb9c074-783b-4e8c-8de5-6c29df4b96f1",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "נציג בטחון מכיר את משימתו במרכז המידע",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "e203f727-43f9-492e-877e-264ff432df3a",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "קיימת מדיניות ברורה באשר למידע הנמסר באתר לגבי מאושפזים, אלמונים ונפטרים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "777659a4-23b4-47a7-8ef5-eb1742dd6a82",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "ישנה יכולת להצגת תמונות של אלמונים למשפחות (מודפס או במצלמה עצמה)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "8da0ac3d-b18c-4935-b086-b35125afebb3",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "קיום קשר עם דוברת ביה\"ח",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "e8d115d5-06d2-4227-8ad0-536fe47d3f87",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "קיום קשר עם מטה החירום",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "87448f8e-311f-441e-b78f-0c06bdb7abb2",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "קיום קשר עם גורמי רישום ודיווח וקבלת הנתונים העדכניים מהם באופן עיתי",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        }
+      ]
+    },
+    {
+      "sheetId": "בטחון",
+      "sheetName": "בטחון",
+      "rows": [
+        {
+          "id": "7669a4d9-e718-48e2-8310-487d8df5c0a7",
+          "component": "אמצעים",
+          "category": "טליתות",
+          "metric": "צוות ביטחון מזוהים בטלית זיהוי",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "c4a0bb83-ce5a-4c3b-aa97-7a3dd8378945",
+          "component": "אמצעים",
+          "category": "אמצעי קשר",
+          "metric": "קיים אמצעי תקשורת  המאפשר קשר בין המאבטחים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "03c4d520-0b61-47d6-b01b-f1c8caa0ed67",
+          "component": "אמצעים",
+          "category": "נוהל חבירה",
+          "metric": "קיום נוהל חבירה במתאר רעידת אדמה עם המשטרה מעודכן לשנה האחרונה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "8b438dab-223b-460a-adc7-4f63a82e9a5c",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "האם צוותי הביטחון פועלים בהתאם לכללי ההתנהגות ברעידת אדמה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "2227070f-7387-4305-8907-dd82b10519cb",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "האם נעשה שימוש ברשימת תיוג ובוצעו לפחות 80% מהמשימות ברשימת התיוג?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "dd81ba0a-2a0f-4d9f-bc92-f8ecd8c8f588",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "האם מועבר דיווח על כמות כ\"א הנמצאת בביה\"ח וכ\"א נפגע.",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "32aac6c2-d491-4faa-97dd-8a0285321960",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "קיימת תוכנית לתגבור כ\"א ממקורות שמופו מראש",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "0fb535af-965a-42c0-a88c-4f07202685db",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "ביצוע חלוקת כ\"א למשימות אבטחה / משימות נוספות באופן אוטומטי או בעת אירוע",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "1d6dac35-a963-42ff-a76a-1afe3802b28f",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הצבת מאבטחים/ שומרי סדר במרכז המידע",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "2b4b39fd-283b-48c3-8771-2f3d6d5872c5",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "תגבור אתרי הטיפול החיצוניים במאבטחים/ שומרי סדר",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "9b3667c9-22a9-441e-b631-6c670f82aac6",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הגבלת גישת מבקרים לאתרי טיפול חיצוניים ונקודת ריכוז חללים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "bad4e8f1-9d27-4d52-9aa9-0d47d43a85fa",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "פתיחת מעבר לאמבולנסים/רכבי פינוי",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "a1bf419a-5b96-47e5-92b2-7eb315609953",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "פינוי רחבת הקליטה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "98e4ad08-ffb4-4fb1-8864-d2e3822ec604",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "פתיחת מעברים בביה\"ח",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "69f955f0-b604-43b7-b1d0-1ac2d3b195e8",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "מניעת גישת ציבור למבנים מסוכנים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "cdf92e25-c65d-4888-8069-64b63da92bc1",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "מניעת כניסה בלתי מבוקרת של נציגי התקשורת וניתוב עיתונאים לנקודת כינוס עיתונאים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "a8da49ec-bb1c-4f9f-94be-ac88cc6a67c6",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "במידה וישנה פגיעה בביה\"ח: האם בוצעה חבירה של הביטחון ומתן מענה לאירוע?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "59afbd5c-380c-4eae-996a-b9cc8f1c2b93",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "האם צוות הביטחון מסייע בביצוע סריקות לא מקצועיות ואיתור הנזקים בבי\"ח?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "eed64655-d151-4563-a460-44159a336a7a",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "בקיאות סגל הביטחון בנוהל הפעלת המנחת/פתיחת המנחת אוטומטית",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "5b8b8875-d6d4-4d00-8746-15e351205154",
+          "component": "תקשורת",
+          "category": "חוץ",
+          "metric": "יצירת  קשר במידת האפשר עם משטרת ישראל ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "9f5bf871-585c-4f2b-9e0c-19daa451b7e8",
+          "component": "תקשורת",
+          "category": "פנים",
+          "metric": "קיום קשר עם מטה חירום",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "f22eed28-b37e-4f9b-b93b-38d4338aa8ac",
+          "component": "תקשורת",
+          "category": "פנים",
+          "metric": "דיווח למטה החירום על אירועים חריגים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        }
+      ]
+    },
+    {
+      "sheetId": "הנדסה_ואחזקה",
+      "sheetName": "הנדסה ואחזקה",
+      "rows": [
+        {
+          "id": "440b5600-769e-4e13-8f09-48e9e56d08c9",
+          "component": "אמצעים",
+          "category": "טליתות",
+          "metric": "כלל בעלי התפקידים באתר סומנו באמצעות טליתות זיהוי",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "00e04215-ed23-4409-a6fb-c596af2cb378",
+          "component": "אמצעים",
+          "category": "עזרים",
+          "metric": "האם ישנם עזרי שליטה וניהול למכלול הנדסה ואחזקה (כגון: תצ\"א, תוכניות מבנים, פריסת תשתיות וכו')",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "071617d6-a6e6-4c99-8fcf-49cd20dfd103",
+          "component": "אמצעים",
+          "category": "עזרים",
+          "metric": "האם נקודות התורפה בתשתיות ואלמנטים חיוניים מופו מראש",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "912d76a6-86f8-4c10-ac14-bfd9c4c5df94",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות",
+          "metric": "האם צוותי אחזקה והתשתיות פועלים בהתאם לכללי ההתנהגות ברעידת אדמה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "94f07533-94a1-4bb5-8dcc-64bb3e101b95",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות",
+          "metric": "סקר נזקים ראשוני מבוצע ע\"י אנשי מקצוע מוסמכים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "cc792049-4d85-4f4e-b1c4-7e956d859ecc",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות",
+          "metric": "הסריקה מתבצעת ע\"פ תוכנית מוכנה מראש",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "024345b6-e316-428b-8dfb-1b9fd5880dfd",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות",
+          "metric": "האם צוותי הנדסה ואחזקה עודכנו בנתוני סריקה ראשונית לא מקצועית? ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "cb97cf33-909e-45c9-a3fa-c80a74c80772",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות",
+          "metric": "האם נתונים הסריקות הלא מקצועיות נלקחו בחשבון בקביעת תעדוף המשימות הראשוניות?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "1e3a6359-06ed-4d21-a5b4-1d9aa8eed9d3",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות",
+          "metric": "האם ניתן דיווח למטה שכולל את כל האלמנטים הקריטים, כולל גזירת משמעויות והמלצות אופרטיביות",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "f7c537cd-7044-48d8-a6fc-8cb2828b3a42",
+          "component": "הפעלה",
+          "category": "סריקת נזקים חוזרת",
+          "metric": "האם בוצעו סקרים חוזרים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "1146afb6-b484-47a3-a392-2e194c188a35",
+          "component": "הפעלה",
+          "category": "סריקת נזקים חוזרת",
+          "metric": "האם הייתה אינדיקציה לביצוע סקר חוזר",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "1e1d8b39-9f6e-4368-b98d-601bbdf6fdbf",
+          "component": "הפעלה",
+          "category": "סריקת נזקים חוזרת",
+          "metric": "האם הועבר דיווח עדכני למטה ביה\"ח לאחר ביצוע סקרי נזקים חוזרים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "10b27260-b393-4be1-b356-424004db4dea",
+          "component": "הפעלה",
+          "category": "מתן פתרונות מידיים לבעיות תשתית",
+          "metric": "האם הייתה אפשרות לתת פתרון מיידי",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "bdc1d69e-06e6-49ee-aa01-d68b5e187d22",
+          "component": "הפעלה",
+          "category": "מתן פתרונות מידיים לבעיות תשתית",
+          "metric": "האם הפתרון יושם בפועל",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "d72ec5ab-450b-42c2-aaab-f85c2f860ef8",
+          "component": "הפעלה",
+          "category": "מתן פתרונות מידיים לבעיות תשתית",
+          "metric": "האם היה תיעדוף לטיפול בתשתיות",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "b00a4296-710a-483f-8f0c-80bd3d9f32af",
+          "component": "הפעלה",
+          "category": "מתן פתרונות מידיים לבעיות תשתית",
+          "metric": "האם התיעדוף ניתן ע\"י מטה/ בשיתוף עם המטה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "90ed8bb4-23b7-47dd-bfd2-ea234a9c26dd",
+          "component": "הפעלה",
+          "category": "מערכות חשמל",
+          "metric": "האם כל התשתיות החיוניות מחוברות למע' גנרציה באופן אוטומטי?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "ea78b8d2-cdb6-45b4-afd0-510422623323",
+          "component": "הפעלה",
+          "category": "מערכות חשמל",
+          "metric": "האם הופעלו תשתיות המחוברות למע' גנרציה שדורשות הפעלה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "2e618b26-8b59-4500-837a-3a85ed7f9755",
+          "component": "הפעלה",
+          "category": "מערכות חשמל",
+          "metric": "האם מבוצע ניתוק יזום של זרם חשמל ראשי לבדיקות מערכת גנרציה לפרק זמן מוגדר ובעומס עבודה נדרש",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "a42ad566-83de-456f-bbc7-fd10753900c3",
+          "component": "הפעלה",
+          "category": "מערכות חשמל",
+          "metric": "האם בוצעה בדיקה של מרכז האנרגיה לתקינות לוחות החשמל. מלאי הדלק לתפעול הגנרטורים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "9dd85349-6634-40b7-931a-226f3b4f218a",
+          "component": "הפעלה",
+          "category": "מים",
+          "metric": "האם בוצעה בדיקה למאגר המים לחירום לאחר האירוע",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "1081db35-0ced-4054-b0be-ffdc8fbcee29",
+          "component": "הפעלה",
+          "category": "מים",
+          "metric": "האם המים במאגר ראויים לשתייה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "8bcabd00-02c1-4006-b2f0-ff677d13e452",
+          "component": "הפעלה",
+          "category": "מים",
+          "metric": "האם בוצעה בדיקה לזיהוי דליפות גלויות / סמויות  ממאגר המים לחירום",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "df213b09-44bb-4204-8c01-39184f67cd2a",
+          "component": "הפעלה",
+          "category": "מים",
+          "metric": "האם בוצעה בדיקה לצנרת אספקת מים בבית החולים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "a3be864a-55f0-4d35-b4f4-73205749d2a8",
+          "component": "הפעלה",
+          "category": "מים",
+          "metric": "האם בוצעה בדיקה לזיהוי דליפות בצנרת מים בבית החולים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "a0274172-3f77-4292-8cc6-084f15a323f2",
+          "component": "הפעלה",
+          "category": "מים",
+          "metric": "האם ניתן פתרון ראשוני במידה וזוהתה דליפה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "f2abe566-1d1b-4319-867d-23693c38c90e",
+          "component": "הפעלה",
+          "category": "גזים רפואיים",
+          "metric": "האם בוצעה בדיקה לצוברי חמצן מרכזיים ומאיידים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "b4ac41c6-abac-45de-a720-bb9e45d3051f",
+          "component": "הפעלה",
+          "category": "גזים רפואיים",
+          "metric": "האם בוצעה בדיקה ליזהוי דליפות לצוברי החמצן",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "b6a474f5-f83c-478a-bd93-eb6fa1d7fbb7",
+          "component": "הפעלה",
+          "category": "גזים רפואיים",
+          "metric": "האם בוצעה בדיקה לזהוי דליפות מצנרת החמצן",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "e0f15f6e-976d-42fd-a0e9-a9d807e4ab60",
+          "component": "הפעלה",
+          "category": "גזים רפואיים",
+          "metric": "האם בוצעה בדיקה למערכת וואקום",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "ac2c222a-9272-4418-860c-dc2979475f99",
+          "component": "הפעלה",
+          "category": "גזים רפואיים",
+          "metric": "האם נבדקו צוברים של גזים רפואיים נוספים(כגון נייטרוס)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "a327daeb-35d9-4b8d-a6bb-fa232994ff57",
+          "component": "תקשורת",
+          "category": "גורמי פנים",
+          "metric": "האם קיימת תקשורת רציפה ויעילה עם המטה?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "1c9338c4-73df-4f3f-a7d7-f104bdf10169",
+          "component": "תקשורת",
+          "category": "גורמי חוץ",
+          "metric": "האם פועלים ליצירת קשר עם גורמי חוץ (ספקים בחוזים נצורים, חברת המים וכו') במידה וניתן והעלאת דרישות בהתאם לפערים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "d8193328-ae62-41b9-864b-4999601898f8",
+          "component": "תקשורת",
+          "category": "מהנדסי משרד הבינוי והשיכון",
+          "metric": "האם מבוצעת חבירה למהנדסי משרד הבינוי והשיכון המגיעים לתגבר את ביה\"ח?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "158cf4f7-9ecc-41c2-85e5-70e145fac947",
+          "component": "תקשורת",
+          "category": "מהנדסי משרד הבינוי והשיכון",
+          "metric": "האם בוצע שימוש מושכל בהפעלת מהנדסי משרד הבינוי והשיכון בהתאם לתמונת המצב?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        }
+      ]
+    },
+    {
+      "sheetId": "פינוי_מחלקות-_4_עותקים",
+      "sheetName": "פינוי מחלקות- 4 עותקים",
+      "rows": [
+        {
+          "id": "7ddb2370-0543-40da-9066-daee06561da5",
+          "component": "אמצעים",
+          "category": "ציוד",
+          "metric": "האם קיים פלקט הדרכה בנושא רעידת אדמה?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "c4b4b48e-6db4-4050-a462-25e44480a7f5",
+          "component": "אמצעים",
+          "category": "ציוד",
+          "metric": "האם קיים ציוד מיגון במחלקה (קסדות, פנסים וכו')",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "557effa4-ab6c-42b0-a8f1-6d8164580c82",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות",
+          "metric": "האם צוות המחלקה פועל בהתאם לכללי ההתנהגות ברעידת אדמה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "861fb216-095d-47eb-8db7-de5f203c8ba4",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות",
+          "metric": "מבוצע סיור במחלקה לאיתור נפגעים ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "d05216fa-7b24-4d50-8592-46861c1e5dc7",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות",
+          "metric": "האם הועבר דיווח למטה חירום על מצב החולים/נפגעים במחלקה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "9b2dc8e2-3bb0-489a-bddd-bfea21e6a148",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות",
+          "metric": "מבוצע סיור במחלקה לאיתור נזקים במבנה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "fecb79f1-b628-43cb-a2cb-755354f70160",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות",
+          "metric": "האם הועבר דיווח על מצב המבנה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "4364985f-d7f5-4511-882e-c8a8e2a9733e",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות",
+          "metric": "האם מבוצע ניתוק מערכות אלקטרומכניות (בהתאם לנזק במחלקה ובמידה וקיים סיכון בטיחותי)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "ec05f529-bcd9-4e68-b996-2195e860bb96",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות",
+          "metric": "האם הועבר דיווח על מצב תשתיות חיוניות (חשמל, גזים רפואיים, מים)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "c89b1bc3-b82f-452f-9b81-4e499c31edae",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות",
+          "metric": "האם הועבר דיווח על מצב כ\"א במחלקה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "c113238b-9feb-411e-b58f-62b4dc282316",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות",
+          "metric": "האם נעשה שימוש בקסדות ואמצעי תאורה לצורך ביצוע סקירת נזקים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "dd4a0c11-3d44-4d37-ac91-be4a0e573474",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות",
+          "metric": "הצוות יודע היכן יש ציוד כיבוי אש זמין",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "f09a99d5-8e28-4fe9-8bdd-37d4fd5471f6",
+          "component": "הפעלה",
+          "category": "פעולות ראשונות",
+          "metric": "מתן עזרה ראשונה לנפגעים במחלקה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "6c37ef77-7576-45c7-88b9-554c03aa8742",
+          "component": "הפעלה",
+          "category": "פינוי בהול",
+          "metric": "הצוות מכיר קריטריונים המצביעים על דחיפות פינוי",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "587bd423-dca2-4919-bf7d-e7c2dbc836fb",
+          "component": "הפעלה",
+          "category": "פינוי בהול",
+          "metric": "החלטה על פינוי המחלקה עצמאי או תוך קבלת הנחיה בהתאם להערכת נזקים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "63e0b574-ef48-401b-b9c0-e305aae5fe45",
+          "component": "הפעלה",
+          "category": "פינוי בהול",
+          "metric": "צוות המחלקה מכיר יעד פינוי בהול באירוע רעידת אדמה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "ceba3a41-b027-4daf-900a-f8b3dab04120",
+          "component": "הפעלה",
+          "category": "פינוי בהול",
+          "metric": "האם נקבעו קדימויות פינוי (בפינוי בהול פינוי מהלכים קודם)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "72af5032-d3ba-4d1f-9a42-4dfb553a00e5",
+          "component": "הפעלה",
+          "category": "פינוי בהול",
+          "metric": "האם הועלתה דרישה לתגבור כ\"א לסיוע בפינוי? (במידה ואין תקשורת באמצעות רץ)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "63843db1-a477-435d-9afd-118f17477d64",
+          "component": "הפעלה",
+          "category": "פינוי בהול",
+          "metric": "שליחת חלוץ לבדיקת תקינות צירי הפינוי ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "6be01e1e-53c7-42e1-b663-194625a171f4",
+          "component": "הפעלה",
+          "category": "פינוי בהול",
+          "metric": "האם ישנו מנהל אירוע לפינוי המחלקה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "4471f40f-fdca-4cbe-b4ba-c02b5dd17317",
+          "component": "הפעלה",
+          "category": "פינוי בהול",
+          "metric": "גיוס חולים מהלכים ומבקרים לסיוע בזמן הפינוי",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "68fbc831-e880-4abb-91be-3c6a631617bc",
+          "component": "הפעלה",
+          "category": "פינוי בהול",
+          "metric": "ביצוע תדריך טרם תחילת הפינוי (אופן הפינוי, ציר הפינוי, סדר הפינוי, דגשי בטיחות)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "619149b2-49eb-429a-9258-96f94d6376ec",
+          "component": "הפעלה",
+          "category": "פינוי בהול",
+          "metric": "קיום ליווי הולם למפונים מהמחלקה (בהתאם לאילוצי כ\"א)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        }
+      ]
+    },
+    {
+      "sheetId": "ממתינים_ודחק",
+      "sheetName": "ממתינים ודחק",
+      "rows": [
+        {
+          "id": "5fc43318-7cb6-4481-91af-47b267ab45c0",
+          "component": "אמצעים",
+          "category": "טליתות",
+          "metric": "כלל בעלי התפקידים באתר סומנו באמצעות טליתות זיהוי",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "81b15e65-765b-4b3c-af94-c31f28cfc939",
+          "component": "אמצעים",
+          "category": "מבנה",
+          "metric": "האתר מתאים ליעודו מבחינת גודלו",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "68c4b91c-7c73-4a75-944f-96dd5f93ca37",
+          "component": "אמצעים",
+          "category": "מבנה",
+          "metric": "האתר מתאים ליעודו: ישנה הפרדה ברורה בין נפגעים קלים לדחק",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "8a567b7b-b003-4f76-955e-30d3ed591038",
+          "component": "אמצעים",
+          "category": "ציוד",
+          "metric": " האם יש באתר ציוד רפואי מתאים (כגון: ציוד לחבישה, נוזלים, קיבועים אורתופדיים וכו')",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "45c5bd8a-310d-4e0c-bbea-6af1876f59ef",
+          "component": "אמצעים",
+          "category": "ציוד",
+          "metric": " האם יש באתר ציוד משקי מתאים (כגון: כסאות, שמיכות וכד')",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "5e0dbd65-09db-4192-b4a2-22fce06cb813",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הוגדר מנהל  אתר",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "989136aa-20c9-4492-86f9-e295e4dbe340",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": " ציוות של רופאים ואחיות באתר בכמות מספקת למתן מענה לנפגעים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "faaeaac9-3e65-4e30-9a69-b577a7091a35",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "ציוות עו\"ס לאתר",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "8a622abf-39bf-48d4-ab33-6721919687e9",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "ביצוע בדיקת רופא לכל נפגע (כולל נפגעי חרדה)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "26edf36a-7842-4b0a-abb3-7b30e637d22e",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "קיים מענה בסיסי לטיפול במדרדרים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "5ad0d58a-a0e7-47e9-8616-c2fb00bec290",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "מנהל האתר שולט בנעשה באתר",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "218d10bf-593c-48a2-82b0-9abbb82b34bb",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "זיהוי פערים וחוסרים הנדרשים לתפעול האתר ע\"י מנהל האתר ופעילות להשלמתם מול הגורמים המתאימים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "d8019130-7f40-48e8-ad43-e7653152a279",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "ניתן ליווי לילדים בהתאם לצורך",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "bad951aa-8892-4245-9406-254415bc022d",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "האם צוות האתר פועל לשחרור חולים שניתן לשחררם?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        }
+      ]
+    },
+    {
+      "sheetId": "מידיים",
+      "sheetName": "מידיים",
+      "rows": [
+        {
+          "id": "1adeca84-71ea-4c5a-a9f5-ae99d9e93f29",
+          "component": "אמצעים",
+          "category": "טליתות",
+          "metric": "כלל בעלי התפקידים באתר סומנו באמצעות טליתות זיהוי",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "f9d5bcee-f8c9-4f90-b4f7-10a28f862cd1",
+          "component": "אמצעים",
+          "category": "ציוד",
+          "metric": "האם נפרס ציוד רפואי בסיסי למתן מענה לנפגעים (האם קיים ציוד לעצירת דימומים, נוזלים, חומרי חבישה, קיבועים אורתופדיים וכו')",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "a6c5de3f-ccd9-4d8b-a9f7-c8108f9547c6",
+          "component": "אמצעים",
+          "category": "ציוד",
+          "metric": "האם נפרס ציוד לוגיסטי לאתר (אלונקות, אמצעי רישום וכו')",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "63388ec2-e479-42ec-85ce-7bee6302d00f",
+          "component": "אמצעים",
+          "category": "ציוד",
+          "metric": "האם יש מענה להשכבת מטופלים במלר\"ד החיצוני (אלונקות/ מיטות או אמצעי אחר?)",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "ee93a855-8ea4-401c-a98a-cfe633f9eeba",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הוגדר מנהל  אתר",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "53cf66de-1cb5-463e-967a-7ccf7ed22131",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "מנהל האתר שולט בנעשה באתר ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "25228b00-7f47-4d54-b844-60fbb7741927",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הוקצה צוות רפואי וסיעודי לאתר בהתאם לזמינות כ\"א בביה\"ח",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "4a506d6a-eede-45e4-a7f8-dcfa7e7ccf02",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "צוות האתר קיבל הנחיות ממנהל האתר / מטה החירום לגבי עקרונות הטיפול ושימוש במשאבים מוגבלים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "5f62af94-663d-4624-974f-30e40ad6ffa5",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "מבוצע שימוש מושכל במשאבי כ\"א וציוד באתר",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "7379dba1-1cc3-48a9-8acf-5fff0b213e50",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הטיפול הרפואי שניתן באתר וקבלת החלטות תואמים למדיניות טיפול באירוע אסון המוני",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "b213811a-7a91-46d6-9304-83050828421c",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הצוות הרפואי מכיר אופן הטיפול בפציעות מעיכה ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "4c2d2672-31db-4fd5-bf40-1c572f152457",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "ניתן ליווי לילדים בהתאם לצורך",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "5ecb7a29-ddfe-4019-9820-1893875e66eb",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "זיהוי פערים וחוסרים הנדרשים לתפעול האתר ע\"י מנהל האתר ופעילות בהתאם",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "f6077454-40bd-4f3c-b562-4a5d9f8e3eed",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "קיום תקשורת עם מטה בית החולים בתאם לנדרש",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "820e094f-14c8-46fe-ab83-f5cb6044a500",
+          "component": "הפעלה",
+          "category": "בטיחות ",
+          "metric": "סימון נקודת הפריקה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "3a1c1101-59fb-4601-a8e2-c9b865b51198",
+          "component": "הפעלה",
+          "category": "בטיחות ",
+          "metric": "הפרדה של מסלול התנועה לרכבים במידת האפשר",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "eee87f87-6e1f-41fc-8d27-5ebc57bc38fd",
+          "component": "הפעלה",
+          "category": "בטיחות ",
+          "metric": "האם תנועת הצוות והמטופלים באיזור הפריקה הינה בטוחה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        }
+      ]
+    },
+    {
+      "sheetId": "רחבת_קליטה",
+      "sheetName": "רחבת קליטה",
+      "rows": [
+        {
+          "id": "b658a3f8-5024-4903-86cf-d490f7951100",
+          "component": "אמצעים",
+          "category": "טליתות",
+          "metric": "כלל בעלי התפקידים באתר סומנו באמצעות טליתות זיהוי",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "23939665-3773-4091-bd51-98a4a87cf2f6",
+          "component": "אמצעים",
+          "category": "מבנה ",
+          "metric": "הוגדרה נקודת פריקה לרכבים המביאים נפגעים לביה\"ח",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "1fd34312-d081-4bab-adc8-f7b25a8e987a",
+          "component": "אמצעים",
+          "category": "מבנה ",
+          "metric": "מיקום נקודת מיון מתאים למטרתה (מאפשרת פריקה בטוחה וניתוב הנפגעים לאתרים השונים)?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "49214aac-4f0c-4c00-8dcd-4186f47e3157",
+          "component": "אמצעים",
+          "category": "מבנה ",
+          "metric": "נקודת הפריקה משולטת באופן ברור",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "ff46f2ea-0df3-437d-a19e-3be3e3043161",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הוגדר מנהל אתר",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "dc809c77-c3c8-4554-b5ee-ec34fea2fcb2",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הוגדר ממיין ראשי",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "fc32ab08-87bc-476e-bb5d-3d91fbf0e240",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הצוות באתר כולל רשמת ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "438e43ff-5cca-4e02-ab06-b53f49330514",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הצוות באתר כולל מנהלן",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "ada06d2f-1d4f-4563-a078-2af83bf2c772",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "האם מבוצע מיון ראשוני נכון לנפגעים וניתובם לאתרים השונים בהתאם למצבם",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "d3e730d0-6c7e-448f-b16d-8a1541a515df",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "זיהוי נפגעים שאינם ברי הצלה ומתן עדיפות טיפול נמוכה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "9e6c1468-97de-4841-9b77-965df1ec1f68",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "כל פצוע מקבל תיק",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "5577da42-6958-4938-b001-e1721162546c",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "שמירת תרשים זרימה חד כיווני בהליך המיון",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "ea4d897c-7e3c-45ee-ae2a-c5e12f17c5a9",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "קיום כ\"א משנע בכמות מספקת",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "71d8ec4d-982d-4818-9f59-3cc47b913e94",
+          "component": "הפעלה",
+          "category": "בטיחות",
+          "metric": "חניית האמבולנסים מתקיימת בצורה בטוחה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "0f78127c-bea2-41b8-a014-4cd9c847910d",
+          "component": "הפעלה",
+          "category": "בטיחות",
+          "metric": "תנועת הצוות בטוחה ברחבת הקליטה",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        }
+      ]
+    },
+    {
+      "sheetId": "אתר_השהייה_לפינוי",
+      "sheetName": "אתר השהייה לפינוי",
+      "rows": [
+        {
+          "id": "38b38afd-170e-483e-89b5-4fd048deafb6",
+          "component": "אמצעים",
+          "category": "טליתות",
+          "metric": "כלל בעלי התפקידים באתר סומנו באמצעות טליתות זיהוי",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "bd9af7d8-5eeb-434d-b7a4-10bd6fd386b5",
+          "component": "אמצעים",
+          "category": "מבנה האתר",
+          "metric": "האתר מתאים ליעודו: גודלו מאפשר השהיה של מספר רב של נפגעים? ",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "b147a40a-a06e-4121-a838-6bd6d70450e0",
+          "component": "אמצעים",
+          "category": "מבנה האתר",
+          "metric": "האתר מתאים ליעודו: האם האתר סמוך לאתרים אחרים וישנם דרכי גישה להעברת פצועים אליו",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "3e41500e-f8ea-4706-87c9-c1665a65c72b",
+          "component": "אמצעים",
+          "category": "מבנה האתר",
+          "metric": "האתר מתאים ליעודו: קרבה לצירי פינוי \\ למנחת",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "4cb2361b-987f-4bef-8bd9-79da27f52eca",
+          "component": "אמצעים",
+          "category": "ציוד",
+          "metric": "קיים באתר ציוד רפואי בסיסי: נוזלים, אמצעי חבישה, קיבועים, תרופות בסיסיות.",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "bb219f77-a374-4dab-82bd-b690b009c970",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "הוגדר מנהל  אתר",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "81bdf1bb-6c74-43ae-8cb2-be158bbafd6b",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": " מבוצע ציוות של רופאים ואחיות באתר.",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "2812a0aa-cb19-4736-8463-95168f8f0da9",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "יש באתר כמות כ\"א מספקת",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "bfefa0f5-d50e-4d23-b50f-f38663fde17e",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "האם מבוצע קביעת קדימויות לוויסות שניוני",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "c4afa919-2c6f-4fff-9617-d7676c10bcd8",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "תאום העברת נפגעים מבוצע דרך מטה בית החולים",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "44fd8baa-7df0-4841-b374-119a2846f91d",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "האם הטיפול הרפואי הניתן הינו לפי עקרונות טיפול במתאר רעידת אדמה?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "307cdc89-32b8-4a80-81a3-ae47d3fc3c40",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "האם מנהל האתר שולט במספר הנפגעים באתר ובמצבם.",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        },
+        {
+          "id": "77c2c6ea-aea4-4f68-973b-f7f2d9b49edf",
+          "component": "הפעלה",
+          "category": "אופן הפעלה",
+          "metric": "האם בעת יציאת פצוע מהאתר הוא נשלח עם מכתב המסכם את מצבו הרפואי והטיפול שקיבל עד כה?",
+          "evaluation": {
+            "yes": false,
+            "no": false,
+            "notRelevant": false,
+            "redFlag": false
+          },
+          "comment": ""
+        }
+      ]
+    }
+  ]
+}

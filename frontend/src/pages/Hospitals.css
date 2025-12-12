@@ -1,0 +1,30 @@
+.hospitals-container {
+  padding: 2rem;
+  background-color: #fff3cd;
+}
+
+.hospitals-title {
+  font-size: 2rem;
+  color: #856404;
+  margin-bottom: 1rem;
+}
+
+.hospitals-list {
+  list-style: none;
+  padding: 0;
+}
+
+.hospitals-item {
+  padding: 0.5rem;
+  border-bottom: 1px solid #856404;
+}
+
+.hospital-name {
+  font-weight: bold;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.hospital-region {
+  color: #6c757d;
+}
