@@ -36,6 +36,24 @@ export function getTemplate(templateId) {
   return request(`/api/templates/${templateId}`);
 }
 
+export function getTemplateBundle(templateId) {
+  return request(`/api/templates/${templateId}`);
+}
+
+export function saveBakaraTemplate(templateId, payload) {
+  return request(`/api/templates/${templateId}/bakara`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  });
+}
+
+export function saveScheduleTemplate(templateId, payload) {
+  return request(`/api/templates/${templateId}/schedule`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  });
+}
+
 export function createDrill(payload) {
   return request('/api/drills', {
     method: 'POST',
@@ -45,6 +63,13 @@ export function createDrill(payload) {
 
 export function getDrill(drillId) {
   return request(`/api/drills/${drillId}`);
+}
+
+export function updateDrill(drillId, payload) {
+  return request(`/api/drills/${drillId}`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  });
 }
 
 export function updateSheet(drillId, sheetId, data) {
@@ -84,5 +109,23 @@ export function updateRow(drillId, sheetId, rowId, data) {
 export function deleteRow(drillId, sheetId, rowId) {
   return request(`/api/drills/${drillId}/sheets/${sheetId}/rows/${rowId}`, {
     method: 'DELETE',
+  });
+}
+
+export function saveDrillSchedule(drillId, payload) {
+  return request(`/api/drills/${drillId}/schedule`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  });
+}
+
+export function getPublicDrill(drillId) {
+  return request(`/api/drills/public/${drillId}`);
+}
+
+export function updatePublicRow(drillId, sheetId, rowId, data) {
+  return request(`/api/drills/public/${drillId}/sheets/${sheetId}/rows/${rowId}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
   });
 }

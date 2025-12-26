@@ -8,6 +8,8 @@ import Hospitals from './pages/Hospitals';
 import Drills from './pages/Drills';
 import NewDrillPage from './pages/NewDrillPage';
 import DrillEditorPage from './pages/DrillEditorPage';
+import PublicTesterPage from './pages/PublicTesterPage';
+import TemplatesPage from './pages/TemplatesPage';
 import Profiles from './pages/Profiles';
 import Settings from './pages/Settings';
 import './index.css';
@@ -22,6 +24,8 @@ const App = () => (
         <Route path="/drills" element={<Drills />} />
         <Route path="/drills/new" element={<NewDrillPage />} />
         <Route path="/drills/:drillId/edit" element={<DrillEditorPage />} />
+        <Route path="/public/:drillId" element={<PublicTesterPage />} />
+        <Route path="/templates" element={<TemplatesPage />} />
         <Route path="/profiles" element={<Profiles />} />
         <Route path="/settings" element={<Settings />} />
       </Routes>

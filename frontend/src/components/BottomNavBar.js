@@ -1,6 +1,6 @@
 import React from 'react';
 import { BottomNavigation, BottomNavigationAction } from '@mui/material';
-import { Home, LocalHospital, Assignment, AccountCircle, Settings } from '@mui/icons-material';
+import { Home, LocalHospital, Assignment, AccountCircle, Settings, Description } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const BottomNavBar = () => {
@@ -31,6 +31,7 @@ const BottomNavBar = () => {
       <BottomNavigationAction label="דף הבית" value="/home" icon={<Home />} />
       <BottomNavigationAction label="בתי חולים" value="/hospitals" icon={<LocalHospital />} />
       <BottomNavigationAction label="תרגילים" value="/drills" icon={<Assignment />} />
+      <BottomNavigationAction label="תבניות" value="/templates" icon={<Description />} />
       <BottomNavigationAction label="מתארים" value="/profiles" icon={<AccountCircle />} />
       <BottomNavigationAction label="הגדרות" value="/settings" icon={<Settings />} />
     </BottomNavigation>

@@ -9,16 +9,17 @@ const Layout = ({ children }) => {
   const location = useLocation();
 
   const isLoginPage = location.pathname === '/login';
+  const isPublicPage = location.pathname.startsWith('/public');
 
   return (
     <div className="layout position-sticky" style={{ display: 'flex', flexDirection: 'row', height: '100vh' }}>
-      {!isLoginPage && !isMobile && (
+      {!isLoginPage && !isPublicPage && !isMobile && (
           <SideNavBar />
       )}
       <main className="page-container" style={{ flexGrow: 1, overflow: 'auto' }}>
         {children}
       </main>
-      {!isLoginPage && isMobile && (
+      {!isLoginPage && !isPublicPage && isMobile && (
         <div style={{ position: 'fixed', bottom: 0, width: '100%' }}>
           <BottomNavBar />
         </div>

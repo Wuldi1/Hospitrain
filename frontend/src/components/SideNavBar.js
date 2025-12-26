@@ -17,6 +17,7 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
+import DescriptionIcon from '@mui/icons-material/Description';
 
 const drawerWidth = 240;
 const NAV_COLOR = '#166CC7';
@@ -30,6 +31,7 @@ export default function SideNavBar() {
     { key: 'home', text: 'דף הבית', icon: <HomeIcon />, to: '/home' },
     { key: 'hospitals', text: 'בתי חולים', icon: <LocalHospitalIcon />, to: '/hospitals' },
     { key: 'drills', text: 'תרגילים', icon: <EventNoteIcon />, to: '/drills' },
+    { key: 'templates', text: 'תבניות', icon: <DescriptionIcon />, to: '/templates' },
     { key: 'profile', text: 'פרופיל', icon: <PersonIcon />, to: '/profile' },
     { key: 'settings', text: 'הגדרות', icon: <SettingsIcon />, to: '/settings' },
   ];

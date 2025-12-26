@@ -1,6 +1,7 @@
 {
-  "templateId": "earthquake",
-  "templateName": "גלופת רעד",
+  "type": "Bakara",
+  "scheduleId": "רע״ד",
+  "templateName": "רעידת אדמה - בקרה",
   "sheets": [
     {
       "sheetId": "מטה_חירום",
