@@ -13989,7 +13989,7 @@
   {
     "drillId": "2b73ea25-e7ec-4bcc-b1dc-85d8e24b221c",
     "id": "2b73ea25-e7ec-4bcc-b1dc-85d8e24b221c",
-    "name": "תרגיל 6",
+    "name": "תרגיל לבדיקה - היום",
     "hospitalId": "ichilov",
     "hospital": "ichilov",
     "date": "2025-12-28",
@@ -14005,7 +14005,7 @@
             "category": "תקשורת ",
             "metric": "קיום אמצעי קשר פנימיים",
             "evaluation": {
-              "yes": false,
+              "yes": true,
               "no": false,
               "notRelevant": false,
               "redFlag": false
@@ -14019,7 +14019,7 @@
             "metric": "קיום תכנית חלוקת אמצעי קשר לבע\"ת מוגדרים",
             "evaluation": {
               "yes": false,
-              "no": false,
+              "no": true,
               "notRelevant": false,
               "redFlag": false
             },
@@ -14033,10 +14033,10 @@
             "evaluation": {
               "yes": false,
               "no": false,
-              "notRelevant": false,
+              "notRelevant": true,
               "redFlag": false
             },
-            "comment": ""
+            "comment": "דשגכשדגכ"
           },
           {
             "id": "7f7922ba-6266-4264-b942-5a68f49eb001",
@@ -14044,7 +14044,7 @@
             "category": "תקשורת ",
             "metric": "האם ישנם מספרי טלפון זמינים של גורמי חוץ (אגף לשע\"ח, פקע\"ר, ארגוני החירום והעזר) זמינים ",
             "evaluation": {
-              "yes": false,
+              "yes": true,
               "no": false,
               "notRelevant": false,
               "redFlag": false
@@ -14057,7 +14057,7 @@
             "category": "תקשורת ",
             "metric": "האם ישנם מספרי טלפון לויינים זמינים ",
             "evaluation": {
-              "yes": false,
+              "yes": true,
               "no": false,
               "notRelevant": false,
               "redFlag": false
@@ -14071,7 +14071,7 @@
             "metric": "קיום עותק של נוהל עבודת המטה ברעידת אדמה ורשימות תיוג זמין",
             "evaluation": {
               "yes": false,
-              "no": false,
+              "no": true,
               "notRelevant": false,
               "redFlag": false
             },
@@ -14109,12 +14109,12 @@
             "category": "עזרים",
             "metric": "האם עזרי המטה מאפשרים שליטה באירוע ובתמונת המצב?",
             "evaluation": {
-              "yes": false,
+              "yes": true,
               "no": false,
               "notRelevant": false,
               "redFlag": false
             },
-            "comment": ""
+            "comment": "גכעי"
           },
           {
             "id": "1f816e3a-5d74-499a-beff-93caa8217d79",
@@ -14122,12 +14122,12 @@
             "category": "מבנה",
             "metric": "התוכנית לפריסת מלר\"ד חיצוני כוללת חלוקה לתת אתרים (טריאז', מיידיים, ממתינים, פינת יולדות, אנושים ופינת חללים)",
             "evaluation": {
-              "yes": false,
+              "yes": true,
               "no": false,
               "notRelevant": false,
               "redFlag": false
             },
-            "comment": ""
+            "comment": "גכעי"
           },
           {
             "id": "bd19baf8-c97e-4262-a53e-3a6c2a18c5a4",
@@ -14135,12 +14135,12 @@
             "category": "מבנה",
             "metric": "האם האתרים החיצוניים משולטים בצורה ברורה",
             "evaluation": {
-              "yes": false,
+              "yes": true,
               "no": false,
               "notRelevant": false,
               "redFlag": false
             },
-            "comment": ""
+            "comment": "ב הנ"
           },
           {
             "id": "aa7061b7-74c9-4fad-80f3-47e2b813a8f6",
@@ -14148,7 +14148,7 @@
             "category": "פריסה חיצונית",
             "metric": "מוגדר מיקום פריסת מטה החירום בשטח פתוח",
             "evaluation": {
-              "yes": false,
+              "yes": true,
               "no": false,
               "notRelevant": false,
               "redFlag": false
@@ -17876,7 +17876,7 @@
       ]
     },
     "createdAt": "2025-12-25T10:38:06.722Z",
-    "updatedAt": "2025-12-25T10:38:06.722Z"
+    "updatedAt": "2025-12-28T06:21:39.191Z"
   },
   {
     "drillId": "f9abbf64-6c06-4553-9a61-44179460d6df",
@@ -21786,10 +21786,10 @@
   {
     "drillId": "844243b0-0f08-4e27-b3c2-d5253d2fb17b",
     "id": "844243b0-0f08-4e27-b3c2-d5253d2fb17b",
-    "name": "כעיחיעהכעי",
+    "name": "תרגיל לבדיקה - 2912",
     "hospitalId": "laniado",
     "hospital": "laniado",
-    "date": "2025-12-26",
+    "date": "2025-12-29",
     "templateId": "רע״ד",
     "sheets": [
       {
@@ -21803,10 +21803,10 @@
             "category": "תקשורת ",
             "metric": "קיום אמצעי קשר פנימיים",
             "evaluation": {
-              "yes": true,
+              "yes": false,
               "no": false,
               "notRelevant": false,
-              "redFlag": false
+              "redFlag": true
             },
             "comment": ""
           },
@@ -21829,7 +21829,7 @@
             "category": "תקשורת ",
             "metric": "קיים טלפון לוויני זמין למטה",
             "evaluation": {
-              "yes": false,
+              "yes": true,
               "no": false,
               "notRelevant": false,
               "redFlag": false
@@ -21844,7 +21844,7 @@
             "evaluation": {
               "yes": false,
               "no": false,
-              "notRelevant": false,
+              "notRelevant": true,
               "redFlag": false
             },
             "comment": ""
@@ -21857,7 +21857,7 @@
             "evaluation": {
               "yes": false,
               "no": false,
-              "notRelevant": false,
+              "notRelevant": true,
               "redFlag": false
             },
             "comment": ""
@@ -21870,7 +21870,7 @@
             "evaluation": {
               "yes": false,
               "no": false,
-              "notRelevant": false,
+              "notRelevant": true,
               "redFlag": false
             },
             "comment": ""
@@ -25686,7 +25686,7 @@
       ]
     },
     "createdAt": "2025-12-25T11:56:48.976Z",
-    "updatedAt": "2025-12-25T11:57:24.191Z"
+    "updatedAt": "2025-12-28T06:16:42.687Z"
   },
   {
     "drillId": "fb71bf30-5b17-4c87-bbb7-901a068fa7a7",

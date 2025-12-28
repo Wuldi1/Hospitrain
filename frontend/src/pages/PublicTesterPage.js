@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useParams } from 'react-router-dom';
 import {
   Alert,
@@ -132,6 +133,7 @@ const EvaluationToggle = ({ evaluation, onChange }) => {
 
 const PublicTesterPage = () => {
   const { drillId } = useParams();
+  const isMobile = useMediaQuery('(max-width:600px)');
   const [data, setData] = useState(null);
   const [selectedSheetId, setSelectedSheetId] = useState('');
   const [activeTab, setActiveTab] = useState('bakara');
@@ -140,10 +142,19 @@ const PublicTesterPage = () => {
   const [saveError, setSaveError] = useState('');
   const [rowSavingState, setRowSavingState] = useState({});
   const rowUpdateTimers = useRef({});
+  const refreshTimerRef = useRef(null);
 
-  const loadData = async () => {
-    setLoading(true);
-    setError('');
+  const isTodayDate = (dateStr) => {
+    if (!dateStr) return false;
+    const today = new Date().toISOString().slice(0, 10);
+    return dateStr.slice(0, 10) === today;
+  };
+
+  const loadData = useCallback(async (silent = false) => {
+    if (!silent) {
+      setLoading(true);
+      setError('');
+    }
     try {
       const response = await getPublicDrill(drillId);
       setData({
@@ -152,18 +163,39 @@ const PublicTesterPage = () => {
       });
       setSelectedSheetId((prev) => prev || response.sheets?.[0]?.sheetId || '');
     } catch (err) {
-      setError('לא הצלחנו לטעון את הגיליון. נסו לרענן או לפנות למנהל המערכת.');
+      if (!silent) {
+        setError('לא הצלחנו לטעון את הגיליון. נסו לרענן או לפנות למנהל המערכת.');
+      }
     } finally {
-      setLoading(false);
+      if (!silent) {
+        setLoading(false);
+      }
     }
-  };
+  }, [drillId]);
 
   useEffect(() => {
     loadData();
     return () => {
       Object.values(rowUpdateTimers.current).forEach((timerId) => clearTimeout(timerId));
+      if (refreshTimerRef.current) {
+        clearInterval(refreshTimerRef.current);
+      }
     };
-  }, [drillId]);
+  }, [drillId, loadData]);
+
+  useEffect(() => {
+    if (refreshTimerRef.current) {
+      clearInterval(refreshTimerRef.current);
+    }
+    if (isTodayDate(data?.date)) {
+      refreshTimerRef.current = setInterval(() => loadData(true), 15000);
+    }
+    return () => {
+      if (refreshTimerRef.current) {
+        clearInterval(refreshTimerRef.current);
+      }
+    };
+  }, [data?.date, loadData]);
 
   const updateRowInState = (rowId, changes) => {
     setData((prev) => {
@@ -259,10 +291,10 @@ const PublicTesterPage = () => {
   const { schedule } = data || {};
 
   return (
-    <Box sx={{ p: 4, pb: 8 }} dir="rtl">
+    <Box sx={{ p: { xs: 2, md: 4 }, pb: 8 }} dir="rtl">
       <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" spacing={2} alignItems={{ xs: 'flex-start', md: 'center' }}>
         <Box>
-          <Typography variant="h4" fontWeight={800}>{data?.name || 'תרגיל'}</Typography>
+          <Typography variant={isMobile ? 'h5' : 'h4'} fontWeight={800}>{data?.name || 'תרגיל'}</Typography>
           <Typography color="text.secondary">{`בית חולים: ${data?.hospital || 'לא צוין'}`}</Typography>
           <Typography color="text.secondary">{`תאריך: ${data?.date || 'לא צוין'}`}</Typography>
           <Typography sx={{ mt: 1 }} fontWeight={700}>{sheet?.sheetName || 'בחר גיליון'}</Typography>
@@ -317,20 +349,20 @@ const PublicTesterPage = () => {
           <Typography variant="h6" fontWeight={700} sx={{ mb: 2 }}>
             גיליון בקרה
           </Typography>
-          <TableContainer>
+          <TableContainer sx={{ overflowX: 'auto' }}>
             <Table size="small">
               <TableHead>
                 <TableRow>
                   <TableCell align="right">מרכיב</TableCell>
                   <TableCell align="right">קטגוריה</TableCell>
                   <TableCell align="right">מדד</TableCell>
-                  <TableCell align="center" width="30%">הערכה</TableCell>
-                  <TableCell align="right" width="25%">הערות</TableCell>
-                  <TableCell />
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {(sheet?.rows || []).map((row) => (
+              <TableCell align="center" width="30%">הערכה</TableCell>
+              <TableCell align="right" width={isMobile ? '45%' : '25%'}>הערות</TableCell>
+              <TableCell />
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {(sheet?.rows || []).map((row) => (
                   <TableRow key={row.id} hover>
                     <TableCell>{row.component}</TableCell>
                     <TableCell>{row.category}</TableCell>
@@ -345,7 +377,7 @@ const PublicTesterPage = () => {
                       <TextField
                         fullWidth
                         multiline
-                        minRows={2}
+                        minRows={isMobile ? 4 : 2}
                         value={row.comment || ''}
                         onChange={(event) => handleCommentChange(row.id, event.target.value)}
                       />
@@ -394,16 +426,20 @@ const PublicTesterPage = () => {
                       >
                         {event.time || '--:--'}
                       </Box>
-                      <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-                        <Typography fontWeight={700} noWrap>{event.message || 'עדכון'}</Typography>
-                        <Typography variant="body2" color="text.secondary" noWrap>
-                          {`${event.from || ''}${event.from && event.to ? ' → ' : ''}${event.to || ''}`}
+                      <Box sx={{ flexGrow: 1, minWidth: 0, overflow: 'hidden', paddingX: '8px' }}>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          noWrap
+                          sx={{ textOverflow: 'ellipsis', overflow: 'hidden', display: 'block' }}
+                        >
+                          {`${event.to || ''}`}
                         </Typography>
                       </Box>
                     </Stack>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <Stack spacing={1.5}>
+                    <Stack spacing={1.5} sx={{ wordBreak: 'break-word' }}>
                       <Stack direction="row" spacing={2}>
                         <Typography variant="body2" color="text.secondary" minWidth={60}>שעה</Typography>
                         <Typography>{event.time || 'לא צוין'}</Typography>

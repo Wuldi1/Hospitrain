@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   Alert,
@@ -364,29 +364,61 @@ const DrillEditorPage = () => {
   const [metaSaving, setMetaSaving] = useState(false);
   const [hospitals, setHospitals] = useState([]);
   const apiClientRef = useRef(new ApiClient());
+  const refreshTimerRef = useRef(null);
   const rowUpdateTimers = useRef({});
   const sheetUpdateTimers = useRef({});
 
-  useEffect(() => {
-    const fetchDrill = async () => {
+  const isTodayDate = (dateStr) => {
+    if (!dateStr) return false;
+    const today = new Date().toISOString().slice(0, 10);
+    return dateStr.slice(0, 10) === today;
+  };
+
+  const fetchDrill = useCallback(async (silent = false) => {
+    if (!silent) {
       setLoading(true);
-      try {
-        const data = await getDrill(drillId);
-        setDrill(data);
-        setSelectedSheetId(data.sheets?.[0]?.sheetId || '');
-        setScheduleDraft(normalizeScheduleForUi(data.schedule));
-        setScheduleDirty(false);
-        setMetaForm({ name: data.name || '', hospitalId: data.hospitalId || data.hospital || '', date: data.date || '' });
-        setError('');
-      } catch (err) {
+    }
+    try {
+      const data = await getDrill(drillId);
+      setDrill(data);
+      setSelectedSheetId(data.sheets?.[0]?.sheetId || '');
+      setScheduleDraft(normalizeScheduleForUi(data.schedule));
+      setScheduleDirty(false);
+      setMetaForm({ name: data.name || '', hospitalId: data.hospitalId || data.hospital || '', date: data.date || '' });
+      setError('');
+    } catch (err) {
+      if (!silent) {
         setError('לא ניתן לטעון את התרגיל');
-      } finally {
+      }
+    } finally {
+      if (!silent) {
         setLoading(false);
       }
-    };
-
-    fetchDrill();
+    }
   }, [drillId]);
+
+  useEffect(() => {
+    fetchDrill();
+    return () => {
+      if (refreshTimerRef.current) {
+        clearInterval(refreshTimerRef.current);
+      }
+    };
+  }, [fetchDrill]);
+
+  useEffect(() => {
+    if (refreshTimerRef.current) {
+      clearInterval(refreshTimerRef.current);
+    }
+    if (isTodayDate(drill?.date)) {
+      refreshTimerRef.current = setInterval(() => fetchDrill(true), 15000);
+    }
+    return () => {
+      if (refreshTimerRef.current) {
+        clearInterval(refreshTimerRef.current);
+      }
+    };
+  }, [drill?.date, fetchDrill]);
 
   useEffect(() => {
     const fetchHospitals = async () => {
