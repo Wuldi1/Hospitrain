@@ -29,6 +29,8 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CheckIcon from '@mui/icons-material/Check';
 import {
   getTemplates,
   getTemplateBundle,
@@ -56,12 +58,13 @@ const defaultScheduleOrder = ['serial', 'time', 'from', 'to', 'message', 'notes'
 const evaluationOptions = [
   { key: 'yes', label: 'כן' },
   { key: 'no', label: 'לא' },
+  { key: 'partial', label: 'חלקי' },
   { key: 'notRelevant', label: 'לא רלוונטי' },
   { key: 'redFlag', label: 'קו אדום' },
 ];
 
 const createId = () => (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`);
-const emptyEvaluation = () => ({ yes: false, no: false, notRelevant: false, redFlag: false });
+const emptyEvaluation = () => ({ yes: false, no: false, partial: false, notRelevant: false, redFlag: false });
 
 const makeColumnKey = (label, existingKeys = []) => {
   const base = (label || '')
@@ -314,6 +317,63 @@ const TemplatesPage = () => {
     markDirty('bakara');
   };
 
+  const handleDuplicateBakaraSheet = () => {
+    if (!bakara || !selectedSheetId) {
+      return;
+    }
+    const sourceSheet = bakara.sheets.find((sheet) => sheet.sheetId === selectedSheetId);
+    if (!sourceSheet) {
+      return;
+    }
+    const newSheetId = createId();
+    const newSheet = {
+      ...sourceSheet,
+      sheetId: newSheetId,
+      sheetName: `${sourceSheet.sheetName || 'גיליון'} (העתק)`,
+      rows: sourceSheet.rows.map((row) => ({
+        ...row,
+        id: createId(),
+        evaluation: row.evaluation || emptyEvaluation(),
+      })),
+    };
+    setBakara((prev) => ({
+      ...prev,
+      sheets: [...prev.sheets, newSheet],
+    }));
+    setSelectedSheetId(newSheetId);
+    markDirty('bakara');
+  };
+
+  const handleRenameBakaraSheet = (value) => {
+    if (!bakara || !selectedSheetId) {
+      return;
+    }
+    setBakara((prev) => ({
+      ...prev,
+      sheets: prev.sheets.map((sheet) =>
+        sheet.sheetId === selectedSheetId ? { ...sheet, sheetName: value } : sheet
+      ),
+    }));
+    markDirty('bakara');
+  };
+
+  const handleReorderBakaraSheets = (sourceId, targetId) => {
+    if (!bakara || !sourceId || !targetId || sourceId === targetId) {
+      return;
+    }
+    const sheets = [...bakara.sheets];
+    const sourceIndex = sheets.findIndex((s) => s.sheetId === sourceId);
+    const targetIndex = sheets.findIndex((s) => s.sheetId === targetId);
+    if (sourceIndex === -1 || targetIndex === -1) {
+      return;
+    }
+    const [moved] = sheets.splice(sourceIndex, 1);
+    sheets.splice(targetIndex, 0, moved);
+    setBakara((prev) => ({ ...prev, sheets }));
+    setSelectedSheetId(moved.sheetId);
+    markDirty('bakara');
+  };
+
   const handleAddBakaraRow = () => {
     if (!bakara || !selectedSheetId) {
       return;
@@ -460,6 +520,11 @@ const TemplatesPage = () => {
     return bakara.sheets.find((sheet) => sheet.sheetId === selectedSheetId) || bakara.sheets[0] || null;
   }, [bakara, selectedSheetId]);
 
+  const scheduleToOptions = useMemo(() => {
+    const sheetNames = (bakara?.sheets || []).map((sheet) => sheet.sheetName).filter(Boolean);
+    return ['כולם', ...sheetNames.filter((name) => name !== 'כולם')];
+  }, [bakara]);
+
   const renderBakaraTab = () => {
     if (!bakara) {
       return (
@@ -478,35 +543,75 @@ const TemplatesPage = () => {
     }
 
     return (
-      <Paper sx={{ p: 2, mt: 2 }}>
+      <Paper
+        sx={{
+          p: 3,
+          mt: 3,
+          border: '1px solid',
+          borderColor: 'primary.main',
+          boxShadow: '0 14px 40px rgba(0,0,0,0.06)',
+          borderRadius: 3,
+        }}
+      >
         <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} justifyContent="space-between" alignItems={{ xs: 'flex-start', md: 'center' }}>
           <Tabs
             value={selectedBakaraSheet?.sheetId || false}
             onChange={(event, val) => setSelectedSheetId(val)}
             variant="scrollable"
             scrollButtons="auto"
+            sx={{ flexGrow: 1, minWidth: 0 }}
           >
             {bakara.sheets.map((sheet) => (
-              <Tab key={sheet.sheetId} value={sheet.sheetId} label={sheet.sheetName || 'גיליון'} />
+              <Tab
+                key={sheet.sheetId}
+                value={sheet.sheetId}
+                label={sheet.sheetName || 'גיליון'}
+                draggable
+                onDragStart={(e) => e.dataTransfer.setData('text/plain', sheet.sheetId)}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  const sourceId = e.dataTransfer.getData('text/plain');
+                  handleReorderBakaraSheets(sourceId, sheet.sheetId);
+                }}
+              />
             ))}
           </Tabs>
-          <Stack direction="row" spacing={1}>
-            <Button
-              variant="outlined"
-              startIcon={<AddIcon />}
-              onClick={handleAddBakaraColumn}
-            >
-              הוסף עמודה
-            </Button>
-            <Button
-              variant="contained"
-              startIcon={<SaveIcon />}
-              onClick={handleSaveBakara}
-              disabled={!dirty.bakara || saving.bakara}
-            >
-              {saving.bakara ? 'שומר...' : 'שמור בקרה'}
-            </Button>
+          <Stack direction="row" spacing={1} flexWrap="wrap" justifyContent="flex-end">
+            <Tooltip title="שמור בקרה">
+              <span>
+                <IconButton color="primary" onClick={handleSaveBakara} disabled={!dirty.bakara || saving.bakara}>
+                  {saving.bakara ? <CircularProgress size={18} /> : <CheckIcon />}
+                </IconButton>
+              </span>
+            </Tooltip>
+            <Tooltip title="הוסף עמודה">
+              <span>
+                <IconButton onClick={handleAddBakaraColumn}>
+                  <AddIcon />
+                </IconButton>
+              </span>
+            </Tooltip>
+            <Tooltip title="שכפל גיליון">
+              <span>
+                <IconButton onClick={handleDuplicateBakaraSheet} disabled={!selectedBakaraSheet}>
+                  <ContentCopyIcon />
+                </IconButton>
+              </span>
+            </Tooltip>
           </Stack>
+        </Stack>
+
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems={{ xs: 'stretch', md: 'center' }} sx={{ mt: 2 }}>
+          <TextField
+            label="שם הגיליון"
+            value={selectedBakaraSheet?.sheetName || ''}
+            onChange={(event) => handleRenameBakaraSheet(event.target.value)}
+            fullWidth
+          />
+          <Button variant="outlined" startIcon={<AddIcon />} onClick={handleAddBakaraRow} sx={{ whiteSpace: 'nowrap' }}>
+            הוסף שורה
+          </Button>
         </Stack>
 
         <TableContainer sx={{ mt: 2 }}>
@@ -578,10 +683,19 @@ const TemplatesPage = () => {
     }
 
     return (
-      <Paper sx={{ p: 2, mt: 2 }}>
+      <Paper
+        sx={{
+          p: 3,
+          mt: 3,
+          border: '1px solid',
+          borderColor: 'secondary.main',
+          boxShadow: '0 14px 40px rgba(0,0,0,0.06)',
+          borderRadius: 3,
+        }}
+      >
         <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} justifyContent="space-between" alignItems={{ xs: 'flex-start', md: 'center' }}>
-          <Typography variant="h6">סדרה ג׳</Typography>
-          <Stack direction="row" spacing={1}>
+          <Typography variant="h5" fontWeight={700}>סדרה ג׳</Typography>
+          <Stack direction="row" spacing={1} flexWrap="wrap" justifyContent="flex-end">
             <Button variant="outlined" startIcon={<AddIcon />} onClick={handleAddScheduleColumn}>
               הוסף עמודה
             </Button>
@@ -617,14 +731,38 @@ const TemplatesPage = () => {
                 <TableRow key={row.id}>
                   {schedule.columns.map((column) => (
                     <TableCell key={column.key}>
-                      <TextField
-                        fullWidth
-                        variant="standard"
-                        value={row[column.key] || ''}
-                        onChange={(event) => handleScheduleRowChange(row.id, column.key, event.target.value)}
-                        multiline={column.key === 'message' || column.key === 'notes'}
-                        minRows={column.key === 'message' || column.key === 'notes' ? 2 : 1}
-                      />
+                      {column.key === 'to' ? (
+                        <Box>
+                          <TextField
+                            select
+                            fullWidth
+                            variant="standard"
+                            label="יעד"
+                            value={row[column.key] || ''}
+                            onChange={(event) => handleScheduleRowChange(row.id, column.key, event.target.value)}
+                          >
+                            {scheduleToOptions.map((option) => (
+                              <MenuItem key={option} value={option}>
+                                {option}
+                              </MenuItem>
+                            ))}
+                          </TextField>
+                          {row[column.key] && !scheduleToOptions.includes(row[column.key]) && (
+                            <Typography variant="caption" color="error" sx={{ mt: 0.5, display: 'block' }}>
+                              ערך זה אינו תואם לגיליונות הבקרה. בחר יעד תקף.
+                            </Typography>
+                          )}
+                        </Box>
+                      ) : (
+                        <TextField
+                          fullWidth
+                          variant="standard"
+                          value={row[column.key] || ''}
+                          onChange={(event) => handleScheduleRowChange(row.id, column.key, event.target.value)}
+                          multiline={column.key === 'message' || column.key === 'notes'}
+                          minRows={column.key === 'message' || column.key === 'notes' ? 2 : 1}
+                        />
+                      )}
                     </TableCell>
                   ))}
                   <TableCell align="center">

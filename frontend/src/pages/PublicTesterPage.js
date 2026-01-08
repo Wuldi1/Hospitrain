@@ -37,6 +37,7 @@ import { getPublicDrill, updatePublicRow } from '../api/drillsApi';
 const evaluationOptions = [
   { key: 'yes', label: 'כן' },
   { key: 'no', label: 'לא' },
+  { key: 'partial', label: 'חלקי' },
   { key: 'notRelevant', label: 'לא רלוונטי' },
   { key: 'redFlag', label: 'קו אדום' },
 ];
@@ -51,7 +52,7 @@ const scheduleColumnLabels = {
   notes: 'הערות',
 };
 
-const emptyEvaluation = () => ({ yes: false, no: false, notRelevant: false, redFlag: false });
+const emptyEvaluation = () => ({ yes: false, no: false, partial: false, notRelevant: false, redFlag: false });
 
 const createColumnsFromEvents = (events = []) => {
   const seen = new Set();
@@ -263,6 +264,17 @@ const PublicTesterPage = () => {
     scheduleRowPersistence(rowId, { comment: value });
   };
 
+  const sheet = (data?.sheets || []).find((s) => s.sheetId === selectedSheetId) || null;
+  const schedule = useMemo(() => {
+    const base = data?.schedule;
+    if (!base) return null;
+    if (!selectedSheetId) return base;
+    const allowed = (base.events || []).filter(
+      (event) => (event.to === 'כולם') || (event.to === (sheet?.sheetName || ''))
+    );
+    return { ...base, events: allowed };
+  }, [data?.schedule, selectedSheetId, sheet?.sheetName]);
+
   if (loading) {
     return (
       <Box sx={{ p: 4 }} dir="rtl">
@@ -286,9 +298,6 @@ const PublicTesterPage = () => {
       </Box>
     );
   }
-
-  const sheet = (data?.sheets || []).find((s) => s.sheetId === selectedSheetId) || null;
-  const { schedule } = data || {};
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, pb: 8 }} dir="rtl">

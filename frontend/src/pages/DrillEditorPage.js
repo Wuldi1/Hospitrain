@@ -55,6 +55,7 @@ import ApiClient from '../services/ApiClient';
 const evaluationOptions = [
   { key: 'yes', label: 'כן' },
   { key: 'no', label: 'לא' },
+  { key: 'partial', label: 'חלקי' },
   { key: 'notRelevant', label: 'לא רלוונטי' },
   { key: 'redFlag', label: 'קו אדום' },
 ];
@@ -446,6 +447,11 @@ const DrillEditorPage = () => {
     return drill.sheets.find((sheet) => sheet.sheetId === selectedSheetId) || drill.sheets[0] || null;
   }, [drill, selectedSheetId]);
 
+  const scheduleToOptions = useMemo(() => {
+    const sheetNames = (drill?.sheets || []).map((sheet) => sheet.sheetName).filter(Boolean);
+    return ['כולם', ...sheetNames.filter((name) => name !== 'כולם')];
+  }, [drill]);
+
   const markRowSaving = (rowId, value) => {
     setRowSavingState((prev) => {
       const next = { ...prev };
@@ -553,6 +559,7 @@ const DrillEditorPage = () => {
       const nextEvaluation = {
         yes: false,
         no: false,
+        partial: false,
         notRelevant: false,
         redFlag: false,
       };
@@ -911,16 +918,40 @@ const DrillEditorPage = () => {
                 <TableRow key={row.id}>
                   {scheduleDraft.columns.map((column) => (
                     <TableCell key={column.key}>
-                      <TextField
-                        fullWidth
-                        variant="standard"
-                        type={column.key === 'time' ? 'time' : 'text'}
-                        InputLabelProps={column.key === 'time' ? { shrink: true } : undefined}
-                        value={row[column.key] || ''}
-                        onChange={(event) => handleScheduleRowChange(row.id, column.key, event.target.value)}
-                        multiline={column.key === 'message' || column.key === 'notes'}
-                        minRows={column.key === 'message' || column.key === 'notes' ? 2 : 1}
-                      />
+                      {column.key === 'to' ? (
+                        <Box>
+                          <TextField
+                            select
+                            fullWidth
+                            variant="standard"
+                            label="יעד"
+                            value={row[column.key] || ''}
+                            onChange={(event) => handleScheduleRowChange(row.id, column.key, event.target.value)}
+                          >
+                            {scheduleToOptions.map((option) => (
+                              <MenuItem key={option} value={option}>
+                                {option}
+                              </MenuItem>
+                            ))}
+                          </TextField>
+                          {row[column.key] && !scheduleToOptions.includes(row[column.key]) && (
+                            <Typography variant="caption" color="error" sx={{ mt: 0.5, display: 'block' }}>
+                              ערך זה אינו קיים בגיליונות. בחר יעד תקף.
+                            </Typography>
+                          )}
+                        </Box>
+                      ) : (
+                        <TextField
+                          fullWidth
+                          variant="standard"
+                          type={column.key === 'time' ? 'time' : 'text'}
+                          InputLabelProps={column.key === 'time' ? { shrink: true } : undefined}
+                          value={row[column.key] || ''}
+                          onChange={(event) => handleScheduleRowChange(row.id, column.key, event.target.value)}
+                          multiline={column.key === 'message' || column.key === 'notes'}
+                          minRows={column.key === 'message' || column.key === 'notes' ? 2 : 1}
+                        />
+                      )}
                     </TableCell>
                   ))}
                   <TableCell align="center">
