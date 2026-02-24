@@ -9,7 +9,6 @@
     "@mui/material": "^7.3.6",
     "@mui/x-date-pickers": "^8.21.0",
     "date-fns": "^4.1.0",
-    "emergency-drill-manager-common": "file:../common",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.10.1",
