@@ -28,7 +28,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
 
       - name: Build frontend artifact
-        run: npm ci && npm run build:artifact
+        run: npm i && npm run build:artifact
         working-directory: frontend
         env:
           REACT_APP_API_DOMAIN: ${{ secrets.REACT_APP_API_DOMAIN }}
