@@ -1,26 +1,24 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import DescriptionIcon from "@mui/icons-material/Description";
+import EventNoteIcon from "@mui/icons-material/EventNote";
+import HomeIcon from "@mui/icons-material/Home";
+import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
+import LogoutIcon from "@mui/icons-material/Logout";
 import {
+  Avatar,
+  Box,
+  Divider,
   Drawer,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Avatar,
-  Box,
   Typography,
-  Divider,
   useTheme,
-} from '@mui/material';
-import HomeIcon from '@mui/icons-material/Home';
-import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
-import EventNoteIcon from '@mui/icons-material/EventNote';
-import PersonIcon from '@mui/icons-material/Person';
-import SettingsIcon from '@mui/icons-material/Settings';
-import LogoutIcon from '@mui/icons-material/Logout';
-import DescriptionIcon from '@mui/icons-material/Description';
+} from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
-const NAV_COLOR = '#166CC7';
+const NAV_COLOR = "#1565C0";
 
 export default function SideNavBar() {
   const location = useLocation();
@@ -28,23 +26,33 @@ export default function SideNavBar() {
   const theme = useTheme();
 
   const items = [
-    { key: 'home', text: 'דף הבית', icon: <HomeIcon />, to: '/home' },
-    { key: 'hospitals', text: 'בתי חולים', icon: <LocalHospitalIcon />, to: '/hospitals' },
-    { key: 'drills', text: 'תרגילים', icon: <EventNoteIcon />, to: '/drills' },
-    { key: 'templates', text: 'תבניות', icon: <DescriptionIcon />, to: '/templates' },
-    { key: 'profile', text: 'פרופיל', icon: <PersonIcon />, to: '/profile' },
-    { key: 'settings', text: 'הגדרות', icon: <SettingsIcon />, to: '/settings' },
+    { key: "home", text: "דף הבית", icon: <HomeIcon />, to: "/home" },
+    {
+      key: "hospitals",
+      text: "בתי חולים",
+      icon: <LocalHospitalIcon />,
+      to: "/hospitals",
+    },
+    { key: "drills", text: "תרגילים", icon: <EventNoteIcon />, to: "/drills" },
+    {
+      key: "templates",
+      text: "תבניות",
+      icon: <DescriptionIcon />,
+      to: "/templates",
+    },
+    // { key: 'profile', text: 'פרופיל', icon: <PersonIcon />, to: '/profiles' },
+    // { key: 'settings', text: 'הגדרות', icon: <SettingsIcon />, to: '/settings' },
   ];
 
   const handleNavigate = (to) => navigate(to);
 
   const handleLogout = () => {
     try {
-      localStorage.removeItem('authToken');
+      localStorage.removeItem("authToken");
     } catch (e) {
       /* ignore */
     }
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
@@ -54,41 +62,79 @@ export default function SideNavBar() {
       sx={{
         width: drawerWidth,
         flexShrink: 0,
-        '& .MuiDrawer-paper': {
+        "& .MuiDrawer-paper": {
           width: drawerWidth,
-          boxSizing: 'border-box',
-          borderRight: 'none',
-          background: theme.palette.background.paper,
-          display: 'flex',
-          flexDirection: 'column',
+          boxSizing: "border-box",
+          borderRight: "none",
+          background: "linear-gradient(180deg, #ffffff 0%, #f5fcfa 100%)",
+          borderLeft: `1px solid ${theme.palette.divider}`,
+          display: "flex",
+          flexDirection: "column",
+          direction: "rtl",
         },
       }}
     >
-      <Box sx={{ px: 2, py: 3, display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
+      <Box
+        sx={{
+          px: 2,
+          py: 3,
+          display: "flex",
+          flexDirection: "row-reverse",
+          alignItems: "center",
+          gap: 2,
+          flexShrink: 0,
+        }}
+      >
         <Avatar sx={{ bgcolor: NAV_COLOR, width: 56, height: 56 }}>ה</Avatar>
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Typography variant="h6" sx={{ color: NAV_COLOR, fontWeight: 600 }}>הצוות שלי</Typography>
-          <Typography variant="caption" color="text.secondary">ניהול תרגילים ומרכז</Typography>
+        <Box
+          sx={{ display: "flex", flexDirection: "column", textAlign: "right" }}
+        >
+          <Typography variant="h6" sx={{ color: NAV_COLOR, fontWeight: 700 }}>
+            Hospitrain
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            ניהול מוכנות בריאות
+          </Typography>
         </Box>
       </Box>
 
       <Divider />
 
-      <List sx={{ p: 1 }}>
+      <List sx={{ p: 1, direction: "rtl" }}>
         {items.map((it) => (
           <ListItemButton
             key={it.key}
             selected={location.pathname === it.to}
             onClick={() => handleNavigate(it.to)}
             sx={{
+              flexDirection: "row-reverse",
+              justifyContent: "flex-start",
+              textAlign: "right",
               borderRadius: 1,
               mb: 0.5,
-              '&.Mui-selected': {
-                bgcolor: 'rgba(22,108,199,0.08)',
+              py: 1,
+              "& .MuiListItemText-root .MuiTypography-root": {
+                textAlign: "right",
+              },
+              "&.Mui-selected": {
+                bgcolor: "rgba(21,101,192,0.12)",
+                "& .MuiListItemText-root .MuiTypography-root": {
+                  fontWeight: 700,
+                },
               },
             }}
           >
-            <ListItemIcon sx={{ color: NAV_COLOR }}>{it.icon}</ListItemIcon>
+            <ListItemIcon
+              sx={{
+                color: NAV_COLOR,
+                minWidth: "auto",
+                marginInlineStart: 12,
+                marginInlineEnd: 0,
+                justifyContent: "center",
+              }}
+            >
+              {it.icon}
+            </ListItemIcon>
             <ListItemText primary={it.text} />
           </ListItemButton>
         ))}
@@ -99,8 +145,25 @@ export default function SideNavBar() {
       <Box sx={{ p: 1 }}>
         <Divider />
         <List>
-          <ListItemButton onClick={handleLogout} sx={{ mt: 1 }}>
-            <ListItemIcon sx={{ color: NAV_COLOR }}>
+          <ListItemButton
+            onClick={handleLogout}
+            sx={{
+              mt: 1,
+              flexDirection: "row-reverse",
+              textAlign: "right",
+              "& .MuiListItemText-root .MuiTypography-root": {
+                textAlign: "right",
+              },
+            }}
+          >
+            <ListItemIcon
+              sx={{
+                color: NAV_COLOR,
+                minWidth: "auto",
+                marginInlineStart: 12,
+                marginInlineEnd: 0,
+              }}
+            >
               <LogoutIcon />
             </ListItemIcon>
             <ListItemText primary="התנתק" />

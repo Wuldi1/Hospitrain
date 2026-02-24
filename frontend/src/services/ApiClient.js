@@ -1,17 +1,26 @@
+import { handleUnauthorizedRedirect, isTokenValid } from '../utils/auth';
+import { getApiBase } from '../utils/apiBase';
+
 class ApiClient {
   constructor() {
-    // domain will be fetched from environment variables or defaults
-    this.domain = process.env.REACT_APP_API_DOMAIN || 'http://localhost:4000';
+    this.domain = getApiBase();
   }
 
   async request(endpoint, options = {}) {
     const token = localStorage.getItem('authToken');
+    const isPublicEndpoint = endpoint.startsWith('/api/auth') || endpoint.startsWith('/api/drills/public');
+
+    if (!isPublicEndpoint && !isTokenValid(token)) {
+      handleUnauthorizedRedirect();
+      throw new Error('Unauthorized');
+    }
+
     const headers = {
       'Content-Type': 'application/json',
       ...options.headers,
     };
 
-    if (token && !endpoint.startsWith('/api/auth')) {
+    if (token && !isPublicEndpoint) {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
@@ -19,6 +28,11 @@ class ApiClient {
       ...options,
       headers,
     });
+
+    if ((response.status === 401 || response.status === 403) && !isPublicEndpoint) {
+      handleUnauthorizedRedirect();
+      throw new Error('Unauthorized');
+    }
 
     if (!response.ok) {
       throw new Error(`API request failed with status ${response.status}`);

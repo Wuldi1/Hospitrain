@@ -1,13 +1,23 @@
-const API_BASE = process.env.REACT_APP_API_DOMAIN || 'http://localhost:4000';
+import { handleUnauthorizedRedirect, isTokenValid } from '../utils/auth';
+import { getApiBase } from '../utils/apiBase';
+
+const API_BASE = getApiBase();
 
 async function request(path, options = {}) {
   const token = localStorage.getItem('authToken');
+  const isPublicEndpoint = path.startsWith('/api/drills/public');
+
+  if (!isPublicEndpoint && !isTokenValid(token)) {
+    handleUnauthorizedRedirect();
+    throw new Error('Unauthorized');
+  }
+
   const headers = {
     'Content-Type': 'application/json',
     ...(options.headers || {}),
   };
 
-  if (token) {
+  if (token && !isPublicEndpoint) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
@@ -15,6 +25,11 @@ async function request(path, options = {}) {
     ...options,
     headers,
   });
+
+  if ((response.status === 401 || response.status === 403) && !isPublicEndpoint) {
+    handleUnauthorizedRedirect();
+    throw new Error('Unauthorized');
+  }
 
   if (!response.ok) {
     const message = await response.text();

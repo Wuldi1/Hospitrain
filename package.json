@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "build:backend:artifact": "npm --prefix backend run build:artifact",
+    "build:frontend:artifact": "npm --prefix frontend run build:artifact",
+    "build:artifacts": "npm run build:backend:artifact && npm run build:frontend:artifact"
+  },
   "dependencies": {
     "dotenv": "^17.2.3",
     "express": "^5.2.1",

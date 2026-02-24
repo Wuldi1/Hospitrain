@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "clean:artifact": "rm -rf .artifact",
+    "build:artifact": "npm run clean:artifact && mkdir -p .artifact && tar --exclude='.artifact' --exclude='node_modules' --exclude='.env' --exclude='data/drills.json' -cf - . | tar -xf - -C .artifact && cp -R ../common .artifact/common && node -e \"const fs=require('fs');const p='.artifact/package.json';const pl='.artifact/package-lock.json';const pkg=JSON.parse(fs.readFileSync(p,'utf8'));if(pkg.dependencies&&pkg.dependencies['emergency-drill-manager-common']==='file:../common'){pkg.dependencies['emergency-drill-manager-common']='file:./common';}fs.writeFileSync(p,JSON.stringify(pkg,null,2)+'\\n');if(fs.existsSync(pl)){const raw=fs.readFileSync(pl,'utf8').replaceAll('file:../common','file:./common');fs.writeFileSync(pl,raw);}\""
   },
   "dependencies": {
     "cors": "^2.8.5",

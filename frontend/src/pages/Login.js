@@ -1,17 +1,30 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Container, Paper, Typography, TextField, Button, Box, Alert } from '@mui/material';
-import { LocalHospital } from '@mui/icons-material';
-import ApiClient from '../services/ApiClient';
+import {
+  LocalHospital,
+  MarkEmailReadOutlined,
+  ShieldOutlined,
+} from "@mui/icons-material";
+import {
+  Alert,
+  Box,
+  Button,
+  Chip,
+  Container,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import ApiClient from "../services/ApiClient";
 
-const API_DOMAIN = 'http://localhost:4000';
-const apiClient = new ApiClient(API_DOMAIN);
+const apiClient = new ApiClient();
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [code, setCode] = useState('');
+  const [email, setEmail] = useState("");
+  const [code, setCode] = useState("000000");
   const [step, setStep] = useState(1);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleRequestCode = async (e) => {
@@ -19,9 +32,9 @@ const Login = () => {
     try {
       await apiClient.requestCode(email);
       setStep(2);
-      setErrorMessage('');
+      setErrorMessage("");
     } catch (error) {
-      setErrorMessage('שליחת הקוד נכשלה');
+      setErrorMessage("שליחת הקוד נכשלה");
     }
   };
 
@@ -29,108 +42,168 @@ const Login = () => {
     e.preventDefault();
     try {
       const data = await apiClient.verifyCode(email, code);
-      localStorage.setItem('authToken', data.token);
-      navigate('/home');
+      localStorage.setItem("authToken", data.token);
+      navigate("/home");
     } catch (error) {
-      setErrorMessage('קוד שגוי');
+      setErrorMessage("קוד שגוי");
     }
   };
 
   return (
-    <Container maxWidth="sm" style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Paper elevation={3} style={{ padding: '40px', width: '100%', borderRadius: '16px', textAlign: 'center' }}>
-        <Box display="flex" flexDirection="column" alignItems="center" mb={3}>
-          <div style={{ 
-            backgroundColor: '#e3f2fd', 
-            borderRadius: '50%', 
-            padding: '16px',
-            marginBottom: '16px'
-          }}>
-            <LocalHospital style={{ fontSize: 48, color: '#1976d2' }} />
-          </div>
-          <Typography variant="h4" component="h1" gutterBottom style={{ fontWeight: 'bold', color: '#1976d2' }}>
-            Hospitrain
-          </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
-            מערכת לניהול תרגילי חירום
-          </Typography>
-        </Box>
+    <Box
+      dir="rtl"
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        background:
+          "linear-gradient(135deg, rgba(21,101,192,0.94), rgba(66,165,245,0.88))",
+      }}
+    >
+      <Container maxWidth="md">
+        <Paper
+          elevation={0}
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", md: "1.1fr 1fr" },
+            overflow: "hidden",
+            borderRadius: 4,
+          }}
+        >
+          <Box
+            sx={{
+              p: { xs: 3, md: 4 },
+              color: "#fff",
+              textAlign: "right",
+              background:
+                "radial-gradient(circle at 0% 0%, rgba(255,255,255,0.24), transparent 45%), linear-gradient(160deg, #1565C0 0%, #0D47A1 100%)",
+            }}
+          >
+            <Stack spacing={2.5}>
+              <Box
+                sx={{
+                  display: "inline-flex",
+                  p: 1.5,
+                  borderRadius: "50%",
+                  bgcolor: "rgba(255,255,255,0.16)",
+                }}
+              >
+                <LocalHospital sx={{ fontSize: 36 }} />
+              </Box>
+              <Typography variant="h4">Hospitrain</Typography>
+              <Typography variant="body1" sx={{ opacity: 0.92 }}>
+                מרכז שליטה לתרגילי חירום רפואיים. ניטור בזמן אמת, משימות, ודיווח
+                אחיד לכלל בתי החולים.
+              </Typography>
+              <Stack direction="row" spacing={1.2} flexWrap="wrap" useFlexGap>
+                <Chip
+                  icon={<ShieldOutlined />}
+                  label="גישה מאובטחת"
+                  sx={{
+                    bgcolor: "rgba(255,255,255,0.2)",
+                    color: "white",
+                    "& .MuiChip-icon": {
+                      marginInlineStart: 8,
+                      marginInlineEnd: -4,
+                    },
+                  }}
+                />
+                <Chip
+                  icon={<MarkEmailReadOutlined />}
+                  label="אימות קוד במייל"
+                  sx={{
+                    bgcolor: "rgba(255,255,255,0.2)",
+                    color: "white",
+                    "& .MuiChip-icon": {
+                      marginInlineStart: 8,
+                      marginInlineEnd: -4,
+                    },
+                  }}
+                />
+              </Stack>
+            </Stack>
+          </Box>
 
-        <Typography variant="h5" gutterBottom style={{ marginBottom: '24px' }}>
-          {step === 1 ? 'כניסה למערכת' : 'אימות קוד'}
-        </Typography>
-
-        {errorMessage && (
-          <Alert severity="error" style={{ marginBottom: '20px' }}>
-            {errorMessage}
-          </Alert>
-        )}
-
-        {step === 1 && (
-          <form onSubmit={handleRequestCode}>
-            <TextField
-              fullWidth
-              label="כתובת אימייל"
-              variant="outlined"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              margin="normal"
-              required
-              dir="rtl"
-            />
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              type="submit"
-              size="large"
-              style={{ marginTop: '24px', padding: '12px', fontSize: '1.1rem' }}
-            >
-              שלח קוד אימות
-            </Button>
-          </form>
-        )}
-
-        {step === 2 && (
-          <form onSubmit={handleVerifyCode}>
-            <Typography variant="body2" color="textSecondary" style={{ marginBottom: '16px' }}>
-              קוד אימות נשלח לכתובת {email}
+          <Box sx={{ p: { xs: 3, md: 4 }, textAlign: "right" }}>
+            <Typography variant="h5" sx={{ mb: 2.5 }}>
+              {step === 1 ? "כניסה למערכת" : "אימות קוד"}
             </Typography>
-            <TextField
-              fullWidth
-              label="קוד אימות"
-              variant="outlined"
-              type="text"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              margin="normal"
-              required
-              dir="rtl"
-              autoFocus
-            />
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              type="submit"
-              size="large"
-              style={{ marginTop: '24px', padding: '12px', fontSize: '1.1rem' }}
-            >
-              כניסה
-            </Button>
-            <Button
-              fullWidth
-              color="secondary"
-              onClick={() => setStep(1)}
-              style={{ marginTop: '12px' }}
-            >
-              חזרה
-            </Button>
-          </form>
-        )}
-      </Paper>
-    </Container>
+
+            {errorMessage && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                {errorMessage}
+              </Alert>
+            )}
+
+            {step === 1 && (
+              <Box component="form" onSubmit={handleRequestCode}>
+                <TextField
+                  fullWidth
+                  label="כתובת אימייל"
+                  variant="outlined"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  margin="normal"
+                  required
+                  dir="rtl"
+                />
+                <Button
+                  fullWidth
+                  variant="contained"
+                  type="submit"
+                  size="large"
+                  sx={{ mt: 2 }}
+                >
+                  שלח קוד אימות
+                </Button>
+              </Box>
+            )}
+
+            {step === 2 && (
+              <Box component="form" onSubmit={handleVerifyCode}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 1 }}
+                >
+                  קוד אימות נשלח לכתובת {email}
+                </Typography>
+                <TextField
+                  fullWidth
+                  label="קוד אימות"
+                  variant="outlined"
+                  type="text"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  margin="normal"
+                  required
+                  dir="rtl"
+                  autoFocus
+                />
+                <Button
+                  fullWidth
+                  variant="contained"
+                  type="submit"
+                  size="large"
+                  sx={{ mt: 2 }}
+                >
+                  כניסה
+                </Button>
+                <Button
+                  fullWidth
+                  color="inherit"
+                  onClick={() => setStep(1)}
+                  sx={{ mt: 1 }}
+                >
+                  חזרה
+                </Button>
+              </Box>
+            )}
+          </Box>
+        </Paper>
+      </Container>
+    </Box>
   );
 };
 

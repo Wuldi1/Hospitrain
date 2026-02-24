@@ -10,14 +10,13 @@ import {
   Avatar,
   List,
   ListItem,
-  ListItemAvatar,
   ListItemText,
   Divider,
   Button,
   Stack,
   Tooltip,
 } from '@mui/material';
-import { LocalHospital, Event, Schedule, Add, ArrowForward } from '@mui/icons-material';
+import { LocalHospital, Event, Schedule, Add, ArrowBack } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
 const apiClient = new ApiClient();
@@ -34,11 +33,15 @@ const Home = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'פעיל': return 'success';
-      case 'לא פעיל': return 'error';
-      case 'בוצע': return 'success';
-      case 'מתוכנן': return 'primary';
-      default: return 'default';
+      case 'פעיל':
+      case 'בוצע':
+        return 'success';
+      case 'לא פעיל':
+        return 'error';
+      case 'מתוכנן':
+        return 'primary';
+      default:
+        return 'default';
     }
   };
 
@@ -53,92 +56,78 @@ const Home = () => {
   const upcomingDrills = drills
     .filter((d) => {
       const hasFutureDate = d.date && new Date(d.date) >= new Date(new Date().toDateString());
-      return (d.status === 'מתוכנן') || hasFutureDate;
+      return d.status === 'מתוכנן' || hasFutureDate;
     })
     .sort((a, b) => new Date(a.date || 0) - new Date(b.date || 0))
     .slice(0, 6);
 
   return (
-    <Box sx={{ flexGrow: 1, px: { xs: 2, md: 4 }, py: { xs: 2, md: 4 }, background: 'linear-gradient(120deg, #0b3f65 0%, #0f5c8c 60%, #0e304c 100%)' }} dir="rtl">
-      <Card
-        elevation={0}
-        sx={{
-          mb: 3,
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))',
-          border: '1px solid rgba(255,255,255,0.08)',
-          color: 'white',
-          borderRadius: 3,
-          backdropFilter: 'blur(8px)',
-        }}
-      >
-        <CardContent>
-          <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" alignItems={{ xs: 'flex-start', md: 'center' }} spacing={2}>
-            <Box>
-              <Typography variant="h4" fontWeight={800} sx={{ lineHeight: 1.2 }}>
-                ברוכים הבאים ל-Hospitrain
-              </Typography>
-              <Typography variant="body1" sx={{ opacity: 0.9, mt: 1 }}>
-                ניהול תרגילים בזמן אמת, מעקב אחר בתי חולים ולוח זמנים אחיד – הכל במקום אחד.
-              </Typography>
-              <Stack direction="row" spacing={1} sx={{ mt: 2 }} flexWrap="wrap">
-                <Chip label={`היום: ${new Date().toLocaleDateString('he-IL')}`} variant="outlined" sx={{ color: 'white', borderColor: 'rgba(255,255,255,0.3)' }} />
-                <Chip label={`תרגילים ${drills.length || 0}`} variant="outlined" sx={{ color: 'white', borderColor: 'rgba(255,255,255,0.3)' }} />
-              </Stack>
-            </Box>
-            <Stack direction="row" spacing={1} flexWrap="wrap" justifyContent="flex-end">
-              <Button
-                variant="contained"
-                color="secondary"
-                startIcon={<Add />}
-                onClick={() => navigate('/drills/new')}
-                sx={{ borderRadius: 2, px: 2.5 }}
-              >
-                תרגיל חדש
-              </Button>
-              <Button
-                variant="outlined"
-                color="inherit"
-                endIcon={<ArrowForward />}
-                onClick={() => navigate('/drills')}
-                sx={{ borderRadius: 2, px: 2.5, borderColor: 'rgba(255,255,255,0.4)', color: 'white' }}
-              >
-                לכל התרגילים
-              </Button>
+    <Box className="page-shell" dir="rtl">
+      <Box className="page-header-card" sx={{ mb: 3 }}>
+        <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" spacing={2}>
+          <Box>
+            <Typography variant="h4" sx={{ color: 'white' }}>לוח הבקרה המבצעי</Typography>
+            <Typography sx={{ mt: 1, opacity: 0.92 }}>
+              תמונת מצב של בתי חולים ותרגילים פעילים במערכת.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+              <Chip label={`היום: ${new Date().toLocaleDateString('he-IL')}`} sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white' }} />
+              <Chip label={`תרגילים ${drills.length || 0}`} sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white' }} />
             </Stack>
+          </Box>
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={1.5}
+            useFlexGap
+            sx={{
+              width: { xs: '100%', md: 'auto' },
+              '& .MuiButton-root': {
+                width: { xs: '100%', sm: 'auto' },
+                minWidth: 150,
+                whiteSpace: 'nowrap',
+              },
+            }}
+          >
+            <Button variant="contained" color="secondary" startIcon={<Add />} onClick={() => navigate('/drills/new')}>
+              תרגיל חדש
+            </Button>
+            <Button variant="outlined" color="inherit" startIcon={<ArrowBack />} onClick={() => navigate('/drills')} sx={{ borderColor: 'rgba(255,255,255,0.5)', color: 'white' }}>
+              לכל התרגילים
+            </Button>
           </Stack>
-        </CardContent>
-      </Card>
+        </Stack>
+      </Box>
 
       <Grid container spacing={2} sx={{ mb: 3 }}>
         <Grid item xs={12} md={4}>
-          <Card elevation={3} sx={{ borderRadius: 3, background: '#0c1c2b', color: 'white', border: '1px solid rgba(255,255,255,0.05)' }}>
-            <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2, flexDirection: 'row-reverse' }}>
-              <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.12)', color: 'white' }}><LocalHospital /></Avatar>
-              <Box sx={{ textAlign: 'right' }}>
-                <Typography variant="subtitle2" sx={{ opacity: 0.8 }}>בתי חולים מחוברים</Typography>
-                <Typography variant="h5" fontWeight={800} sx={{ mt: 0.5 }}>{hospitals.length}</Typography>
+          <Card>
+            <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Avatar sx={{ bgcolor: 'primary.light' }}><LocalHospital /></Avatar>
+              <Box>
+                <Typography variant="body2" color="text.secondary">בתי חולים מחוברים</Typography>
+                <Typography variant="h5">{hospitals.length}</Typography>
               </Box>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={12} md={4}>
-          <Card elevation={3} sx={{ borderRadius: 3, background: '#0c1c2b', color: 'white', border: '1px solid rgba(255,255,255,0.05)' }}>
-            <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2, flexDirection: 'row-reverse' }}>
-              <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.12)', color: 'white' }}><Event /></Avatar>
-              <Box sx={{ textAlign: 'right' }}>
-                <Typography variant="subtitle2" sx={{ opacity: 0.8 }}>תרגילים אחרונים</Typography>
-                <Typography variant="h5" fontWeight={800} sx={{ mt: 0.5 }}>{recentDrills.length}</Typography>
+          <Card>
+            <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Avatar sx={{ bgcolor: 'secondary.main' }}><Event /></Avatar>
+              <Box>
+                <Typography variant="body2" color="text.secondary">תרגילים אחרונים</Typography>
+                <Typography variant="h5">{recentDrills.length}</Typography>
               </Box>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={12} md={4}>
-          <Card elevation={3} sx={{ borderRadius: 3, background: '#0c1c2b', color: 'white', border: '1px solid rgba(255,255,255,0.05)' }}>
-            <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2, flexDirection: 'row-reverse' }}>
-              <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.12)', color: 'white' }}><Schedule /></Avatar>
-              <Box sx={{ textAlign: 'right' }}>
-                <Typography variant="subtitle2" sx={{ opacity: 0.8 }}>תרגילים קרובים</Typography>
-                <Typography variant="h5" fontWeight={800} sx={{ mt: 0.5 }}>{upcomingDrills.length}</Typography>
+          <Card>
+            <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Avatar sx={{ bgcolor: 'success.main' }}><Schedule /></Avatar>
+              <Box>
+                <Typography variant="body2" color="text.secondary">תרגילים קרובים</Typography>
+                <Typography variant="h5">{upcomingDrills.length}</Typography>
               </Box>
             </CardContent>
           </Card>
@@ -147,105 +136,62 @@ const Home = () => {
 
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
-          <Card elevation={3} sx={{ borderRadius: 3 }}>
-            <CardContent sx={{ p: 3 }}>
-              <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ flexDirection: 'row-reverse', mb: 1 }}>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Event color="primary" />
-                  <Typography variant="h6" fontWeight={800}>תרגילים אחרונים</Typography>
-                </Stack>
+          <Card>
+            <CardContent>
+              <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mb: 1 }}>
+                <Typography variant="h6">תרגילים אחרונים</Typography>
                 <Tooltip title="לכל התרגילים">
                   <Button size="small" onClick={() => navigate('/drills')}>פתח רשימה</Button>
                 </Tooltip>
               </Box>
-              <Divider sx={{ mb: 2 }} />
+              <Divider sx={{ mb: 1.5 }} />
               <List disablePadding>
                 {recentDrills.map((d, index) => (
-                  <React.Fragment key={d.id}>
-                    <ListItem sx={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', py: 1.5 }}>
+                  <React.Fragment key={d.id || d.drillId || index}>
+                    <ListItem sx={{ justifyContent: 'space-between' }}>
                       <ListItemText
                         primary={d.hospital || d.name || 'תרגיל'}
                         secondary={formatDate(d.date)}
                         primaryTypographyProps={{ textAlign: 'right', fontWeight: 700 }}
-                        secondaryTypographyProps={{ textAlign: 'right', sx: { mt: 0.5 } }}
+                        secondaryTypographyProps={{ textAlign: 'right' }}
                       />
                       <Chip label={d.status || 'ללא סטטוס'} color={getStatusColor(d.status)} size="small" />
                     </ListItem>
                     {index < recentDrills.length - 1 && <Divider component="li" />}
                   </React.Fragment>
                 ))}
-                {recentDrills.length === 0 && (
-                  <Typography color="text.secondary" textAlign="right">אין תרגילים להצגה.</Typography>
-                )}
+                {!recentDrills.length && <Typography color="text.secondary">אין תרגילים להצגה.</Typography>}
               </List>
             </CardContent>
           </Card>
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Card elevation={3} sx={{ borderRadius: 3 }}>
-            <CardContent sx={{ p: 3 }}>
-              <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ flexDirection: 'row-reverse', mb: 1 }}>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Schedule color="primary" />
-                  <Typography variant="h6" fontWeight={800}>תרגילים קרובים</Typography>
-                </Stack>
+          <Card>
+            <CardContent>
+              <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mb: 1 }}>
+                <Typography variant="h6">תרגילים קרובים</Typography>
                 <Tooltip title="תכנן תרגיל חדש">
                   <Button size="small" onClick={() => navigate('/drills/new')}>תכנון מהיר</Button>
                 </Tooltip>
               </Box>
-              <Divider sx={{ mb: 2 }} />
+              <Divider sx={{ mb: 1.5 }} />
               <List disablePadding>
                 {upcomingDrills.map((d, index) => (
-                  <React.Fragment key={d.id}>
-                    <ListItem sx={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', py: 1.5 }}>
+                  <React.Fragment key={d.id || d.drillId || index}>
+                    <ListItem sx={{ justifyContent: 'space-between' }}>
                       <ListItemText
                         primary={d.name || d.hospital || 'תרגיל'}
                         secondary={formatDate(d.date)}
                         primaryTypographyProps={{ textAlign: 'right', fontWeight: 700 }}
-                        secondaryTypographyProps={{ textAlign: 'right', sx: { mt: 0.5 } }}
+                        secondaryTypographyProps={{ textAlign: 'right' }}
                       />
                       <Chip label={d.status || 'מתוכנן'} color={getStatusColor(d.status || 'מתוכנן')} size="small" variant="outlined" />
                     </ListItem>
                     {index < upcomingDrills.length - 1 && <Divider component="li" />}
                   </React.Fragment>
                 ))}
-                {upcomingDrills.length === 0 && (
-                  <Typography color="text.secondary" textAlign="right">אין תרגילים קרובים כרגע.</Typography>
-                )}
-              </List>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={4} sx={{ mt: 2 }}>
-          <Card elevation={3} sx={{ borderRadius: 3, height: '100%' }}>
-            <CardContent sx={{ p: 3 }}>
-              <Stack direction="row" spacing={1} alignItems="center" sx={{ flexDirection: 'row-reverse', mb: 1 }}>
-                <LocalHospital color="primary" />
-                <Typography variant="h6" fontWeight={800}>בתי חולים</Typography>
-              </Stack>
-              <Divider sx={{ mb: 2 }} />
-              <List disablePadding>
-                {hospitals.map((h, index) => (
-                  <React.Fragment key={h.id}>
-                    <ListItem sx={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', py: 1.25 }}>
-                      <ListItemAvatar sx={{ minWidth: 48 }}>
-                        <Avatar sx={{ bgcolor: '#e8f4ff', color: '#0f5c8c' }}>
-                          {h.name.charAt(0)}
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={h.name}
-                        primaryTypographyProps={{ textAlign: 'right', fontWeight: 700 }}
-                      />
-                    </ListItem>
-                    {index < hospitals.length - 1 && <Divider component="li" />}
-                  </React.Fragment>
-                ))}
-                {hospitals.length === 0 && (
-                  <Typography color="text.secondary" textAlign="right">אין נתוני בתי חולים זמינים.</Typography>
-                )}
+                {!upcomingDrills.length && <Typography color="text.secondary">אין תרגילים קרובים כרגע.</Typography>}
               </List>
             </CardContent>
           </Card>

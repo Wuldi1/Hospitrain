@@ -1,7 +1,11 @@
-import React from 'react';
-import { BottomNavigation, BottomNavigationAction } from '@mui/material';
-import { Home, LocalHospital, Assignment, AccountCircle, Settings, Description } from '@mui/icons-material';
-import { useNavigate, useLocation } from 'react-router-dom';
+import {
+  Assignment,
+  Description,
+  Home,
+  LocalHospital,
+} from "@mui/icons-material";
+import { BottomNavigation, BottomNavigationAction } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const BottomNavBar = () => {
   const navigate = useNavigate();
@@ -13,27 +17,53 @@ const BottomNavBar = () => {
       onChange={(event, newValue) => navigate(newValue)}
       showLabels
       sx={{
-        width: '100%',
-        position: 'fixed',
+        width: "100%",
+        position: "fixed",
         bottom: 0,
-        borderTop: '1px solid #e0e0e0',
-        boxShadow: '0px -2px 10px rgba(0,0,0,0.05)',
+        right: 0,
+        left: 0,
+        borderTop: "1px solid rgba(21,101,192,0.16)",
+        boxShadow: "0 -8px 24px rgba(20, 72, 83, 0.12)",
+        background: "rgba(255,255,255,0.96)",
+        backdropFilter: "blur(10px)",
         zIndex: 1000,
-        '& .Mui-selected': {
-          color: '#166CC7',
+        direction: "rtl",
+        "& .Mui-selected": {
+          color: "#1565C0",
+          fontWeight: 700,
         },
-        '& .MuiBottomNavigationAction-root': {
-          minWidth: 'auto',
-          padding: '6px 0',
-        }
+        "& .MuiBottomNavigationAction-root": {
+          minWidth: "auto",
+          padding: "6px 0 8px",
+        },
       }}
     >
       <BottomNavigationAction label="דף הבית" value="/home" icon={<Home />} />
-      <BottomNavigationAction label="בתי חולים" value="/hospitals" icon={<LocalHospital />} />
-      <BottomNavigationAction label="תרגילים" value="/drills" icon={<Assignment />} />
-      <BottomNavigationAction label="תבניות" value="/templates" icon={<Description />} />
-      <BottomNavigationAction label="מתארים" value="/profiles" icon={<AccountCircle />} />
-      <BottomNavigationAction label="הגדרות" value="/settings" icon={<Settings />} />
+      <BottomNavigationAction
+        label="בתי חולים"
+        value="/hospitals"
+        icon={<LocalHospital />}
+      />
+      <BottomNavigationAction
+        label="תרגילים"
+        value="/drills"
+        icon={<Assignment />}
+      />
+      <BottomNavigationAction
+        label="תבניות"
+        value="/templates"
+        icon={<Description />}
+      />
+      {/* <BottomNavigationAction
+        label="פרופיל"
+        value="/profiles"
+        icon={<AccountCircle />}
+      /> */}
+      {/* <BottomNavigationAction
+        label="הגדרות"
+        value="/settings"
+        icon={<Settings />}
+      /> */}
     </BottomNavigation>
   );
 };
