@@ -5,7 +5,6 @@ import {
   Alert,
   Box,
   CircularProgress,
-  Divider,
   FormControl,
   IconButton,
   InputLabel,
@@ -30,9 +29,18 @@ import {
   FormControlLabel,
   Tooltip,
   Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
 } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import DescriptionIcon from '@mui/icons-material/Description';
 import { getPublicDrill, updatePublicRow } from '../../api/drillsApi';
 import { resolveHospitalName } from '../../utils/hospitalsCache';
 
@@ -101,12 +109,76 @@ const normalizeSchedule = (schedule) => {
   };
 };
 
-const timeToMinutes = (timeStr = '') => {
-  const [h, m] = timeStr.split(':').map((n) => parseInt(n, 10));
+const parseOffsetMinutes = (timeStr = '') => {
+  const [h, m] = String(timeStr).split(':').map((n) => parseInt(n, 10));
   if (Number.isNaN(h) || Number.isNaN(m)) {
-    return Number.MAX_SAFE_INTEGER;
+    return null;
   }
-  return h * 60 + m;
+  return (h * 60) + m;
+};
+
+const parseDrillStartDate = (value) => {
+  if (!value) {
+    return null;
+  }
+  const direct = new Date(value);
+  if (!Number.isNaN(direct.getTime())) {
+    return direct;
+  }
+  if (typeof value === 'string') {
+    const normalized = value.replace(' ', 'T');
+    const fallback = new Date(normalized);
+    if (!Number.isNaN(fallback.getTime())) {
+      return fallback;
+    }
+  }
+  return null;
+};
+
+const formatAbsoluteEventTime = (drillStart, offsetTime) => {
+  if (!drillStart) {
+    return 'לא זמין';
+  }
+  const start = parseDrillStartDate(drillStart);
+  if (!start) {
+    return 'לא זמין';
+  }
+  const minutes = parseOffsetMinutes(offsetTime);
+  if (minutes == null) {
+    return 'לא זמין';
+  }
+  const eventDate = new Date(start.getTime() + minutes * 60000);
+  const now = new Date();
+  const isToday = (
+    eventDate.getFullYear() === now.getFullYear() &&
+    eventDate.getMonth() === now.getMonth() &&
+    eventDate.getDate() === now.getDate()
+  );
+  return new Intl.DateTimeFormat('he-IL', isToday ? {
+    hour: '2-digit',
+    minute: '2-digit',
+  } : {
+    day: '2-digit',
+    month: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(eventDate);
+};
+
+const formatDrillStart = (value) => {
+  if (!value) {
+    return 'לא צוין';
+  }
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+  return new Intl.DateTimeFormat('he-IL', {
+    day: '2-digit',
+    month: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date);
 };
 
 const EvaluationControl = ({ evaluation, onChange, isMobile }) => {
@@ -160,13 +232,22 @@ const PublicTesterPage = () => {
   const [error, setError] = useState('');
   const [saveError, setSaveError] = useState('');
   const [rowSavingState, setRowSavingState] = useState({});
+  const [notificationEvent, setNotificationEvent] = useState(null);
   const rowUpdateTimers = useRef({});
   const refreshTimerRef = useRef(null);
+  const notificationTimerRef = useRef(null);
+  const notifiedEventsRef = useRef(new Set());
 
   const isTodayDate = (dateStr) => {
     if (!dateStr) return false;
-    const today = new Date().toISOString().slice(0, 10);
-    return dateStr.slice(0, 10) === today;
+    const date = parseDrillStartDate(dateStr);
+    if (!date) return false;
+    const now = new Date();
+    return (
+      date.getFullYear() === now.getFullYear() &&
+      date.getMonth() === now.getMonth() &&
+      date.getDate() === now.getDate()
+    );
   };
 
   const loadData = useCallback(async (silent = false) => {
@@ -199,6 +280,10 @@ const PublicTesterPage = () => {
       if (refreshTimerRef.current) {
         clearInterval(refreshTimerRef.current);
       }
+      if (notificationTimerRef.current) {
+        clearInterval(notificationTimerRef.current);
+      }
+      notifiedEventsRef.current.clear();
     };
   }, [drillId, loadData]);
 
@@ -293,6 +378,68 @@ const PublicTesterPage = () => {
     return { ...base, events: allowed };
   }, [data?.schedule, selectedSheetId, sheet?.sheetName]);
 
+  const scheduleEventsWithAbsoluteTime = useMemo(() => {
+    if (!schedule?.events?.length) {
+      return [];
+    }
+    const start = parseDrillStartDate(data?.date);
+    return (schedule.events || [])
+      .map((event, index) => {
+        const offsetMinutes = parseOffsetMinutes(event.time);
+        const absoluteDate = start && offsetMinutes != null
+          ? new Date(start.getTime() + offsetMinutes * 60000)
+          : null;
+        return {
+          ...event,
+          _index: index,
+          _offsetMinutes: offsetMinutes == null ? Number.MAX_SAFE_INTEGER : offsetMinutes,
+          _absoluteDate: absoluteDate,
+        };
+      })
+      .sort((a, b) => a._offsetMinutes - b._offsetMinutes);
+  }, [data?.date, schedule?.events]);
+
+  useEffect(() => {
+    if (notificationTimerRef.current) {
+      clearInterval(notificationTimerRef.current);
+    }
+    if (!scheduleEventsWithAbsoluteTime.length) {
+      return;
+    }
+
+    const NOTIFICATION_GRACE_MS = 10 * 60 * 1000;
+    const checkNotifications = () => {
+      if (notificationEvent) {
+        return;
+      }
+      const now = Date.now();
+      const dueEvent = scheduleEventsWithAbsoluteTime.find((event) => {
+        const eventId = event.id || `${event.time}-${event.message}-${event._index}`;
+        if (notifiedEventsRef.current.has(eventId)) {
+          return false;
+        }
+        const eventAt = event._absoluteDate?.getTime();
+        if (!eventAt) {
+          return false;
+        }
+        return eventAt <= now && now - eventAt <= NOTIFICATION_GRACE_MS;
+      });
+      if (dueEvent) {
+        const eventId = dueEvent.id || `${dueEvent.time}-${dueEvent.message}-${dueEvent._index}`;
+        notifiedEventsRef.current.add(eventId);
+        setNotificationEvent(dueEvent);
+      }
+    };
+
+    checkNotifications();
+    notificationTimerRef.current = setInterval(checkNotifications, 5000);
+    return () => {
+      if (notificationTimerRef.current) {
+        clearInterval(notificationTimerRef.current);
+      }
+    };
+  }, [notificationEvent, scheduleEventsWithAbsoluteTime]);
+
   if (loading) {
     return (
       <Box sx={{ p: 4 }} dir="rtl">
@@ -319,22 +466,52 @@ const PublicTesterPage = () => {
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 }, pb: 8 }} dir="rtl">
-      <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" spacing={2} alignItems={{ xs: 'flex-start', md: 'center' }}>
-        <Box>
-          <Typography variant={isMobile ? 'h5' : 'h4'} fontWeight={800}>{data?.name || 'תרגיל'}</Typography>
-          <Typography color="text.secondary">
-            {`בית חולים: ${resolveHospitalName(data?.hospitalId || data?.hospital) || 'לא צוין'}`}
-          </Typography>
-          <Typography color="text.secondary">{`תאריך: ${data?.date || 'לא צוין'}`}</Typography>
-          <Typography sx={{ mt: 1 }} fontWeight={700}>{sheet?.sheetName || 'בחר גיליון'}</Typography>
-        </Box>
-        <Paper sx={{ p: 2, borderRadius: 2, border: '1px solid', borderColor: 'divider', background: 'linear-gradient(120deg, rgba(25,118,210,0.08), rgba(25,118,210,0.02))' }}>
-          <Typography fontWeight={700}>קישור אנונימי לבוחן</Typography>
-          <Typography variant="body2" color="text.secondary">
-            ניתן לעדכן רק הערכה והערות. שאר התוכן מוגן.
-          </Typography>
-        </Paper>
-      </Stack>
+      <Paper
+        sx={{
+          p: { xs: 2, md: 3 },
+          borderRadius: 3,
+          border: '1px solid',
+          borderColor: 'primary.light',
+          background: 'linear-gradient(120deg, rgba(25,118,210,0.16), rgba(25,118,210,0.04))',
+          boxShadow: '0 14px 40px rgba(0,0,0,0.06)',
+        }}
+      >
+        <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" spacing={2} alignItems={{ xs: 'flex-start', md: 'center' }}>
+          <Box>
+            <Typography variant={isMobile ? 'h5' : 'h4'} fontWeight={800}>{data?.name || 'תרגיל'}</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              מעקב בוחן בזמן אמת
+            </Typography>
+          </Box>
+          <Paper sx={{ p: 1.5, borderRadius: 2, border: '1px solid', borderColor: 'divider', bgcolor: 'rgba(255,255,255,0.75)' }}>
+            <Typography fontWeight={700}>גישה לבוחן</Typography>
+            <Typography variant="body2" color="text.secondary">
+              ניתן לעדכן הערכה והערות בלבד.
+            </Typography>
+          </Paper>
+        </Stack>
+
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.2} sx={{ mt: 2 }} useFlexGap flexWrap="wrap">
+          <Paper sx={{ px: 1.5, py: 1, borderRadius: 2, border: '1px solid', borderColor: 'divider', minWidth: 170 }}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <LocalHospitalIcon fontSize="small" color="primary" />
+              <Typography variant="body2">{resolveHospitalName(data?.hospitalId || data?.hospital) || 'לא צוין'}</Typography>
+            </Stack>
+          </Paper>
+          <Paper sx={{ px: 1.5, py: 1, borderRadius: 2, border: '1px solid', borderColor: 'divider', minWidth: 170 }}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <EventAvailableIcon fontSize="small" color="primary" />
+              <Typography variant="body2">{formatDrillStart(data?.date)}</Typography>
+            </Stack>
+          </Paper>
+          <Paper sx={{ px: 1.5, py: 1, borderRadius: 2, border: '1px solid', borderColor: 'divider', minWidth: 170 }}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <DescriptionIcon fontSize="small" color="primary" />
+              <Typography variant="body2">{sheet?.sheetName || 'בחר גיליון'}</Typography>
+            </Stack>
+          </Paper>
+        </Stack>
+      </Paper>
 
       <Paper sx={{ p: 2, mt: 3, borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
         <FormControl fullWidth>
@@ -352,6 +529,20 @@ const PublicTesterPage = () => {
             ))}
           </Select>
         </FormControl>
+      </Paper>
+
+      <Paper sx={{ mt: 3, borderRadius: 3, border: '1px solid', borderColor: 'divider' }}>
+        <Tabs
+          value={activeTab}
+          onChange={(event, val) => setActiveTab(val)}
+          centered
+          indicatorColor="primary"
+          textColor="primary"
+          TabIndicatorProps={{ sx: { height: 4, borderRadius: 2 } }}
+        >
+          <Tab value="bakara" label="בקרה" sx={{ fontWeight: 800, fontSize: isMobile ? 14 : 16, letterSpacing: 0.2 }} />
+          <Tab value="schedule" label="סדרה ג׳" sx={{ fontWeight: 800, fontSize: isMobile ? 14 : 16, letterSpacing: 0.2 }} />
+        </Tabs>
       </Paper>
 
       {saveError && (
@@ -478,7 +669,7 @@ const PublicTesterPage = () => {
           </Stack>
           {schedule ? (
             <Stack spacing={1.5}>
-              {(schedule.events || []).slice().sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time)).map((event, index) => (
+              {scheduleEventsWithAbsoluteTime.map((event, index) => (
                 <Accordion key={event.id || index} elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <Stack direction="row" spacing={2} alignItems="center" sx={{ width: '100%' }}>
@@ -494,7 +685,7 @@ const PublicTesterPage = () => {
                           fontWeight: 800,
                         }}
                       >
-                        {event.time || '--:--'}
+                        {formatAbsoluteEventTime(data?.date, event.time)}
                       </Box>
                       <Box sx={{ flexGrow: 1, minWidth: 0, overflow: 'hidden', paddingX: '8px' }}>
                         <Typography
@@ -511,8 +702,12 @@ const PublicTesterPage = () => {
                   <AccordionDetails>
                     <Stack spacing={1.5} sx={{ wordBreak: 'break-word' }}>
                       <Stack direction="row" spacing={2}>
-                        <Typography variant="body2" color="text.secondary" minWidth={60}>שעה</Typography>
+                        <Typography variant="body2" color="text.secondary" minWidth={90}>זמן יחסי</Typography>
                         <Typography>{event.time || 'לא צוין'}</Typography>
+                      </Stack>
+                      <Stack direction="row" spacing={2}>
+                        <Typography variant="body2" color="text.secondary" minWidth={90}>זמן בפועל</Typography>
+                        <Typography>{formatAbsoluteEventTime(data?.date, event.time)}</Typography>
                       </Stack>
                       <Stack direction="row" spacing={2}>
                         <Typography variant="body2" color="text.secondary" minWidth={60}>מאת</Typography>
@@ -543,31 +738,47 @@ const PublicTesterPage = () => {
         </Paper>
       )}
 
-      <Paper
-        sx={{
-          mt: 4,
-          position: 'sticky',
-          bottom: 0,
-          zIndex: 6,
-          boxShadow: '0 -6px 30px rgba(0,0,0,0.08)',
-          borderTop: '1px solid',
-          borderColor: 'divider',
-          backdropFilter: 'blur(10px)',
-        }}
-      >
-        <Divider />
-        <Tabs
-          value={activeTab}
-          onChange={(event, val) => setActiveTab(val)}
-          centered
-          indicatorColor="primary"
-          textColor="primary"
-          TabIndicatorProps={{ sx: { height: 4, borderRadius: 2 } }}
-        >
-          <Tab value="bakara" label="בקרה" sx={{ fontWeight: 800, fontSize: isMobile ? 14 : 16, letterSpacing: 0.2 }} />
-          <Tab value="schedule" label="סדרה ג׳" sx={{ fontWeight: 800, fontSize: isMobile ? 14 : 16, letterSpacing: 0.2 }} />
-        </Tabs>
-      </Paper>
+      <Dialog open={Boolean(notificationEvent)} onClose={() => setNotificationEvent(null)} maxWidth="sm" fullWidth>
+        <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1.2, color: 'primary.main' }}>
+          <NotificationsActiveIcon />
+          אירוע תרגיל הגיע לזמן הביצוע
+        </DialogTitle>
+        <DialogContent>
+          <Stack spacing={1.5} sx={{ mt: 0.5 }}>
+            <Typography variant="body2" color="text.secondary">
+              {`זמן יחסי: ${notificationEvent?.time || '--:--'}`}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {`זמן בפועל: ${formatAbsoluteEventTime(data?.date, notificationEvent?.time)}`}
+            </Typography>
+            <Typography variant="body2"><strong>מאת:</strong> {notificationEvent?.from || 'לא צוין'}</Typography>
+            <Typography variant="body2"><strong>אל:</strong> {notificationEvent?.to || 'לא צוין'}</Typography>
+            <Paper
+              elevation={0}
+              sx={{
+                p: 1.5,
+                borderRadius: 2,
+                border: '1px solid',
+                borderColor: 'primary.light',
+                bgcolor: 'rgba(25,118,210,0.06)',
+              }}
+            >
+              <Typography variant="subtitle2" sx={{ mb: 0.5 }}>הודעה</Typography>
+              <Typography whiteSpace="pre-line">{notificationEvent?.message || '—'}</Typography>
+            </Paper>
+            {notificationEvent?.notes ? (
+              <Typography variant="body2" color="text.secondary" whiteSpace="pre-line">
+                {`הערות: ${notificationEvent.notes}`}
+              </Typography>
+            ) : null}
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={() => setNotificationEvent(null)}>
+            הבנתי
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

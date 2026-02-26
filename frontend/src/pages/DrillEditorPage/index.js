@@ -138,6 +138,83 @@ const normalizeScheduleForUi = (schedule) => {
   };
 };
 
+const toDateTimeLocalValue = (value) => {
+  if (!value) {
+    return '';
+  }
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return typeof value === 'string' ? value.slice(0, 16) : '';
+  }
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
+
+const iconButtonBaseSx = {
+  border: '1px solid',
+  borderColor: 'divider',
+  borderRadius: 2,
+  bgcolor: 'background.paper',
+  transition: 'transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease, border-color 0.16s ease',
+  '&:hover': {
+    transform: 'translateY(-1px)',
+    boxShadow: '0 8px 18px rgba(15,23,42,0.08)',
+  },
+  '&.Mui-disabled': {
+    opacity: 0.5,
+    color: 'action.disabled',
+    borderColor: 'divider',
+    bgcolor: 'action.hover',
+    boxShadow: 'none',
+    transform: 'none',
+  },
+};
+
+const iconToneSx = {
+  primary: {
+    borderColor: 'primary.light',
+    color: 'primary.main',
+    bgcolor: 'rgba(25,118,210,0.10)',
+    '&:hover': { bgcolor: 'rgba(25,118,210,0.18)' },
+  },
+  success: {
+    borderColor: 'success.light',
+    color: 'success.main',
+    bgcolor: 'rgba(46,125,50,0.10)',
+    '&:hover': { bgcolor: 'rgba(46,125,50,0.18)' },
+  },
+  info: {
+    borderColor: 'info.light',
+    color: 'info.main',
+    bgcolor: 'rgba(2,136,209,0.10)',
+    '&:hover': { bgcolor: 'rgba(2,136,209,0.18)' },
+  },
+  danger: {
+    borderColor: 'error.light',
+    color: 'error.main',
+    bgcolor: 'rgba(211,47,47,0.08)',
+    '&:hover': { bgcolor: 'rgba(211,47,47,0.16)' },
+  },
+  neutral: {
+    borderColor: 'divider',
+    color: 'text.secondary',
+    bgcolor: 'background.paper',
+    '&:hover': { bgcolor: 'action.hover' },
+  },
+};
+
+const iconButtonSx = (tone = 'neutral') => ({
+  ...iconButtonBaseSx,
+  ...iconToneSx[tone],
+});
+
+const compactIconButtonSx = (tone = 'neutral') => ({
+  ...iconButtonSx(tone),
+  width: 30,
+  height: 30,
+  borderRadius: 1.5,
+});
+
 const SheetTabs = ({
   sheets,
   selectedSheetId,
@@ -147,42 +224,13 @@ const SheetTabs = ({
   onDeleteSheet,
   disableSheetActions,
 }) => {
-  const boxedIconButtonSx = {
-    border: '1px solid',
-    borderColor: 'divider',
-    borderRadius: 2,
-    bgcolor: 'background.paper',
-    transition: 'all 0.16s ease',
-  };
-  const addActionSx = {
-    ...boxedIconButtonSx,
-    borderColor: 'primary.light',
-    color: 'primary.main',
-    bgcolor: 'rgba(25,118,210,0.10)',
-    '&:hover': { bgcolor: 'rgba(25,118,210,0.18)' },
-  };
-  const duplicateActionSx = {
-    ...boxedIconButtonSx,
-    borderColor: 'success.light',
-    color: 'success.main',
-    bgcolor: 'rgba(46,125,50,0.10)',
-    '&:hover': { bgcolor: 'rgba(46,125,50,0.18)' },
-  };
-  const deleteActionSx = {
-    ...boxedIconButtonSx,
-    borderColor: 'error.light',
-    color: 'error.main',
-    bgcolor: 'rgba(211,47,47,0.08)',
-    '&:hover': { bgcolor: 'rgba(211,47,47,0.16)' },
-  };
-
   if (!sheets?.length) {
     return (
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="center" justifyContent="space-between">
         <Typography color="text.secondary">עדיין אין גיליונות לתרגיל זה.</Typography>
         <Tooltip title="הוסף גיליון ראשון">
           <span>
-            <IconButton onClick={onAddSheet} disabled={disableSheetActions} sx={addActionSx}>
+            <IconButton onClick={onAddSheet} disabled={disableSheetActions} sx={iconButtonSx('primary')}>
               <LibraryAddIcon />
             </IconButton>
           </span>
@@ -207,14 +255,14 @@ const SheetTabs = ({
       <Stack direction="row" spacing={1} sx={{ flexShrink: 0, minWidth: { xs: '100%', md: 'auto' } }}>
         <Tooltip title="הוסף גיליון">
           <span>
-            <IconButton onClick={onAddSheet} disabled={disableSheetActions} sx={addActionSx}>
+            <IconButton onClick={onAddSheet} disabled={disableSheetActions} sx={iconButtonSx('primary')}>
               <LibraryAddIcon />
             </IconButton>
           </span>
         </Tooltip>
         <Tooltip title="שכפל גיליון">
           <span>
-            <IconButton onClick={onDuplicateSheet} disabled={disableSheetActions || sheets.length === 0} sx={duplicateActionSx}>
+            <IconButton onClick={onDuplicateSheet} disabled={disableSheetActions || sheets.length === 0} sx={iconButtonSx('success')}>
               <ContentCopyIcon />
             </IconButton>
           </span>
@@ -224,7 +272,7 @@ const SheetTabs = ({
             <IconButton
               onClick={onDeleteSheet}
               disabled={disableSheetActions || sheets.length <= 1}
-              sx={deleteActionSx}
+              sx={iconButtonSx('danger')}
             >
               <DeleteIcon />
             </IconButton>
@@ -377,7 +425,7 @@ const SheetEditor = ({
                     <Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
                       {rowSavingState[row.id] && <CircularProgress size={18} />}
                       <Tooltip title="מחק שורה">
-                        <IconButton onClick={() => onDeleteRow(row.id)}>
+                        <IconButton onClick={() => onDeleteRow(row.id)} sx={compactIconButtonSx('danger')}>
                           <DeleteIcon />
                         </IconButton>
                       </Tooltip>
@@ -438,7 +486,11 @@ const DrillEditorPage = () => {
       setScheduleDraft(normalizeScheduleForUi(data.schedule));
       setBakaraDirty(false);
       setScheduleDirty(false);
-      setMetaForm({ name: data.name || '', hospitalId: data.hospitalId || data.hospital || '', date: data.date || '' });
+      setMetaForm({
+        name: data.name || '',
+        hospitalId: data.hospitalId || data.hospital || '',
+        date: toDateTimeLocalValue(data.date),
+      });
       setError('');
     } catch (err) {
       if (!silent) {
@@ -896,14 +948,7 @@ const DrillEditorPage = () => {
               <span>
                 <IconButton
                   onClick={handleAddScheduleColumn}
-                  sx={{
-                    border: '1px solid',
-                    borderColor: 'primary.light',
-                    borderRadius: 2,
-                    color: 'primary.main',
-                    bgcolor: 'rgba(25,118,210,0.10)',
-                    '&:hover': { bgcolor: 'rgba(25,118,210,0.18)' },
-                  }}
+                  sx={iconButtonSx('primary')}
                 >
                   <AddIcon />
                 </IconButton>
@@ -926,6 +971,7 @@ const DrillEditorPage = () => {
                             size="small"
                             onClick={() => handleRemoveScheduleColumn(column.key)}
                             disabled={scheduleDraft.columns.length <= 1}
+                            sx={compactIconButtonSx('neutral')}
                           >
                             <DeleteIcon fontSize="small" />
                           </IconButton>
@@ -987,7 +1033,7 @@ const DrillEditorPage = () => {
                   ))}
                   <TableCell align="center">
                     <Tooltip title="מחק שורה">
-                      <IconButton onClick={() => handleDeleteScheduleRow(row.id)}>
+                      <IconButton onClick={() => handleDeleteScheduleRow(row.id)} sx={compactIconButtonSx('danger')}>
                         <DeleteIcon />
                       </IconButton>
                     </Tooltip>
@@ -1034,33 +1080,60 @@ const DrillEditorPage = () => {
           </Typography>
           <Typography color="text.secondary">{`תאריך: ${drill?.date || 'לא צוין'}`}</Typography>
         </Box>
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} alignItems={{ xs: 'stretch', sm: 'center' }} flexWrap="wrap" justifyContent="flex-end">
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSaveAll}
-            disabled={saveAllLoading || (!bakaraDirty && !scheduleDirty)}
-          >
-            {saveAllLoading ? 'שומר...' : <RtlIconLabel icon={<SaveIcon />}>שמור שינויים</RtlIconLabel>}
-          </Button>
-          <Button
-            variant={shareCopied ? 'contained' : 'outlined'}
-            color={shareCopied ? 'success' : 'primary'}
-            onClick={() => {
-              navigator.clipboard.writeText(`${window.location.origin}/public/${drillId}`).then(() => {
-                setShareCopied(true);
-                setTimeout(() => setShareCopied(false), 1800);
-              }).catch(() => setSaveError('לא ניתן להעתיק את הקישור'));
-            }}
-          >
-            {shareCopied ? 'הועתק' : <RtlIconLabel icon={<LinkIcon />}>העתק קישור לבוחנים</RtlIconLabel>}
-          </Button>
-          <Button variant="outlined" onClick={() => setIsMetaDialogOpen(true)}>
-            <RtlIconLabel icon={<EditIcon />}>עריכת פרטי תרגיל</RtlIconLabel>
-          </Button>
-          <Button variant="outlined" onClick={() => navigate('/drills')}>
-            <RtlIconLabel icon={<ArrowBackIcon />}>חזרה לרשימה</RtlIconLabel>
-          </Button>
+        <Stack
+          direction="row"
+          spacing={1}
+          alignItems="center"
+          justifyContent="flex-end"
+          sx={{
+            p: 0.75,
+            borderRadius: 2.5,
+            border: '1px solid',
+            borderColor: 'divider',
+            bgcolor: 'background.paper',
+            flexWrap: 'nowrap',
+          }}
+        >
+          <Tooltip title="שמור שינויים">
+            <span>
+              <IconButton
+                onClick={handleSaveAll}
+                disabled={saveAllLoading || (!bakaraDirty && !scheduleDirty)}
+                sx={iconButtonSx('primary')}
+              >
+                {saveAllLoading ? <CircularProgress size={18} /> : <SaveIcon />}
+              </IconButton>
+            </span>
+          </Tooltip>
+          <Tooltip title={shareCopied ? 'הועתק' : 'העתק קישור לבוחנים'}>
+            <IconButton
+              onClick={() => {
+                navigator.clipboard.writeText(`${window.location.origin}/public/${drillId}`).then(() => {
+                  setShareCopied(true);
+                  setTimeout(() => setShareCopied(false), 1800);
+                }).catch(() => setSaveError('לא ניתן להעתיק את הקישור'));
+              }}
+              sx={iconButtonSx(shareCopied ? 'success' : 'primary')}
+            >
+              {shareCopied ? <CheckCircleIcon /> : <LinkIcon />}
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="עריכת פרטי תרגיל">
+            <IconButton
+              onClick={() => setIsMetaDialogOpen(true)}
+              sx={iconButtonSx('info')}
+            >
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="חזרה לרשימה">
+            <IconButton
+              onClick={() => navigate('/drills')}
+              sx={iconButtonSx('neutral')}
+            >
+              <ArrowBackIcon />
+            </IconButton>
+          </Tooltip>
         </Stack>
       </Stack>
       {!isSaving && !scheduleDirty && lastSavedAt && (
@@ -1123,12 +1196,13 @@ const DrillEditorPage = () => {
               </Select>
             </FormControl>
             <TextField
-              type="date"
-              label="תאריך"
+              type="datetime-local"
+              label="מועד התחלת תרגיל"
               name="date"
               value={metaForm.date}
               onChange={handleMetaChange}
               InputLabelProps={{ shrink: true }}
+              inputProps={{ step: 60 }}
               fullWidth
             />
           </Stack>

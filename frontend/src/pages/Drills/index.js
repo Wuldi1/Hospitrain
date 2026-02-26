@@ -41,8 +41,8 @@ const api = new ApiClient();
 
 function formatDate(dateStr) {
   try {
-    const d = new Date(dateStr + 'T00:00:00');
-    return new Intl.DateTimeFormat('he-IL', { dateStyle: 'medium' }).format(d);
+    const d = new Date(dateStr);
+    return new Intl.DateTimeFormat('he-IL', { dateStyle: 'medium', timeStyle: 'short' }).format(d);
   } catch (e) {
     return dateStr;
   }
@@ -76,9 +76,7 @@ const Drills = () => {
   }, [cachedHospitalsById, hospitals]);
 
   const now = useMemo(() => {
-    const t = new Date();
-    t.setHours(0, 0, 0, 0);
-    return t;
+    return new Date();
   }, []);
 
   const getDrillId = (drill) => drill.drillId || drill.id;
@@ -86,7 +84,7 @@ const Drills = () => {
   const drillsWithStatus = useMemo(() => {
     return drills.map((drill) => {
       const dateValue = drill.date || '';
-      const dDate = dateValue ? new Date(dateValue + 'T00:00:00') : new Date();
+      const dDate = dateValue ? new Date(dateValue) : new Date();
       const status = dDate < now ? 'בוצע' : 'מתוכנן';
       return {
         ...drill,
@@ -119,7 +117,7 @@ const Drills = () => {
     const id = selected[0];
     const drill = drills.find((d) => getDrillId(d) === id);
     if (!drill) return;
-    const newDate = window.prompt('עדכן תאריך (YYYY-MM-DD)', drill.date);
+    const newDate = window.prompt('עדכן מועד התחלה (YYYY-MM-DDTHH:mm)', drill.date);
     if (!newDate) return;
     setDrills((s) => s.map((d) => (getDrillId(d) === id ? { ...d, date: newDate } : d)));
     setSelected([]);

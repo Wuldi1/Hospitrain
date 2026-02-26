@@ -147,13 +147,14 @@ const NewDrillPage = () => {
                 ))}
               </TextField>
               <TextField
-                type="date"
-                label="תאריך התרגיל"
+                type="datetime-local"
+                label="מועד התחלת התרגיל"
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
                 required
                 InputLabelProps={{ shrink: true }}
+                inputProps={{ step: 60 }}
               />
               <TextField
                 select

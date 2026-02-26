@@ -98,7 +98,7 @@ const ColumnHeader = ({ column, onRemove, disableRemove }) => (
     <Typography fontWeight={600}>{column.label}</Typography>
     {!disableRemove && (
       <Tooltip title="הסר עמודה">
-        <IconButton size="small" onClick={() => onRemove(column.key)}>
+        <IconButton size="small" onClick={() => onRemove(column.key)} sx={compactIconButtonSx('neutral')}>
           <DeleteIcon fontSize="small" />
         </IconButton>
       </Tooltip>
@@ -140,37 +140,64 @@ const EvaluationCell = ({ value, onChange }) => {
   );
 };
 
-const boxedIconButtonSx = {
+const iconButtonBaseSx = {
   border: '1px solid',
   borderColor: 'divider',
   borderRadius: 2,
   bgcolor: 'background.paper',
-  transition: 'all 0.16s ease',
+  transition: 'transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease, border-color 0.16s ease',
+  '&:hover': {
+    transform: 'translateY(-1px)',
+    boxShadow: '0 8px 18px rgba(15,23,42,0.08)',
+  },
+  '&.Mui-disabled': {
+    opacity: 0.5,
+    color: 'action.disabled',
+    borderColor: 'divider',
+    bgcolor: 'action.hover',
+    boxShadow: 'none',
+    transform: 'none',
+  },
 };
 
-const primaryActionSx = {
-  ...boxedIconButtonSx,
-  borderColor: 'primary.light',
-  color: 'primary.main',
-  bgcolor: 'rgba(25,118,210,0.10)',
-  '&:hover': { bgcolor: 'rgba(25,118,210,0.18)' },
+const iconToneSx = {
+  primary: {
+    borderColor: 'primary.light',
+    color: 'primary.main',
+    bgcolor: 'rgba(25,118,210,0.10)',
+    '&:hover': { bgcolor: 'rgba(25,118,210,0.18)' },
+  },
+  success: {
+    borderColor: 'success.light',
+    color: 'success.main',
+    bgcolor: 'rgba(46,125,50,0.10)',
+    '&:hover': { bgcolor: 'rgba(46,125,50,0.18)' },
+  },
+  danger: {
+    borderColor: 'error.light',
+    color: 'error.main',
+    bgcolor: 'rgba(211,47,47,0.08)',
+    '&:hover': { bgcolor: 'rgba(211,47,47,0.16)' },
+  },
+  neutral: {
+    borderColor: 'divider',
+    color: 'text.secondary',
+    bgcolor: 'background.paper',
+    '&:hover': { bgcolor: 'action.hover' },
+  },
 };
 
-const duplicateActionSx = {
-  ...boxedIconButtonSx,
-  borderColor: 'success.light',
-  color: 'success.main',
-  bgcolor: 'rgba(46,125,50,0.10)',
-  '&:hover': { bgcolor: 'rgba(46,125,50,0.18)' },
-};
+const iconButtonSx = (tone = 'neutral') => ({
+  ...iconButtonBaseSx,
+  ...iconToneSx[tone],
+});
 
-const deleteActionSx = {
-  ...boxedIconButtonSx,
-  borderColor: 'error.light',
-  color: 'error.main',
-  bgcolor: 'rgba(211,47,47,0.08)',
-  '&:hover': { bgcolor: 'rgba(211,47,47,0.16)' },
-};
+const compactIconButtonSx = (tone = 'neutral') => ({
+  ...iconButtonSx(tone),
+  width: 30,
+  height: 30,
+  borderRadius: 1.5,
+});
 
 const TemplatesPage = () => {
   const isMobile = useMediaQuery('(max-width:900px)');
@@ -621,7 +648,7 @@ const TemplatesPage = () => {
               <span>
                 <IconButton
                   onClick={handleAddBakaraSheet}
-                  sx={primaryActionSx}
+                  sx={iconButtonSx('primary')}
                 >
                   <LibraryAddIcon />
                 </IconButton>
@@ -632,7 +659,7 @@ const TemplatesPage = () => {
                 <IconButton
                   onClick={handleDuplicateBakaraSheet}
                   disabled={!selectedBakaraSheet}
-                  sx={duplicateActionSx}
+                  sx={iconButtonSx('success')}
                 >
                   <ContentCopyIcon />
                 </IconButton>
@@ -643,7 +670,7 @@ const TemplatesPage = () => {
                 <IconButton
                   onClick={handleDeleteBakaraSheet}
                   disabled={!selectedBakaraSheet || (bakara?.sheets?.length || 0) <= 1}
-                  sx={deleteActionSx}
+                  sx={iconButtonSx('danger')}
                 >
                   <DeleteIcon />
                 </IconButton>
@@ -706,7 +733,7 @@ const TemplatesPage = () => {
                   ))}
                   <TableCell align="center">
                     <Tooltip title="מחק שורה">
-                      <IconButton onClick={() => handleDeleteBakaraRow(row.id)}>
+                      <IconButton onClick={() => handleDeleteBakaraRow(row.id)} sx={compactIconButtonSx('danger')}>
                         <DeleteIcon />
                       </IconButton>
                     </Tooltip>
@@ -800,6 +827,9 @@ const TemplatesPage = () => {
                         <TextField
                           fullWidth
                           variant="standard"
+                          type={column.key === 'time' ? 'time' : 'text'}
+                          inputProps={column.key === 'time' ? { step: 60 } : undefined}
+                          InputLabelProps={column.key === 'time' ? { shrink: true } : undefined}
                           value={row[column.key] || ''}
                           onChange={(event) => handleScheduleRowChange(row.id, column.key, event.target.value)}
                           multiline={column.key === 'message' || column.key === 'notes'}
@@ -810,7 +840,7 @@ const TemplatesPage = () => {
                   ))}
                   <TableCell align="center">
                     <Tooltip title="מחק שורה">
-                      <IconButton onClick={() => handleDeleteScheduleRow(row.id)}>
+                      <IconButton onClick={() => handleDeleteScheduleRow(row.id)} sx={compactIconButtonSx('danger')}>
                         <DeleteIcon />
                       </IconButton>
                     </Tooltip>
@@ -833,33 +863,49 @@ const TemplatesPage = () => {
         בחר תבנית, ערוך את הבקרה והסדרה ושמור כדי לדרוס את הקובץ הקיים.
       </Typography>
 
-      <Paper sx={{ p: { xs: 1.5, md: 2 }, mt: 3 }}>
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems={{ xs: 'stretch', md: 'center' }}>
-          <FormControl fullWidth>
-            <InputLabel id="template-select-label">בחר תבנית</InputLabel>
-            <Select
-              labelId="template-select-label"
-              label="בחר תבנית"
-              value={selectedTemplateId}
-              onChange={(event) => setSelectedTemplateId(event.target.value)}
-            >
-              {templates.map((template) => (
-                <MenuItem key={template.templateId} value={template.templateId}>
-                  {`${template.templateName || template.templateId} (${template.templateId})`}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Button
-            variant="contained"
-            onClick={handleSaveActiveTab}
-            disabled={!hasActiveTabData || !isActiveTabDirty || isActiveTabSaving}
-            sx={{ minWidth: { xs: '100%', md: 180 } }}
-            startIcon={isActiveTabSaving ? <CircularProgress size={18} color="inherit" /> : <SaveIcon />}
-          >
-            {isActiveTabSaving ? 'שומר...' : 'שמור שינויים'}
-          </Button>
+      <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-start', direction: 'ltr' }}>
+        <Stack
+          direction="row"
+          spacing={1}
+          alignItems="center"
+          sx={{
+            p: 0.75,
+            borderRadius: 2.5,
+            border: '1px solid',
+            borderColor: 'divider',
+            bgcolor: 'background.paper',
+          }}
+        >
+          <Tooltip title="שמור שינויים">
+            <span>
+              <IconButton
+                onClick={handleSaveActiveTab}
+                disabled={!hasActiveTabData || !isActiveTabDirty || isActiveTabSaving}
+                sx={iconButtonSx('primary')}
+              >
+                {isActiveTabSaving ? <CircularProgress size={18} /> : <SaveIcon />}
+              </IconButton>
+            </span>
+          </Tooltip>
         </Stack>
+      </Box>
+
+      <Paper sx={{ p: { xs: 1.5, md: 2 }, mt: 3 }}>
+        <FormControl fullWidth>
+          <InputLabel id="template-select-label">בחר תבנית</InputLabel>
+          <Select
+            labelId="template-select-label"
+            label="בחר תבנית"
+            value={selectedTemplateId}
+            onChange={(event) => setSelectedTemplateId(event.target.value)}
+          >
+            {templates.map((template) => (
+              <MenuItem key={template.templateId} value={template.templateId}>
+                {`${template.templateName || template.templateId} (${template.templateId})`}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Paper>
 
       {error && (
