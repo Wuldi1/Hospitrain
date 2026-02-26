@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ApiClient from '../services/ApiClient';
+import ApiClient from '../../services/ApiClient';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import {
   Card,
   CardContent,
@@ -33,6 +34,8 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import RtlIconLabel from '../../components/RtlIconLabel';
+import { getHospitalsMap, resolveHospitalName, saveHospitalsMap } from '../../utils/hospitalsCache';
 
 const api = new ApiClient();
 
@@ -47,22 +50,30 @@ function formatDate(dateStr) {
 
 const Drills = () => {
   const theme = useTheme();
+  const isMobile = useMediaQuery('(max-width:900px)');
   const [drills, setDrills] = useState([]);
   const [hospitals, setHospitals] = useState([]);
+  const [cachedHospitalsById, setCachedHospitalsById] = useState(() => getHospitalsMap());
   const [selected, setSelected] = useState([]);
   const [showUpcomingOnly, setShowUpcomingOnly] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     api.getDrills().then(setDrills).catch((e) => console.error(e));
-    api.getHospitals().then(setHospitals).catch((e) => console.error(e));
+    api
+      .getHospitals()
+      .then((data) => {
+        setHospitals(data);
+        setCachedHospitalsById(saveHospitalsMap(data));
+      })
+      .catch((e) => console.error(e));
   }, []);
 
   const hospitalsById = useMemo(() => {
-    const map = {};
+    const map = { ...cachedHospitalsById };
     hospitals.forEach((h) => (map[h.id] = h.name));
     return map;
-  }, [hospitals]);
+  }, [cachedHospitalsById, hospitals]);
 
   const now = useMemo(() => {
     const t = new Date();
@@ -93,7 +104,7 @@ const Drills = () => {
   const upcomingDrillsList = drillsWithStatus.filter((d) => d.status === 'מתוכנן').sort((a, b) => a.dateObj - b.dateObj);
   const nextUpcoming = upcomingDrillsList.length ? upcomingDrillsList[0] : null;
 
-  const displayedDrills = showUpcomingOnly ? upcomingDrillsList : [...drillsWithStatus].sort((a, b) => a.dateObj - b.dateObj);
+  const displayedDrills = showUpcomingOnly ? upcomingDrillsList : [...drillsWithStatus].sort((a, b) => b.dateObj - a.dateObj);
 
   const toggleSelect = (id) => {
     setSelected((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
@@ -130,7 +141,7 @@ const Drills = () => {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }} dir="rtl">
+    <Container maxWidth="xl" sx={{ py: { xs: 2, md: 4 } }} dir="rtl">
         {/* Header Section */}
         <Box sx={{ mb: 4 }}>
           <Typography variant="h4" fontWeight={800} color="primary.main" gutterBottom>
@@ -146,13 +157,23 @@ const Drills = () => {
           <Grid item xs={12} md={4}>
             <Card 
               elevation={0} 
+              onClick={() => {
+                if (nextUpcoming?._id) {
+                  navigate(`/drills/${nextUpcoming._id}/edit`);
+                }
+              }}
               sx={{ 
                 height: '100%', 
                 background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
                 color: 'white',
                 borderRadius: 4,
                 position: 'relative',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                cursor: nextUpcoming?._id ? 'pointer' : 'default',
+                transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+                '&:hover': nextUpcoming?._id
+                  ? { transform: 'translateY(-2px)', boxShadow: '0 16px 32px rgba(13,71,161,0.35)' }
+                  : undefined,
               }}
             >
               <Box sx={{ position: 'absolute', top: -20, left: -20, opacity: 0.1 }}>
@@ -167,7 +188,7 @@ const Drills = () => {
                 {nextUpcoming ? (
                   <Box>
                     <Typography variant="h4" fontWeight={700} gutterBottom>
-                      {hospitalsById[nextUpcoming.hospital] || nextUpcoming.hospital}
+                      {resolveHospitalName(nextUpcoming.hospitalKey || nextUpcoming.hospital, hospitalsById)}
                     </Typography>
                     <Chip 
                       label={formatDate(nextUpcoming.date)} 
@@ -191,14 +212,26 @@ const Drills = () => {
           <Grid item xs={12} md={8}>
             <Grid container spacing={3} height="100%">
               <Grid item xs={12} sm={6}>
-                <Card elevation={0} sx={{ height: '100%', borderRadius: 4, border: '1px solid', borderColor: 'divider' }}>
+                <Card
+                  elevation={0}
+                  onClick={() => setShowUpcomingOnly(true)}
+                  sx={{
+                    height: '100%',
+                    borderRadius: 4,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    cursor: 'pointer',
+                    transition: 'transform 0.16s ease, border-color 0.16s ease',
+                    '&:hover': { transform: 'translateY(-1px)', borderColor: 'primary.main' },
+                  }}
+                >
                   <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
                     <Box>
                       <Typography variant="subtitle2" color="text.secondary" gutterBottom>מתוכננים לעתיד</Typography>
                       <Typography variant="h3" fontWeight={700} color="primary.main">{upcomingCount}</Typography>
                     </Box>
                     <Box sx={{ mt: 2 }}>
-                      <Chip icon={<TrendingUpIcon />} label="פעיל" size="small" color="primary" variant="outlined" />
+                      <Chip label={<RtlIconLabel icon={<TrendingUpIcon />} iconSize={16}>פעיל</RtlIconLabel>} size="small" color="primary" variant="outlined" />
                     </Box>
                   </CardContent>
                 </Card>
@@ -209,7 +242,7 @@ const Drills = () => {
                     <Typography variant="subtitle2" color="text.secondary" gutterBottom>בוצעו בהצלחה</Typography>
                     <Typography variant="h3" fontWeight={700} color="success.main">{completedCount}</Typography>
                     <Box sx={{ mt: 2 }}>
-                      <Chip icon={<CheckCircleIcon />} label="הושלם" size="small" color="success" variant="outlined" />
+                      <Chip label={<RtlIconLabel icon={<CheckCircleIcon />} iconSize={16}>הושלם</RtlIconLabel>} size="small" color="success" variant="outlined" />
                     </Box>
                   </CardContent>
                 </Card>
@@ -237,11 +270,10 @@ const Drills = () => {
           <Stack direction="row" spacing={1}>
             <Button 
               variant="contained" 
-              startIcon={<AddIcon />} 
               onClick={handleCreate}
               sx={{ borderRadius: 2, px: 3, py: 1, fontWeight: 600 }}
             >
-              צור תרגיל חדש
+              <RtlIconLabel icon={<AddIcon />}>צור תרגיל חדש</RtlIconLabel>
             </Button>
             <Tooltip title="ערוך נבחר">
               <span>
@@ -281,6 +313,74 @@ const Drills = () => {
 
         {/* Data Table */}
         <Paper elevation={0} sx={{ borderRadius: 4, overflow: 'hidden', border: '1px solid', borderColor: 'divider' }}>
+          {isMobile ? (
+            <Stack spacing={1.5} sx={{ p: 1.5 }}>
+              {displayedDrills.length === 0 ? (
+                <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center', py: 4 }}>
+                  לא נמצאו תרגילים
+                </Typography>
+              ) : (
+                displayedDrills.map((d) => {
+                  const isSelected = selected.includes(d._id);
+                  return (
+                    <Paper
+                      key={d._id}
+                      variant="outlined"
+                      onClick={() => toggleSelect(d._id)}
+                      sx={{
+                        p: 1.5,
+                        borderRadius: 2.5,
+                        cursor: 'pointer',
+                        borderColor: isSelected ? 'primary.main' : 'divider',
+                        bgcolor: isSelected ? alpha(theme.palette.primary.main, 0.08) : 'background.paper',
+                      }}
+                    >
+                      <Stack spacing={1.2}>
+                        <Stack direction="row" justifyContent="space-between" alignItems="center">
+                          <Stack direction="row" spacing={1} alignItems="center">
+                            <Avatar sx={{ bgcolor: alpha(theme.palette.primary.main, 0.1), color: 'primary.main', width: 32, height: 32 }}>
+                              <LocalHospitalIcon sx={{ fontSize: 18 }} />
+                            </Avatar>
+                            <Typography fontWeight={700} variant="body2">
+                              {resolveHospitalName(d.hospitalKey, hospitalsById)}
+                            </Typography>
+                          </Stack>
+                          <Checkbox
+                            checked={isSelected}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleSelect(d._id);
+                            }}
+                          />
+                        </Stack>
+                        <Stack direction="row" justifyContent="space-between" alignItems="center">
+                          <Typography variant="caption" color="text.secondary">{formatDate(d.date)}</Typography>
+                          <Chip
+                            icon={getStatusIcon(d.status)}
+                            label={d.status}
+                            color={getStatusColor(d.status)}
+                            variant={d.status === 'בוצע' ? 'outlined' : 'filled'}
+                            size="small"
+                            sx={{ fontWeight: 600 }}
+                          />
+                        </Stack>
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/drills/${d._id}/edit`);
+                          }}
+                        >
+                          ערוך
+                        </Button>
+                      </Stack>
+                    </Paper>
+                  );
+                })
+              )}
+            </Stack>
+          ) : (
           <Table>
             <TableHead sx={{ bgcolor: alpha(theme.palette.primary.main, 0.05) }}>
               <TableRow>
@@ -331,7 +431,7 @@ const Drills = () => {
                             <LocalHospitalIcon />
                           </Avatar>
                           <Typography fontWeight={500}>
-                            {hospitalsById[d.hospitalKey] || d.hospitalKey}
+                            {resolveHospitalName(d.hospitalKey, hospitalsById)}
                           </Typography>
                         </Stack>
                       </TableCell>
@@ -368,6 +468,7 @@ const Drills = () => {
               )}
             </TableBody>
           </Table>
+          )}
         </Paper>
       </Container>
   );

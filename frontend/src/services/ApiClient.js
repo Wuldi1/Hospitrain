@@ -45,6 +45,13 @@ class ApiClient {
     return this.request('/api/hospitals');
   }
 
+  createHospital(payload) {
+    return this.request('/api/hospitals', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  }
+
   getDrills() {
     return this.request('/api/drills');
   }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ApiClient from '../services/ApiClient';
+import ApiClient from '../../services/ApiClient';
 import {
   Card,
   CardContent,
@@ -18,6 +18,8 @@ import {
 } from '@mui/material';
 import { LocalHospital, Event, Schedule, Add, ArrowBack } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import RtlIconLabel from '../../components/RtlIconLabel';
+import { getHospitalsMap, resolveHospitalName, saveHospitalsMap } from '../../utils/hospitalsCache';
 
 const apiClient = new ApiClient();
 
@@ -25,9 +27,16 @@ const Home = () => {
   const navigate = useNavigate();
   const [hospitals, setHospitals] = useState([]);
   const [drills, setDrills] = useState([]);
+  const [cachedHospitalsById, setCachedHospitalsById] = useState(() => getHospitalsMap());
 
   useEffect(() => {
-    apiClient.getHospitals().then(setHospitals).catch(console.error);
+    apiClient
+      .getHospitals()
+      .then((data) => {
+        setHospitals(data);
+        setCachedHospitalsById(saveHospitalsMap(data));
+      })
+      .catch(console.error);
     apiClient.getDrills().then(setDrills).catch(console.error);
   }, []);
 
@@ -88,11 +97,11 @@ const Home = () => {
               },
             }}
           >
-            <Button variant="contained" color="secondary" startIcon={<Add />} onClick={() => navigate('/drills/new')}>
-              תרגיל חדש
+            <Button variant="contained" color="secondary" onClick={() => navigate('/drills/new')}>
+              <RtlIconLabel icon={<Add />}>תרגיל חדש</RtlIconLabel>
             </Button>
-            <Button variant="outlined" color="inherit" startIcon={<ArrowBack />} onClick={() => navigate('/drills')} sx={{ borderColor: 'rgba(255,255,255,0.5)', color: 'white' }}>
-              לכל התרגילים
+            <Button variant="outlined" color="inherit" onClick={() => navigate('/drills')} sx={{ borderColor: 'rgba(255,255,255,0.5)', color: 'white' }}>
+              <RtlIconLabel icon={<ArrowBack />}>לכל התרגילים</RtlIconLabel>
             </Button>
           </Stack>
         </Stack>
@@ -150,7 +159,7 @@ const Home = () => {
                   <React.Fragment key={d.id || d.drillId || index}>
                     <ListItem sx={{ justifyContent: 'space-between' }}>
                       <ListItemText
-                        primary={d.hospital || d.name || 'תרגיל'}
+                        primary={resolveHospitalName(d.hospitalId || d.hospital || d.name, cachedHospitalsById) || 'תרגיל'}
                         secondary={formatDate(d.date)}
                         primaryTypographyProps={{ textAlign: 'right', fontWeight: 700 }}
                         secondaryTypographyProps={{ textAlign: 'right' }}
@@ -181,7 +190,7 @@ const Home = () => {
                   <React.Fragment key={d.id || d.drillId || index}>
                     <ListItem sx={{ justifyContent: 'space-between' }}>
                       <ListItemText
-                        primary={d.name || d.hospital || 'תרגיל'}
+                        primary={resolveHospitalName(d.hospitalId || d.hospital || d.name, cachedHospitalsById) || 'תרגיל'}
                         secondary={formatDate(d.date)}
                         primaryTypographyProps={{ textAlign: 'right', fontWeight: 700 }}
                         secondaryTypographyProps={{ textAlign: 'right' }}

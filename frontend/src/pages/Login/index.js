@@ -1,5 +1,4 @@
 import {
-  LocalHospital,
   MarkEmailReadOutlined,
   ShieldOutlined,
 } from "@mui/icons-material";
@@ -8,6 +7,7 @@ import {
   Box,
   Button,
   Chip,
+  CircularProgress,
   Container,
   Paper,
   Stack,
@@ -16,7 +16,8 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ApiClient from "../services/ApiClient";
+import ApiClient from "../../services/ApiClient";
+import RtlIconLabel from "../../components/RtlIconLabel";
 
 const apiClient = new ApiClient();
 
@@ -25,27 +26,38 @@ const Login = () => {
   const [code, setCode] = useState("000000");
   const [step, setStep] = useState(1);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isRequestingCode, setIsRequestingCode] = useState(false);
+  const [isVerifyingCode, setIsVerifyingCode] = useState(false);
   const navigate = useNavigate();
 
   const handleRequestCode = async (e) => {
     e.preventDefault();
+    if (isRequestingCode) return;
+    setIsRequestingCode(true);
+    setErrorMessage("");
     try {
       await apiClient.requestCode(email);
       setStep(2);
-      setErrorMessage("");
     } catch (error) {
       setErrorMessage("שליחת הקוד נכשלה");
+    } finally {
+      setIsRequestingCode(false);
     }
   };
 
   const handleVerifyCode = async (e) => {
     e.preventDefault();
+    if (isVerifyingCode) return;
+    setIsVerifyingCode(true);
+    setErrorMessage("");
     try {
       const data = await apiClient.verifyCode(email, code);
       localStorage.setItem("authToken", data.token);
       navigate("/home");
     } catch (error) {
       setErrorMessage("קוד שגוי");
+    } finally {
+      setIsVerifyingCode(false);
     }
   };
 
@@ -88,7 +100,12 @@ const Login = () => {
                   bgcolor: "rgba(255,255,255,0.16)",
                 }}
               >
-                <LocalHospital sx={{ fontSize: 36 }} />
+                <Box
+                  component="img"
+                  src={`${process.env.PUBLIC_URL}/favicon.ico`}
+                  alt="Hospitrain"
+                  sx={{ width: 36, height: 36, borderRadius: "8px", objectFit: "cover" }}
+                />
               </Box>
               <Typography variant="h4">Hospitrain</Typography>
               <Typography variant="body1" sx={{ opacity: 0.92 }}>
@@ -97,27 +114,17 @@ const Login = () => {
               </Typography>
               <Stack direction="row" spacing={1.2} flexWrap="wrap" useFlexGap>
                 <Chip
-                  icon={<ShieldOutlined />}
-                  label="גישה מאובטחת"
+                  label={<RtlIconLabel icon={<ShieldOutlined />} iconSize={15}>גישה מאובטחת</RtlIconLabel>}
                   sx={{
                     bgcolor: "rgba(255,255,255,0.2)",
                     color: "white",
-                    "& .MuiChip-icon": {
-                      marginInlineStart: 8,
-                      marginInlineEnd: -4,
-                    },
                   }}
                 />
                 <Chip
-                  icon={<MarkEmailReadOutlined />}
-                  label="אימות קוד במייל"
+                  label={<RtlIconLabel icon={<MarkEmailReadOutlined />} iconSize={15}>אימות קוד במייל</RtlIconLabel>}
                   sx={{
                     bgcolor: "rgba(255,255,255,0.2)",
                     color: "white",
-                    "& .MuiChip-icon": {
-                      marginInlineStart: 8,
-                      marginInlineEnd: -4,
-                    },
                   }}
                 />
               </Stack>
@@ -147,6 +154,7 @@ const Login = () => {
                   margin="normal"
                   required
                   dir="rtl"
+                  disabled={isRequestingCode}
                 />
                 <Button
                   fullWidth
@@ -154,8 +162,16 @@ const Login = () => {
                   type="submit"
                   size="large"
                   sx={{ mt: 2 }}
+                  disabled={isRequestingCode}
                 >
-                  שלח קוד אימות
+                  {isRequestingCode ? (
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <CircularProgress size={18} color="inherit" />
+                      <span>שולח קוד...</span>
+                    </Stack>
+                  ) : (
+                    "שלח קוד אימות"
+                  )}
                 </Button>
               </Box>
             )}
@@ -180,6 +196,7 @@ const Login = () => {
                   required
                   dir="rtl"
                   autoFocus
+                  disabled={isVerifyingCode}
                 />
                 <Button
                   fullWidth
@@ -187,14 +204,23 @@ const Login = () => {
                   type="submit"
                   size="large"
                   sx={{ mt: 2 }}
+                  disabled={isVerifyingCode}
                 >
-                  כניסה
+                  {isVerifyingCode ? (
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <CircularProgress size={18} color="inherit" />
+                      <span>מאמת קוד...</span>
+                    </Stack>
+                  ) : (
+                    "כניסה"
+                  )}
                 </Button>
                 <Button
                   fullWidth
                   color="inherit"
                   onClick={() => setStep(1)}
                   sx={{ mt: 1 }}
+                  disabled={isVerifyingCode}
                 >
                   חזרה
                 </Button>

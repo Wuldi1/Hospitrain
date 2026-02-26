@@ -772,12 +772,4 @@ body {
 - Ask Copilot for unit tests & small snippets (e.g., "generate jest tests for /api/drills").
 - Use Copilot in pair-programming style: propose a function comment and let it fill body; verify.
 
----
-
-If you want, I can:
-
-- Produce a ready-to-run **starter repo** scaffold (package.json, basic Express server, React app shell + login UI) — with Copilot-friendly comments and TODOs.
-- Generate JSON seed data for hospitals and one parsed template extracted from your Excel example.
-- Draft GitHub Actions workflow for CI/CD to Azure.
-
-Which would you like me to produce next?
+# Y95adcMGAjNxOODHgQhQJezKBVpW6UGeB43xY5yZdk7

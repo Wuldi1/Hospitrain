@@ -85,7 +85,12 @@ export default function SideNavBar() {
           flexShrink: 0,
         }}
       >
-        <Avatar sx={{ bgcolor: NAV_COLOR, width: 56, height: 56 }}>ה</Avatar>
+        <Avatar
+          src={`${process.env.PUBLIC_URL}/favicon.ico`}
+          alt="Hospitrain"
+          sx={{ bgcolor: NAV_COLOR, width: 56, height: 56 }}
+          imgProps={{ style: { objectFit: "cover" } }}
+        />
         <Box
           sx={{ display: "flex", flexDirection: "column", textAlign: "right" }}
         >

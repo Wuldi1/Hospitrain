@@ -4,8 +4,8 @@ import {
   Box,
   Button,
   CircularProgress,
-  Divider,
   FormControl,
+  FormControlLabel,
   IconButton,
   InputLabel,
   MenuItem,
@@ -21,22 +21,22 @@ import {
   TableRow,
   Tabs,
   TextField,
-  ToggleButton,
-  ToggleButtonGroup,
+  Radio,
+  RadioGroup,
   Tooltip,
   Typography,
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import CheckIcon from '@mui/icons-material/Check';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import {
   getTemplates,
   getTemplateBundle,
   saveBakaraTemplate,
   saveScheduleTemplate,
-} from '../api/drillsApi';
+} from '../../api/drillsApi';
 
 const columnLabels = {
   component: 'מרכיב',
@@ -65,21 +65,6 @@ const evaluationOptions = [
 
 const createId = () => (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`);
 const emptyEvaluation = () => ({ yes: false, no: false, partial: false, notRelevant: false, redFlag: false });
-
-const makeColumnKey = (label, existingKeys = []) => {
-  const base = (label || '')
-    .trim()
-    .replace(/\s+/g, '_')
-    .replace(/[^\w\u0590-\u05FF]/g, '')
-    .toLowerCase() || `column_${existingKeys.length + 1}`;
-  let key = base;
-  let counter = 1;
-  while (existingKeys.includes(key)) {
-    key = `${base}_${counter}`;
-    counter += 1;
-  }
-  return key;
-};
 
 const createColumnsFromRows = (rows = [], preferredOrder = []) => {
   const seen = new Set();
@@ -124,29 +109,71 @@ const ColumnHeader = ({ column, onRemove, disableRemove }) => (
 const EvaluationCell = ({ value, onChange }) => {
   const selectedKey = useMemo(() => {
     if (!value) {
-      return null;
+      return '';
     }
-    return evaluationOptions.find((option) => value[option.key])?.key || null;
+    return evaluationOptions.find((option) => value[option.key])?.key || '';
   }, [value]);
 
   return (
-    <ToggleButtonGroup
-      exclusive
-      value={selectedKey}
-      onChange={(event, val) => onChange(val)}
-      size="small"
-      fullWidth
-    >
-      {evaluationOptions.map((option) => (
-        <ToggleButton key={option.key} value={option.key} sx={{ flex: 1 }}>
-          {option.label}
-        </ToggleButton>
-      ))}
-    </ToggleButtonGroup>
+    <FormControl component="fieldset" fullWidth>
+      <RadioGroup
+        row
+        value={selectedKey}
+        onChange={(event) => onChange(event.target.value)}
+        sx={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: 0.5 }}
+      >
+        {evaluationOptions.map((option) => (
+          <FormControlLabel
+            key={option.key}
+            value={option.key}
+            control={<Radio size="small" />}
+            label={option.label}
+            sx={{
+              m: 0,
+              minWidth: '48%',
+              '.MuiFormControlLabel-label': { fontSize: '0.8rem' },
+            }}
+          />
+        ))}
+      </RadioGroup>
+    </FormControl>
   );
 };
 
+const boxedIconButtonSx = {
+  border: '1px solid',
+  borderColor: 'divider',
+  borderRadius: 2,
+  bgcolor: 'background.paper',
+  transition: 'all 0.16s ease',
+};
+
+const primaryActionSx = {
+  ...boxedIconButtonSx,
+  borderColor: 'primary.light',
+  color: 'primary.main',
+  bgcolor: 'rgba(25,118,210,0.10)',
+  '&:hover': { bgcolor: 'rgba(25,118,210,0.18)' },
+};
+
+const duplicateActionSx = {
+  ...boxedIconButtonSx,
+  borderColor: 'success.light',
+  color: 'success.main',
+  bgcolor: 'rgba(46,125,50,0.10)',
+  '&:hover': { bgcolor: 'rgba(46,125,50,0.18)' },
+};
+
+const deleteActionSx = {
+  ...boxedIconButtonSx,
+  borderColor: 'error.light',
+  color: 'error.main',
+  bgcolor: 'rgba(211,47,47,0.08)',
+  '&:hover': { bgcolor: 'rgba(211,47,47,0.16)' },
+};
+
 const TemplatesPage = () => {
+  const isMobile = useMediaQuery('(max-width:900px)');
   const [templates, setTemplates] = useState([]);
   const [selectedTemplateId, setSelectedTemplateId] = useState('');
   const [bakara, setBakara] = useState(null);
@@ -240,29 +267,22 @@ const TemplatesPage = () => {
 
   const markDirty = (key) => setDirty((prev) => ({ ...prev, [key]: true }));
 
-  const handleAddBakaraColumn = () => {
-    if (!bakara || !selectedSheetId) {
+  const handleAddBakaraSheet = () => {
+    if (!bakara) {
       return;
     }
-    const label = window.prompt('שם העמודה החדשה');
-    if (!label) {
-      return;
-    }
-    setBakara((prev) => {
-      const sheets = prev.sheets.map((sheet) => {
-        if (sheet.sheetId !== selectedSheetId) {
-          return sheet;
-        }
-        const key = makeColumnKey(label, sheet.columns.map((c) => c.key));
-        const newColumn = { key, label, type: 'text' };
-        return {
-          ...sheet,
-          columns: [...sheet.columns, newColumn],
-          rows: sheet.rows.map((row) => ({ ...row, [key]: '' })),
-        };
-      });
-      return { ...prev, sheets };
-    });
+    const newSheetId = createId();
+    const nextColumns = selectedBakaraSheet?.columns?.length
+      ? selectedBakaraSheet.columns
+      : createColumnsFromRows([], defaultBakaraOrder);
+    const newSheet = {
+      sheetId: newSheetId,
+      sheetName: `גיליון ${bakara.sheets.length + 1}`,
+      columns: nextColumns.map((col) => ({ ...col })),
+      rows: [],
+    };
+    setBakara((prev) => ({ ...prev, sheets: [...prev.sheets, newSheet] }));
+    setSelectedSheetId(newSheetId);
     markDirty('bakara');
   };
 
@@ -344,6 +364,16 @@ const TemplatesPage = () => {
     markDirty('bakara');
   };
 
+  const handleDeleteBakaraSheet = () => {
+    if (!bakara?.sheets?.length || !selectedSheetId || bakara.sheets.length <= 1) {
+      return;
+    }
+    const nextSheets = bakara.sheets.filter((sheet) => sheet.sheetId !== selectedSheetId);
+    setBakara((prev) => ({ ...prev, sheets: nextSheets }));
+    setSelectedSheetId(nextSheets[0]?.sheetId || '');
+    markDirty('bakara');
+  };
+
   const handleRenameBakaraSheet = (value) => {
     if (!bakara || !selectedSheetId) {
       return;
@@ -408,26 +438,6 @@ const TemplatesPage = () => {
       return { ...prev, sheets };
     });
     markDirty('bakara');
-  };
-
-  const handleAddScheduleColumn = () => {
-    if (!schedule) {
-      return;
-    }
-    const label = window.prompt('שם העמודה החדשה');
-    if (!label) {
-      return;
-    }
-    setSchedule((prev) => {
-      const key = makeColumnKey(label, prev.columns.map((c) => c.key));
-      const column = { key, label, type: 'text' };
-      return {
-        ...prev,
-        columns: [...prev.columns, column],
-        events: prev.events.map((event) => ({ ...event, [key]: '' })),
-      };
-    });
-    markDirty('schedule');
   };
 
   const handleRemoveScheduleColumn = (columnKey) => {
@@ -525,6 +535,18 @@ const TemplatesPage = () => {
     return ['כולם', ...sheetNames.filter((name) => name !== 'כולם')];
   }, [bakara]);
 
+  const isActiveTabSaving = activeTab === 'bakara' ? saving.bakara : saving.schedule;
+  const isActiveTabDirty = activeTab === 'bakara' ? dirty.bakara : dirty.schedule;
+  const hasActiveTabData = activeTab === 'bakara' ? Boolean(bakara) : Boolean(schedule);
+
+  const handleSaveActiveTab = () => {
+    if (activeTab === 'bakara') {
+      handleSaveBakara();
+      return;
+    }
+    handleSaveSchedule();
+  };
+
   const renderBakaraTab = () => {
     if (!bakara) {
       return (
@@ -545,15 +567,22 @@ const TemplatesPage = () => {
     return (
       <Paper
         sx={{
-          p: 3,
+          p: { xs: 2, md: 3 },
           mt: 3,
+          width: '100%',
           border: '1px solid',
           borderColor: 'primary.main',
           boxShadow: '0 14px 40px rgba(0,0,0,0.06)',
           borderRadius: 3,
         }}
       >
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} justifyContent="space-between" alignItems={{ xs: 'flex-start', md: 'center' }}>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          spacing={2}
+          justifyContent="space-between"
+          alignItems={{ xs: 'stretch', md: 'center' }}
+          sx={{ flexWrap: { xs: 'wrap', md: 'nowrap' } }}
+        >
           <Tabs
             value={selectedBakaraSheet?.sheetId || false}
             onChange={(event, val) => setSelectedSheetId(val)}
@@ -577,25 +606,46 @@ const TemplatesPage = () => {
               />
             ))}
           </Tabs>
-          <Stack direction="row" spacing={1} flexWrap="wrap" justifyContent="flex-end">
-            <Tooltip title="שמור בקרה">
+          <Stack
+            direction="row"
+            spacing={1}
+            justifyContent="flex-end"
+            sx={{
+              flexShrink: 0,
+              flexWrap: 'nowrap',
+              minWidth: 'fit-content',
+              alignSelf: { xs: 'flex-end', md: 'auto' },
+            }}
+          >
+            <Tooltip title="הוסף גיליון חדש">
               <span>
-                <IconButton color="primary" onClick={handleSaveBakara} disabled={!dirty.bakara || saving.bakara}>
-                  {saving.bakara ? <CircularProgress size={18} /> : <CheckIcon />}
-                </IconButton>
-              </span>
-            </Tooltip>
-            <Tooltip title="הוסף עמודה">
-              <span>
-                <IconButton onClick={handleAddBakaraColumn}>
-                  <AddIcon />
+                <IconButton
+                  onClick={handleAddBakaraSheet}
+                  sx={primaryActionSx}
+                >
+                  <LibraryAddIcon />
                 </IconButton>
               </span>
             </Tooltip>
             <Tooltip title="שכפל גיליון">
               <span>
-                <IconButton onClick={handleDuplicateBakaraSheet} disabled={!selectedBakaraSheet}>
+                <IconButton
+                  onClick={handleDuplicateBakaraSheet}
+                  disabled={!selectedBakaraSheet}
+                  sx={duplicateActionSx}
+                >
                   <ContentCopyIcon />
+                </IconButton>
+              </span>
+            </Tooltip>
+            <Tooltip title="מחק גיליון">
+              <span>
+                <IconButton
+                  onClick={handleDeleteBakaraSheet}
+                  disabled={!selectedBakaraSheet || (bakara?.sheets?.length || 0) <= 1}
+                  sx={deleteActionSx}
+                >
+                  <DeleteIcon />
                 </IconButton>
               </span>
             </Tooltip>
@@ -609,12 +659,9 @@ const TemplatesPage = () => {
             onChange={(event) => handleRenameBakaraSheet(event.target.value)}
             fullWidth
           />
-          <Button variant="outlined" startIcon={<AddIcon />} onClick={handleAddBakaraRow} sx={{ whiteSpace: 'nowrap' }}>
-            הוסף שורה
-          </Button>
         </Stack>
 
-        <TableContainer sx={{ mt: 2 }}>
+        <TableContainer sx={{ mt: 2, overflowX: 'auto', width: '100%' }}>
           <Table size="small">
             <TableHead>
               <TableRow>
@@ -631,6 +678,13 @@ const TemplatesPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
+              <TableRow>
+                <TableCell colSpan={(selectedBakaraSheet?.columns?.length || 0) + 1} align="center" sx={{ py: 1.25, bgcolor: 'action.hover' }}>
+                  <Button size="small" onClick={handleAddBakaraRow}>
+                    הוספת שורה חדשה
+                  </Button>
+                </TableCell>
+              </TableRow>
               {(selectedBakaraSheet?.rows || []).map((row) => (
                 <TableRow key={row.id}>
                   {selectedBakaraSheet.columns.map((column) => (
@@ -659,13 +713,6 @@ const TemplatesPage = () => {
                   </TableCell>
                 </TableRow>
               ))}
-              <TableRow>
-                <TableCell colSpan={(selectedBakaraSheet?.columns?.length || 0) + 1}>
-                  <Button startIcon={<AddIcon />} onClick={handleAddBakaraRow}>
-                    הוסף שורה
-                  </Button>
-                </TableCell>
-              </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
@@ -685,32 +732,21 @@ const TemplatesPage = () => {
     return (
       <Paper
         sx={{
-          p: 3,
+          p: { xs: 2, md: 3 },
           mt: 3,
+          width: '100%',
           border: '1px solid',
           borderColor: 'secondary.main',
           boxShadow: '0 14px 40px rgba(0,0,0,0.06)',
           borderRadius: 3,
         }}
       >
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} justifyContent="space-between" alignItems={{ xs: 'flex-start', md: 'center' }}>
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} justifyContent="space-between" alignItems={{ xs: 'stretch', md: 'center' }}>
           <Typography variant="h5" fontWeight={700}>סדרה ג׳</Typography>
-          <Stack direction="row" spacing={1} flexWrap="wrap" justifyContent="flex-end">
-            <Button variant="outlined" startIcon={<AddIcon />} onClick={handleAddScheduleColumn}>
-              הוסף עמודה
-            </Button>
-            <Button
-              variant="contained"
-              startIcon={<SaveIcon />}
-              onClick={handleSaveSchedule}
-              disabled={!dirty.schedule || saving.schedule}
-            >
-              {saving.schedule ? 'שומר...' : 'שמור סדרה ג׳'}
-            </Button>
-          </Stack>
+          <Typography variant="body2" color="text.secondary">עריכת אירועי הסדרה לפי המבנה הקיים</Typography>
         </Stack>
 
-        <TableContainer sx={{ mt: 2 }}>
+        <TableContainer sx={{ mt: 2, overflowX: 'auto', width: '100%' }}>
           <Table size="small">
             <TableHead>
               <TableRow>
@@ -727,6 +763,13 @@ const TemplatesPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
+              <TableRow>
+                <TableCell colSpan={schedule.columns.length + 1} align="center" sx={{ py: 1.25, bgcolor: 'action.hover' }}>
+                  <Button size="small" onClick={handleAddScheduleRow}>
+                    הוספת שורה חדשה
+                  </Button>
+                </TableCell>
+              </TableRow>
               {(schedule.events || []).map((row) => (
                 <TableRow key={row.id}>
                   {schedule.columns.map((column) => (
@@ -774,13 +817,6 @@ const TemplatesPage = () => {
                   </TableCell>
                 </TableRow>
               ))}
-              <TableRow>
-                <TableCell colSpan={schedule.columns.length + 1}>
-                  <Button startIcon={<AddIcon />} onClick={handleAddScheduleRow}>
-                    הוסף שורה
-                  </Button>
-                </TableCell>
-              </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
@@ -789,7 +825,7 @@ const TemplatesPage = () => {
   };
 
   return (
-    <Box sx={{ p: 4 }} dir="rtl">
+    <Box className="page-shell" dir="rtl" sx={{ maxWidth: 'none', width: '100%', px: { xs: 2, md: 3 } }}>
       <Typography variant="h4" fontWeight={700}>
         תבניות
       </Typography>
@@ -797,22 +833,33 @@ const TemplatesPage = () => {
         בחר תבנית, ערוך את הבקרה והסדרה ושמור כדי לדרוס את הקובץ הקיים.
       </Typography>
 
-      <Paper sx={{ p: 2, mt: 3 }}>
-        <FormControl fullWidth>
-          <InputLabel id="template-select-label">בחר תבנית</InputLabel>
-          <Select
-            labelId="template-select-label"
-            label="בחר תבנית"
-            value={selectedTemplateId}
-            onChange={(event) => setSelectedTemplateId(event.target.value)}
+      <Paper sx={{ p: { xs: 1.5, md: 2 }, mt: 3 }}>
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems={{ xs: 'stretch', md: 'center' }}>
+          <FormControl fullWidth>
+            <InputLabel id="template-select-label">בחר תבנית</InputLabel>
+            <Select
+              labelId="template-select-label"
+              label="בחר תבנית"
+              value={selectedTemplateId}
+              onChange={(event) => setSelectedTemplateId(event.target.value)}
+            >
+              {templates.map((template) => (
+                <MenuItem key={template.templateId} value={template.templateId}>
+                  {`${template.templateName || template.templateId} (${template.templateId})`}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Button
+            variant="contained"
+            onClick={handleSaveActiveTab}
+            disabled={!hasActiveTabData || !isActiveTabDirty || isActiveTabSaving}
+            sx={{ minWidth: { xs: '100%', md: 180 } }}
+            startIcon={isActiveTabSaving ? <CircularProgress size={18} color="inherit" /> : <SaveIcon />}
           >
-            {templates.map((template) => (
-              <MenuItem key={template.templateId} value={template.templateId}>
-                {`${template.templateName || template.templateId} (${template.templateId})`}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+            {isActiveTabSaving ? 'שומר...' : 'שמור שינויים'}
+          </Button>
+        </Stack>
       </Paper>
 
       {error && (
@@ -832,34 +879,23 @@ const TemplatesPage = () => {
         </Box>
       ) : (
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '70vh' }}>
-          <Box sx={{ flex: 1 }}>
-            {activeTab === 'bakara' ? renderBakaraTab() : renderScheduleTab()}
-          </Box>
-          <Paper
-            sx={{
-              mt: 3,
-              position: 'sticky',
-              bottom: 0,
-              zIndex: 6,
-              boxShadow: '0 -6px 30px rgba(0,0,0,0.08)',
-              borderTop: '1px solid',
-              borderColor: 'divider',
-              backdropFilter: 'blur(10px)',
-            }}
-          >
-            <Divider />
+          <Paper sx={{ mt: 3, borderRadius: 3, border: '1px solid', borderColor: 'divider' }}>
             <Tabs
               value={activeTab}
               onChange={(event, val) => setActiveTab(val)}
-              centered
+              centered={!isMobile}
+              variant={isMobile ? 'fullWidth' : 'standard'}
               indicatorColor="primary"
               textColor="primary"
               TabIndicatorProps={{ sx: { height: 4, borderRadius: 2 } }}
             >
-              <Tab value="bakara" label="בקרה" sx={{ fontWeight: 800, fontSize: 16, letterSpacing: 0.4 }} />
-              <Tab value="schedule" label="סדרה ג׳" sx={{ fontWeight: 800, fontSize: 16, letterSpacing: 0.4 }} />
+              <Tab value="bakara" label="בקרה" sx={{ fontWeight: 800, fontSize: isMobile ? 14 : 16, letterSpacing: 0.2 }} />
+              <Tab value="schedule" label="סדרה ג׳" sx={{ fontWeight: 800, fontSize: isMobile ? 14 : 16, letterSpacing: 0.2 }} />
             </Tabs>
           </Paper>
+          <Box sx={{ flex: 1 }}>
+            {activeTab === 'bakara' ? renderBakaraTab() : renderScheduleTab()}
+          </Box>
         </Box>
       )}
     </Box>

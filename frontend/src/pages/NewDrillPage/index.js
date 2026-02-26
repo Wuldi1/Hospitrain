@@ -11,13 +11,15 @@ import {
   Alert,
   CircularProgress,
 } from '@mui/material';
-import ApiClient from '../services/ApiClient';
-import { getTemplates, createDrill } from '../api/drillsApi';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import ApiClient from '../../services/ApiClient';
+import { getTemplates, createDrill } from '../../api/drillsApi';
 
 const apiClient = new ApiClient();
 
 const NewDrillPage = () => {
   const navigate = useNavigate();
+  const isMobile = useMediaQuery('(max-width:600px)');
   const [hospitals, setHospitals] = useState([]);
   const [templates, setTemplates] = useState([]);
   const [formData, setFormData] = useState({
@@ -73,7 +75,7 @@ const NewDrillPage = () => {
 
   if (isLoading) {
     return (
-      <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4 }} dir="rtl">
+      <Box className="page-shell" dir="rtl">
         <Paper sx={{ p: 4, textAlign: 'center' }}>
           <CircularProgress />
           <Typography sx={{ mt: 2 }}>טוען נתונים...</Typography>
@@ -84,7 +86,7 @@ const NewDrillPage = () => {
 
   if (loadError) {
     return (
-      <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4 }} dir="rtl">
+      <Box className="page-shell" dir="rtl">
         <Paper sx={{ p: 4 }}>
           <Alert severity="error" sx={{ mb: 2 }}>
             {loadError}
@@ -98,10 +100,10 @@ const NewDrillPage = () => {
   }
 
   return (
-    <Box sx={{ maxWidth: 720, mx: 'auto', mt: 4, pb: 4 }} dir="rtl">
+    <Box className="page-shell" dir="rtl">
       <Paper
         sx={{
-          p: 4,
+          p: { xs: 2, md: 4 },
           borderRadius: 3,
           boxShadow: '0 16px 44px rgba(0,0,0,0.08)',
           border: '1px solid',
@@ -167,7 +169,7 @@ const NewDrillPage = () => {
                   </MenuItem>
                 ))}
               </TextField>
-              <Box display="flex" justifyContent="flex-end" gap={2}>
+              <Box display="flex" justifyContent="flex-end" gap={2} flexDirection={isMobile ? 'column-reverse' : 'row'}>
                 <Button variant="outlined" onClick={() => navigate('/drills')}>
                   ביטול
                 </Button>

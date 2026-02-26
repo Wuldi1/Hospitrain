@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   Alert,
   Box,
   Button,
   CircularProgress,
-  Divider,
   IconButton,
   Paper,
   Stack,
@@ -18,8 +18,6 @@ import {
   TableHead,
   TableRow,
   TextField,
-  ToggleButton,
-  ToggleButtonGroup,
   Tooltip,
   Typography,
   Dialog,
@@ -27,9 +25,12 @@ import {
   DialogContent,
   DialogActions,
   FormControl,
+  FormControlLabel,
   InputLabel,
   Select,
   MenuItem,
+  Radio,
+  RadioGroup,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -39,6 +40,8 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import LinkIcon from '@mui/icons-material/Link';
 import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from '@mui/icons-material/Edit';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import RtlIconLabel from '../../components/RtlIconLabel';
 import {
   addRow,
   addSheet,
@@ -49,8 +52,9 @@ import {
   updateSheet,
   saveDrillSchedule,
   updateDrill,
-} from '../api/drillsApi';
-import ApiClient from '../services/ApiClient';
+} from '../../api/drillsApi';
+import ApiClient from '../../services/ApiClient';
+import { getHospitalsMap, resolveHospitalName, saveHospitalsMap } from '../../utils/hospitalsCache';
 
 const evaluationOptions = [
   { key: 'yes', label: 'כן' },
@@ -143,14 +147,46 @@ const SheetTabs = ({
   onDeleteSheet,
   disableSheetActions,
 }) => {
+  const boxedIconButtonSx = {
+    border: '1px solid',
+    borderColor: 'divider',
+    borderRadius: 2,
+    bgcolor: 'background.paper',
+    transition: 'all 0.16s ease',
+  };
+  const addActionSx = {
+    ...boxedIconButtonSx,
+    borderColor: 'primary.light',
+    color: 'primary.main',
+    bgcolor: 'rgba(25,118,210,0.10)',
+    '&:hover': { bgcolor: 'rgba(25,118,210,0.18)' },
+  };
+  const duplicateActionSx = {
+    ...boxedIconButtonSx,
+    borderColor: 'success.light',
+    color: 'success.main',
+    bgcolor: 'rgba(46,125,50,0.10)',
+    '&:hover': { bgcolor: 'rgba(46,125,50,0.18)' },
+  };
+  const deleteActionSx = {
+    ...boxedIconButtonSx,
+    borderColor: 'error.light',
+    color: 'error.main',
+    bgcolor: 'rgba(211,47,47,0.08)',
+    '&:hover': { bgcolor: 'rgba(211,47,47,0.16)' },
+  };
 
   if (!sheets?.length) {
     return (
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="center" justifyContent="space-between">
         <Typography color="text.secondary">עדיין אין גיליונות לתרגיל זה.</Typography>
-        <Button variant="contained" startIcon={<AddIcon />} onClick={onAddSheet} disabled={disableSheetActions}>
-          הוסף גיליון ראשון
-        </Button>
+        <Tooltip title="הוסף גיליון ראשון">
+          <span>
+            <IconButton onClick={onAddSheet} disabled={disableSheetActions} sx={addActionSx}>
+              <LibraryAddIcon />
+            </IconButton>
+          </span>
+        </Tooltip>
       </Stack>
     );
   }
@@ -168,17 +204,17 @@ const SheetTabs = ({
           <Tab key={sheet.sheetId} value={sheet.sheetId} label={sheet.sheetName || 'ללא שם'} />
         ))}
       </Tabs>
-      <Stack direction="row" spacing={1} sx={{ flexShrink: 0 }}>
+      <Stack direction="row" spacing={1} sx={{ flexShrink: 0, minWidth: { xs: '100%', md: 'auto' } }}>
         <Tooltip title="הוסף גיליון">
           <span>
-            <IconButton onClick={onAddSheet} disabled={disableSheetActions}>
-              <AddIcon />
+            <IconButton onClick={onAddSheet} disabled={disableSheetActions} sx={addActionSx}>
+              <LibraryAddIcon />
             </IconButton>
           </span>
         </Tooltip>
         <Tooltip title="שכפל גיליון">
           <span>
-            <IconButton onClick={onDuplicateSheet} disabled={disableSheetActions || sheets.length === 0}>
+            <IconButton onClick={onDuplicateSheet} disabled={disableSheetActions || sheets.length === 0} sx={duplicateActionSx}>
               <ContentCopyIcon />
             </IconButton>
           </span>
@@ -188,6 +224,7 @@ const SheetTabs = ({
             <IconButton
               onClick={onDeleteSheet}
               disabled={disableSheetActions || sheets.length <= 1}
+              sx={deleteActionSx}
             >
               <DeleteIcon />
             </IconButton>
@@ -198,28 +235,37 @@ const SheetTabs = ({
   );
 };
 
-const EvaluationToggle = ({ evaluation, onChange }) => {
+const EvaluationRadioGroup = ({ evaluation, onChange }) => {
   const selectedKey = useMemo(() => {
     if (!evaluation) {
-      return null;
+      return '';
     }
-    return evaluationOptions.find((option) => evaluation[option.key])?.key || null;
+    return evaluationOptions.find((option) => evaluation[option.key])?.key || '';
   }, [evaluation]);
 
   return (
-    <ToggleButtonGroup
-      exclusive
+    <FormControl component="fieldset" fullWidth>
+      <RadioGroup
+        row
       value={selectedKey}
-      onChange={(event, value) => onChange(value)}
-      size="small"
-      fullWidth
-    >
-      {evaluationOptions.map((option) => (
-        <ToggleButton key={option.key} value={option.key} sx={{ flex: 1 }}>
-          {option.label}
-        </ToggleButton>
-      ))}
-    </ToggleButtonGroup>
+        onChange={(event) => onChange(event.target.value)}
+        sx={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: 0.5 }}
+      >
+        {evaluationOptions.map((option) => (
+          <FormControlLabel
+            key={option.key}
+            value={option.key}
+            control={<Radio size="small" />}
+            label={option.label}
+            sx={{
+              m: 0,
+              minWidth: '48%',
+              '.MuiFormControlLabel-label': { fontSize: '0.8rem' },
+            }}
+          />
+        ))}
+      </RadioGroup>
+    </FormControl>
   );
 };
 
@@ -255,12 +301,9 @@ const SheetEditor = ({
           onChange={(event) => onSheetRename(event.target.value)}
           fullWidth
         />
-        <Button variant="contained" startIcon={<AddIcon />} onClick={onAddRow}>
-          הוסף שורה
-        </Button>
       </Stack>
 
-      <TableContainer sx={{ mt: 3 }}>
+      <TableContainer sx={{ mt: 3, overflowX: 'auto', width: '100%' }}>
         <Table size="small">
           <TableHead>
             <TableRow>
@@ -273,6 +316,13 @@ const SheetEditor = ({
             </TableRow>
           </TableHead>
           <TableBody>
+            <TableRow>
+              <TableCell colSpan={6} align="center" sx={{ py: 1.25, bgcolor: 'action.hover' }}>
+                <Button size="small" onClick={onAddRow}>
+                  הוספת שורה חדשה
+                </Button>
+              </TableCell>
+            </TableRow>
             {sheet.rows.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6}>
@@ -309,7 +359,7 @@ const SheetEditor = ({
                     />
                   </TableCell>
                   <TableCell>
-                    <EvaluationToggle
+                    <EvaluationRadioGroup
                       evaluation={row.evaluation}
                       onChange={(value) => onRowChange(row.id, { evaluation: value })}
                     />
@@ -346,6 +396,7 @@ const SheetEditor = ({
 const DrillEditorPage = () => {
   const { drillId } = useParams();
   const navigate = useNavigate();
+  const isMobile = useMediaQuery('(max-width:900px)');
   const [drill, setDrill] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -357,17 +408,18 @@ const DrillEditorPage = () => {
   const [isMutating, setIsMutating] = useState(false);
   const [lastSavedAt, setLastSavedAt] = useState('');
   const [scheduleDraft, setScheduleDraft] = useState(null);
+  const [bakaraDirty, setBakaraDirty] = useState(false);
   const [scheduleDirty, setScheduleDirty] = useState(false);
   const [scheduleSaving, setScheduleSaving] = useState(false);
+  const [saveAllLoading, setSaveAllLoading] = useState(false);
   const [shareCopied, setShareCopied] = useState(false);
   const [isMetaDialogOpen, setIsMetaDialogOpen] = useState(false);
   const [metaForm, setMetaForm] = useState({ name: '', hospitalId: '', date: '' });
   const [metaSaving, setMetaSaving] = useState(false);
   const [hospitals, setHospitals] = useState([]);
+  const [cachedHospitalsById, setCachedHospitalsById] = useState(() => getHospitalsMap());
   const apiClientRef = useRef(new ApiClient());
   const refreshTimerRef = useRef(null);
-  const rowUpdateTimers = useRef({});
-  const sheetUpdateTimers = useRef({});
 
   const isTodayDate = (dateStr) => {
     if (!dateStr) return false;
@@ -384,6 +436,7 @@ const DrillEditorPage = () => {
       setDrill(data);
       setSelectedSheetId(data.sheets?.[0]?.sheetId || '');
       setScheduleDraft(normalizeScheduleForUi(data.schedule));
+      setBakaraDirty(false);
       setScheduleDirty(false);
       setMetaForm({ name: data.name || '', hospitalId: data.hospitalId || data.hospital || '', date: data.date || '' });
       setError('');
@@ -411,7 +464,7 @@ const DrillEditorPage = () => {
     if (refreshTimerRef.current) {
       clearInterval(refreshTimerRef.current);
     }
-    if (isTodayDate(drill?.date)) {
+    if (isTodayDate(drill?.date) && !bakaraDirty && !scheduleDirty) {
       refreshTimerRef.current = setInterval(() => fetchDrill(true), 15000);
     }
     return () => {
@@ -419,25 +472,19 @@ const DrillEditorPage = () => {
         clearInterval(refreshTimerRef.current);
       }
     };
-  }, [drill?.date, fetchDrill]);
+  }, [drill?.date, fetchDrill, bakaraDirty, scheduleDirty]);
 
   useEffect(() => {
     const fetchHospitals = async () => {
       try {
         const hospitalsResponse = await apiClientRef.current.getHospitals();
         setHospitals(hospitalsResponse);
+        setCachedHospitalsById(saveHospitalsMap(hospitalsResponse));
       } catch (err) {
         // fallback to empty list
       }
     };
     fetchHospitals();
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      Object.values(rowUpdateTimers.current).forEach((timerId) => clearTimeout(timerId));
-      Object.values(sheetUpdateTimers.current).forEach((timerId) => clearTimeout(timerId));
-    };
   }, []);
 
   const selectedSheet = useMemo(() => {
@@ -451,30 +498,6 @@ const DrillEditorPage = () => {
     const sheetNames = (drill?.sheets || []).map((sheet) => sheet.sheetName).filter(Boolean);
     return ['כולם', ...sheetNames.filter((name) => name !== 'כולם')];
   }, [drill]);
-
-  const markRowSaving = (rowId, value) => {
-    setRowSavingState((prev) => {
-      const next = { ...prev };
-      if (value) {
-        next[rowId] = true;
-      } else {
-        delete next[rowId];
-      }
-      return next;
-    });
-  };
-
-  const markSheetSaving = (sheetId, value) => {
-    setSheetSavingState((prev) => {
-      const next = { ...prev };
-      if (value) {
-        next[sheetId] = true;
-      } else {
-        delete next[sheetId];
-      }
-      return next;
-    });
-  };
 
   const updateRowInState = (sheetId, rowId, changes) => {
     setDrill((prev) => {
@@ -504,52 +527,6 @@ const DrillEditorPage = () => {
     });
   };
 
-  const scheduleRowPersistence = (sheetId, rowId, payload) => {
-    const key = `${sheetId}:${rowId}`;
-    if (rowUpdateTimers.current[key]) {
-      clearTimeout(rowUpdateTimers.current[key]);
-    }
-
-    rowUpdateTimers.current[key] = setTimeout(async () => {
-      markRowSaving(rowId, true);
-      try {
-        const updatedRow = await updateRow(drillId, sheetId, rowId, payload);
-        updateRowInState(sheetId, rowId, updatedRow);
-        setSaveError('');
-        setLastSavedAt(new Date().toISOString());
-      } catch (err) {
-        setSaveError(err.message || 'שמירה נכשלה');
-      } finally {
-        markRowSaving(rowId, false);
-        delete rowUpdateTimers.current[key];
-      }
-    }, 500);
-  };
-
-  const scheduleSheetPersistence = (sheetId, payload) => {
-    if (!sheetId) {
-      return;
-    }
-    if (sheetUpdateTimers.current[sheetId]) {
-      clearTimeout(sheetUpdateTimers.current[sheetId]);
-    }
-
-    sheetUpdateTimers.current[sheetId] = setTimeout(async () => {
-      markSheetSaving(sheetId, true);
-      try {
-        const updatedSheet = await updateSheet(drillId, sheetId, payload);
-        replaceSheetInState(sheetId, updatedSheet);
-        setSaveError('');
-        setLastSavedAt(new Date().toISOString());
-      } catch (err) {
-        setSaveError(err.message || 'שמירת הגיליון נכשלה');
-      } finally {
-        markSheetSaving(sheetId, false);
-        delete sheetUpdateTimers.current[sheetId];
-      }
-    }, 500);
-  };
-
   const handleRowChange = (rowId, changes) => {
     if (!selectedSheet) {
       return;
@@ -567,10 +544,10 @@ const DrillEditorPage = () => {
         nextEvaluation[changes.evaluation] = true;
       }
       updateRowInState(selectedSheet.sheetId, rowId, { evaluation: nextEvaluation });
-      scheduleRowPersistence(selectedSheet.sheetId, rowId, { evaluation: nextEvaluation });
+      setBakaraDirty(true);
     } else {
       updateRowInState(selectedSheet.sheetId, rowId, changes);
-      scheduleRowPersistence(selectedSheet.sheetId, rowId, changes);
+      setBakaraDirty(true);
     }
   };
 
@@ -631,7 +608,7 @@ const DrillEditorPage = () => {
       return;
     }
     replaceSheetInState(selectedSheet.sheetId, { ...selectedSheet, sheetName: value });
-    scheduleSheetPersistence(selectedSheet.sheetId, { sheetName: value });
+    setBakaraDirty(true);
   };
 
   const handleAddSheet = async () => {
@@ -765,23 +742,62 @@ const DrillEditorPage = () => {
     setScheduleDirty(true);
   };
 
-  const handleSaveSchedule = async () => {
-    if (!scheduleDraft) {
+  const persistBakaraChanges = async () => {
+    if (!bakaraDirty || !drill?.sheets?.length) {
+      return;
+    }
+
+    const emptyEval = {
+      yes: false,
+      no: false,
+      partial: false,
+      notRelevant: false,
+      redFlag: false,
+    };
+
+    for (const sheet of drill.sheets) {
+      await updateSheet(drillId, sheet.sheetId, { sheetName: sheet.sheetName || '' });
+      for (const row of sheet.rows || []) {
+        await updateRow(drillId, sheet.sheetId, row.id, {
+          component: row.component || '',
+          category: row.category || '',
+          metric: row.metric || '',
+          comment: row.comment || '',
+          evaluation: row.evaluation || emptyEval,
+        });
+      }
+    }
+    setBakaraDirty(false);
+  };
+
+  const persistScheduleChanges = async () => {
+    if (!scheduleDirty || !scheduleDraft) {
       return;
     }
     setScheduleSaving(true);
+    const saved = await saveDrillSchedule(drillId, scheduleDraft);
+    const normalized = normalizeScheduleForUi(saved);
+    setScheduleDraft(normalized);
+    setDrill((prev) => (prev ? { ...prev, schedule: normalized } : prev));
+    setScheduleDirty(false);
+    setScheduleSaving(false);
+  };
+
+  const handleSaveAll = async () => {
+    if (!bakaraDirty && !scheduleDirty) {
+      return;
+    }
+    setSaveAllLoading(true);
     setSaveError('');
     try {
-      const saved = await saveDrillSchedule(drillId, scheduleDraft);
-      const normalized = normalizeScheduleForUi(saved);
-      setScheduleDraft(normalized);
-      setDrill((prev) => (prev ? { ...prev, schedule: normalized } : prev));
-      setScheduleDirty(false);
+      await persistBakaraChanges();
+      await persistScheduleChanges();
       setLastSavedAt(new Date().toISOString());
     } catch (err) {
-      setSaveError(err.message || 'שמירת סדרה ג׳ נכשלה');
+      setSaveError(err.message || 'שמירת השינויים נכשלה');
     } finally {
       setScheduleSaving(false);
+      setSaveAllLoading(false);
     }
   };
 
@@ -810,15 +826,17 @@ const DrillEditorPage = () => {
       Object.keys(rowSavingState).length > 0 ||
       Object.keys(sheetSavingState).length > 0 ||
       isMutating ||
-      scheduleSaving
+      scheduleSaving ||
+      saveAllLoading
     );
-  }, [rowSavingState, sheetSavingState, isMutating, scheduleSaving]);
+  }, [rowSavingState, sheetSavingState, isMutating, scheduleSaving, saveAllLoading]);
 
   const renderBakaraSection = () => (
     <>
       <Paper
         sx={{
           p: 3,
+          width: '100%',
           mt: 3,
           border: '1px solid',
           borderColor: 'primary.main',
@@ -860,7 +878,7 @@ const DrillEditorPage = () => {
     return (
       <Paper
         sx={{
-          p: 3,
+          p: { xs: 2, md: 3 },
           mt: 3,
           border: '1px solid',
           borderColor: 'secondary.main',
@@ -868,27 +886,33 @@ const DrillEditorPage = () => {
           borderRadius: 3,
         }}
       >
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} justifyContent="space-between" alignItems={{ xs: 'flex-start', md: 'center' }}>
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} justifyContent="space-between" alignItems={{ xs: 'stretch', md: 'center' }}>
           <Box>
             <Typography variant="h5" fontWeight={700}>סדרה ג׳</Typography>
             <Typography color="text.secondary">עדכון לוח האירועים לתרגיל</Typography>
           </Box>
-          <Stack direction="row" spacing={1} flexWrap="wrap" justifyContent="flex-end">
-            <Button variant="outlined" startIcon={<AddIcon />} onClick={handleAddScheduleColumn}>
-              הוסף עמודה
-            </Button>
-            <Button
-              variant="contained"
-              startIcon={<SaveIcon />}
-              onClick={handleSaveSchedule}
-              disabled={!scheduleDirty || scheduleSaving}
-            >
-              {scheduleSaving ? 'שומר...' : 'שמור סדרה ג׳'}
-            </Button>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} flexWrap="wrap" justifyContent="flex-end">
+            <Tooltip title="הוסף עמודה">
+              <span>
+                <IconButton
+                  onClick={handleAddScheduleColumn}
+                  sx={{
+                    border: '1px solid',
+                    borderColor: 'primary.light',
+                    borderRadius: 2,
+                    color: 'primary.main',
+                    bgcolor: 'rgba(25,118,210,0.10)',
+                    '&:hover': { bgcolor: 'rgba(25,118,210,0.18)' },
+                  }}
+                >
+                  <AddIcon />
+                </IconButton>
+              </span>
+            </Tooltip>
           </Stack>
         </Stack>
 
-        <TableContainer sx={{ mt: 2 }}>
+        <TableContainer sx={{ mt: 2, overflowX: 'auto', width: '100%' }}>
           <Table size="small">
             <TableHead>
               <TableRow>
@@ -914,6 +938,13 @@ const DrillEditorPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
+              <TableRow>
+                <TableCell colSpan={scheduleDraft.columns.length + 1} align="center" sx={{ py: 1.25, bgcolor: 'action.hover' }}>
+                  <Button size="small" onClick={handleAddScheduleRow}>
+                    הוספת שורה חדשה
+                  </Button>
+                </TableCell>
+              </TableRow>
               {(scheduleDraft.events || []).map((row) => (
                 <TableRow key={row.id}>
                   {scheduleDraft.columns.map((column) => (
@@ -963,13 +994,6 @@ const DrillEditorPage = () => {
                   </TableCell>
                 </TableRow>
               ))}
-              <TableRow>
-                <TableCell colSpan={scheduleDraft.columns.length + 1}>
-                  <Button startIcon={<AddIcon />} onClick={handleAddScheduleRow}>
-                    הוסף שורה
-                  </Button>
-                </TableCell>
-              </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
@@ -979,7 +1003,7 @@ const DrillEditorPage = () => {
 
   if (loading) {
     return (
-      <Box sx={{ p: 4 }} dir="rtl">
+      <Box className="page-shell" dir="rtl">
         <CircularProgress />
       </Box>
     );
@@ -987,34 +1011,41 @@ const DrillEditorPage = () => {
 
   if (error) {
     return (
-      <Box sx={{ p: 4 }} dir="rtl">
+      <Box className="page-shell" dir="rtl">
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
         </Alert>
-        <Button variant="outlined" onClick={() => navigate('/drills')} startIcon={<ArrowBackIcon />}>
-          חזרה לרשימת התרגילים
+        <Button variant="outlined" onClick={() => navigate('/drills')}>
+          <RtlIconLabel icon={<ArrowBackIcon />}>חזרה לרשימת התרגילים</RtlIconLabel>
         </Button>
       </Box>
     );
   }
 
   return (
-    <Box sx={{ p: 4, pb: 8 }} dir="rtl">
+    <Box className="page-shell" sx={{ pb: 8, maxWidth: 'none', width: '100%', px: { xs: 2, md: 3 } }} dir="rtl">
       <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" spacing={2} alignItems={{ xs: 'flex-start', md: 'center' }}>
         <Box>
           <Typography variant="h4" fontWeight={700}>
             {drill?.name || 'תרגיל'}
           </Typography>
           <Typography color="text.secondary">
-            {`בית חולים: ${drill?.hospitalId || drill?.hospital || 'לא צוין'}`}
+            {`בית חולים: ${resolveHospitalName(drill?.hospitalId || drill?.hospital, cachedHospitalsById) || 'לא צוין'}`}
           </Typography>
           <Typography color="text.secondary">{`תאריך: ${drill?.date || 'לא צוין'}`}</Typography>
         </Box>
-        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" justifyContent="flex-end">
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} alignItems={{ xs: 'stretch', sm: 'center' }} flexWrap="wrap" justifyContent="flex-end">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSaveAll}
+            disabled={saveAllLoading || (!bakaraDirty && !scheduleDirty)}
+          >
+            {saveAllLoading ? 'שומר...' : <RtlIconLabel icon={<SaveIcon />}>שמור שינויים</RtlIconLabel>}
+          </Button>
           <Button
             variant={shareCopied ? 'contained' : 'outlined'}
             color={shareCopied ? 'success' : 'primary'}
-            startIcon={<LinkIcon />}
             onClick={() => {
               navigator.clipboard.writeText(`${window.location.origin}/public/${drillId}`).then(() => {
                 setShareCopied(true);
@@ -1022,13 +1053,13 @@ const DrillEditorPage = () => {
               }).catch(() => setSaveError('לא ניתן להעתיק את הקישור'));
             }}
           >
-            {shareCopied ? 'הועתק' : 'העתק קישור לבוחנים'}
+            {shareCopied ? 'הועתק' : <RtlIconLabel icon={<LinkIcon />}>העתק קישור לבוחנים</RtlIconLabel>}
           </Button>
-          <Button variant="outlined" startIcon={<EditIcon />} onClick={() => setIsMetaDialogOpen(true)}>
-            עריכת פרטי תרגיל
+          <Button variant="outlined" onClick={() => setIsMetaDialogOpen(true)}>
+            <RtlIconLabel icon={<EditIcon />}>עריכת פרטי תרגיל</RtlIconLabel>
           </Button>
-          <Button variant="outlined" startIcon={<ArrowBackIcon />} onClick={() => navigate('/drills')}>
-            חזרה לרשימה
+          <Button variant="outlined" onClick={() => navigate('/drills')}>
+            <RtlIconLabel icon={<ArrowBackIcon />}>חזרה לרשימה</RtlIconLabel>
           </Button>
         </Stack>
       </Stack>
@@ -1047,33 +1078,22 @@ const DrillEditorPage = () => {
         </Alert>
       )}
 
-      {activeTab === 'bakara' ? renderBakaraSection() : renderScheduleSection()}
-
-      <Paper
-        sx={{
-          mt: 4,
-          position: 'sticky',
-          bottom: 0,
-          zIndex: 6,
-          boxShadow: '0 -6px 30px rgba(0,0,0,0.08)',
-          borderTop: '1px solid',
-          borderColor: 'divider',
-          backdropFilter: 'blur(10px)',
-        }}
-      >
-        <Divider />
+      <Paper sx={{ mt: 3, borderRadius: 3, border: '1px solid', borderColor: 'divider' }}>
         <Tabs
           value={activeTab}
           onChange={(event, val) => setActiveTab(val)}
-          centered
+          centered={!isMobile}
+          variant={isMobile ? 'fullWidth' : 'standard'}
           indicatorColor="primary"
           textColor="primary"
           TabIndicatorProps={{ sx: { height: 4, borderRadius: 2 } }}
         >
-          <Tab value="bakara" label="בקרה" sx={{ fontWeight: 800, fontSize: 16, letterSpacing: 0.4 }} />
-          <Tab value="schedule" label="סדרה ג׳" sx={{ fontWeight: 800, fontSize: 16, letterSpacing: 0.4 }} />
+          <Tab value="bakara" label="בקרה" sx={{ fontWeight: 800, fontSize: isMobile ? 14 : 16, letterSpacing: 0.2 }} />
+          <Tab value="schedule" label="סדרה ג׳" sx={{ fontWeight: 800, fontSize: isMobile ? 14 : 16, letterSpacing: 0.2 }} />
         </Tabs>
       </Paper>
+
+      {activeTab === 'bakara' ? renderBakaraSection() : renderScheduleSection()}
 
       <Dialog open={isMetaDialogOpen} onClose={() => setIsMetaDialogOpen(false)} fullWidth maxWidth="sm">
         <DialogTitle>עריכת פרטי התרגיל</DialogTitle>
@@ -1116,7 +1136,7 @@ const DrillEditorPage = () => {
         <DialogActions>
           <Button onClick={() => setIsMetaDialogOpen(false)}>בטל</Button>
           <Button variant="contained" onClick={handleSaveMeta} disabled={metaSaving}>
-            {metaSaving ? 'שומר...' : 'שמור'}
+            {metaSaving ? 'שומר...' : <RtlIconLabel icon={<SaveIcon />}>שמור</RtlIconLabel>}
           </Button>
         </DialogActions>
       </Dialog>

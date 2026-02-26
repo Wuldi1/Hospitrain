@@ -25,14 +25,16 @@ import {
   TableHead,
   TableRow,
   TextField,
-  ToggleButton,
-  ToggleButtonGroup,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
   Tooltip,
   Typography,
 } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { getPublicDrill, updatePublicRow } from '../api/drillsApi';
+import { getPublicDrill, updatePublicRow } from '../../api/drillsApi';
+import { resolveHospitalName } from '../../utils/hospitalsCache';
 
 const evaluationOptions = [
   { key: 'yes', label: 'כן' },
@@ -107,28 +109,44 @@ const timeToMinutes = (timeStr = '') => {
   return h * 60 + m;
 };
 
-const EvaluationToggle = ({ evaluation, onChange }) => {
+const EvaluationControl = ({ evaluation, onChange, isMobile }) => {
   const selectedKey = useMemo(() => {
     if (!evaluation) {
-      return null;
+      return '';
     }
-    return evaluationOptions.find((option) => evaluation[option.key])?.key || null;
+    return evaluationOptions.find((option) => evaluation[option.key])?.key || '';
   }, [evaluation]);
 
   return (
-    <ToggleButtonGroup
-      exclusive
-      value={selectedKey}
-      onChange={(event, value) => onChange(value)}
-      size="small"
-      fullWidth
-    >
-      {evaluationOptions.map((option) => (
-        <ToggleButton key={option.key} value={option.key} sx={{ flex: 1 }}>
-          {option.label}
-        </ToggleButton>
-      ))}
-    </ToggleButtonGroup>
+    <FormControl component="fieldset" fullWidth>
+      <RadioGroup
+        row={!isMobile}
+        value={selectedKey}
+        onChange={(event) => onChange(event.target.value)}
+        sx={{
+          gap: isMobile ? 0.25 : 0.75,
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
+        }}
+      >
+        {evaluationOptions.map((option) => (
+          <FormControlLabel
+            key={option.key}
+            value={option.key}
+            control={<Radio size="small" />}
+            label={option.label}
+            sx={{
+              m: 0,
+              minWidth: isMobile ? '48%' : 'auto',
+              '.MuiFormControlLabel-label': {
+                fontSize: isMobile ? '0.8rem' : '0.9rem',
+                fontWeight: 500,
+              },
+            }}
+          />
+        ))}
+      </RadioGroup>
+    </FormControl>
   );
 };
 
@@ -304,7 +322,9 @@ const PublicTesterPage = () => {
       <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" spacing={2} alignItems={{ xs: 'flex-start', md: 'center' }}>
         <Box>
           <Typography variant={isMobile ? 'h5' : 'h4'} fontWeight={800}>{data?.name || 'תרגיל'}</Typography>
-          <Typography color="text.secondary">{`בית חולים: ${data?.hospital || 'לא צוין'}`}</Typography>
+          <Typography color="text.secondary">
+            {`בית חולים: ${resolveHospitalName(data?.hospitalId || data?.hospital) || 'לא צוין'}`}
+          </Typography>
           <Typography color="text.secondary">{`תאריך: ${data?.date || 'לא צוין'}`}</Typography>
           <Typography sx={{ mt: 1 }} fontWeight={700}>{sheet?.sheetName || 'בחר גיליון'}</Typography>
         </Box>
@@ -358,47 +378,88 @@ const PublicTesterPage = () => {
           <Typography variant="h6" fontWeight={700} sx={{ mb: 2 }}>
             גיליון בקרה
           </Typography>
-          <TableContainer sx={{ overflowX: 'auto' }}>
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="right">מרכיב</TableCell>
-                  <TableCell align="right">קטגוריה</TableCell>
-                  <TableCell align="right">מדד</TableCell>
-              <TableCell align="center" width="30%">הערכה</TableCell>
-              <TableCell align="right" width={isMobile ? '45%' : '25%'}>הערות</TableCell>
-              <TableCell />
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(sheet?.rows || []).map((row) => (
-                  <TableRow key={row.id} hover>
-                    <TableCell>{row.component}</TableCell>
-                    <TableCell>{row.category}</TableCell>
-                    <TableCell>{row.metric}</TableCell>
-                    <TableCell>
-                      <EvaluationToggle
-                        evaluation={row.evaluation}
-                        onChange={(value) => handleEvaluationChange(row.id, value)}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <TextField
-                        fullWidth
-                        multiline
-                        minRows={isMobile ? 4 : 2}
-                        value={row.comment || ''}
-                        onChange={(event) => handleCommentChange(row.id, event.target.value)}
-                      />
-                    </TableCell>
-                    <TableCell align="center" width="60">
-                      {rowSavingState[row.id] && <CircularProgress size={18} />}
-                    </TableCell>
+          {isMobile ? (
+            <Stack spacing={1.5}>
+              {(sheet?.rows || []).map((row) => (
+                <Paper
+                  key={row.id}
+                  variant="outlined"
+                  sx={{ p: 1.5, borderRadius: 2, borderColor: 'divider' }}
+                >
+                  <Stack spacing={1}>
+                    <Typography variant="subtitle2" fontWeight={700}>
+                      {row.metric || 'מדד ללא כותרת'}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {`${row.component || ''}${row.category ? ` / ${row.category}` : ''}`}
+                    </Typography>
+                    <EvaluationControl
+                      evaluation={row.evaluation}
+                      onChange={(value) => handleEvaluationChange(row.id, value)}
+                      isMobile
+                    />
+                    <TextField
+                      fullWidth
+                      size="small"
+                      multiline
+                      minRows={2}
+                      placeholder="הערות"
+                      value={row.comment || ''}
+                      onChange={(event) => handleCommentChange(row.id, event.target.value)}
+                    />
+                    {rowSavingState[row.id] ? (
+                      <Stack direction="row" justifyContent="flex-end">
+                        <CircularProgress size={16} />
+                      </Stack>
+                    ) : null}
+                  </Stack>
+                </Paper>
+              ))}
+            </Stack>
+          ) : (
+            <TableContainer sx={{ overflowX: 'auto' }}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="right">מרכיב</TableCell>
+                    <TableCell align="right">קטגוריה</TableCell>
+                    <TableCell align="right">מדד</TableCell>
+                    <TableCell align="center" width="30%">הערכה</TableCell>
+                    <TableCell align="right" width="25%">הערות</TableCell>
+                    <TableCell />
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {(sheet?.rows || []).map((row) => (
+                    <TableRow key={row.id} hover>
+                      <TableCell>{row.component}</TableCell>
+                      <TableCell>{row.category}</TableCell>
+                      <TableCell>{row.metric}</TableCell>
+                      <TableCell>
+                        <EvaluationControl
+                          evaluation={row.evaluation}
+                          onChange={(value) => handleEvaluationChange(row.id, value)}
+                          isMobile={false}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <TextField
+                          fullWidth
+                          multiline
+                          minRows={2}
+                          value={row.comment || ''}
+                          onChange={(event) => handleCommentChange(row.id, event.target.value)}
+                        />
+                      </TableCell>
+                      <TableCell align="center" width="60">
+                        {rowSavingState[row.id] && <CircularProgress size={18} />}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
         </Paper>
       ) : (
         <Paper
@@ -503,8 +564,8 @@ const PublicTesterPage = () => {
           textColor="primary"
           TabIndicatorProps={{ sx: { height: 4, borderRadius: 2 } }}
         >
-          <Tab value="bakara" label="בקרה" sx={{ fontWeight: 800, fontSize: 16, letterSpacing: 0.4 }} />
-          <Tab value="schedule" label="סדרה ג׳" sx={{ fontWeight: 800, fontSize: 16, letterSpacing: 0.4 }} />
+          <Tab value="bakara" label="בקרה" sx={{ fontWeight: 800, fontSize: isMobile ? 14 : 16, letterSpacing: 0.2 }} />
+          <Tab value="schedule" label="סדרה ג׳" sx={{ fontWeight: 800, fontSize: isMobile ? 14 : 16, letterSpacing: 0.2 }} />
         </Tabs>
       </Paper>
     </Box>
