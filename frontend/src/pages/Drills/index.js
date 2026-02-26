@@ -103,6 +103,15 @@ const Drills = () => {
   const nextUpcoming = upcomingDrillsList.length ? upcomingDrillsList[0] : null;
 
   const displayedDrills = showUpcomingOnly ? upcomingDrillsList : [...drillsWithStatus].sort((a, b) => b.dateObj - a.dateObj);
+  const hasActiveDrillsToday = drillsWithStatus.some((d) => {
+    const nowDate = new Date();
+    const drillDate = d.dateObj;
+    return (
+      drillDate.getFullYear() === nowDate.getFullYear() &&
+      drillDate.getMonth() === nowDate.getMonth() &&
+      drillDate.getDate() === nowDate.getDate()
+    );
+  });
 
   const toggleSelect = (id) => {
     setSelected((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
@@ -273,6 +282,16 @@ const Drills = () => {
             >
               <RtlIconLabel icon={<AddIcon />}>צור תרגיל חדש</RtlIconLabel>
             </Button>
+            {hasActiveDrillsToday ? (
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => navigate('/drills/active')}
+                sx={{ borderRadius: 2, px: 2.5, py: 1, fontWeight: 700 }}
+              >
+                תרגילים פעילים
+              </Button>
+            ) : null}
             <Tooltip title="ערוך נבחר">
               <span>
                 <IconButton 

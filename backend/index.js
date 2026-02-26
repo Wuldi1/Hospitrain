@@ -28,6 +28,69 @@ app.use(cors());
 app.use(express.json({ limit: "10mb" }));
 app.use(express.json());
 
+const toSafeString = (value) =>
+  typeof value === "string" ? value.trim() : "";
+
+const TESTER_TTL_MS = 24 * 60 * 60 * 1000;
+
+const sanitizeTesterIdentity = (payload = {}) => {
+  const testerId = toSafeString(payload.testerId);
+  const testerName = toSafeString(payload.testerName);
+  if (!testerId || !testerName) {
+    return null;
+  }
+  return { testerId, testerName };
+};
+
+const touchDrillTester = (drill, identity) => {
+  if (!identity) {
+    return null;
+  }
+  drill.publicTesters = Array.isArray(drill.publicTesters)
+    ? drill.publicTesters
+    : [];
+  const nowIso = new Date().toISOString();
+  const expiresAt = new Date(Date.now() + TESTER_TTL_MS).toISOString();
+  const existing = drill.publicTesters.find(
+    (tester) => tester.testerId === identity.testerId,
+  );
+
+  if (existing) {
+    existing.testerName = identity.testerName;
+    existing.lastSeenAt = nowIso;
+    existing.expiresAt = expiresAt;
+    return existing;
+  }
+
+  const created = {
+    testerId: identity.testerId,
+    testerName: identity.testerName,
+    firstSeenAt: nowIso,
+    lastSeenAt: nowIso,
+    expiresAt,
+  };
+  drill.publicTesters.push(created);
+  return created;
+};
+
+const purgeExpiredTesters = (drill) => {
+  let changed = false;
+  if (!Array.isArray(drill.publicTesters)) {
+    drill.publicTesters = [];
+    return true;
+  }
+  const now = Date.now();
+  const before = drill.publicTesters.length;
+  drill.publicTesters = drill.publicTesters.filter((tester) => {
+    const expiry = new Date(tester.expiresAt || "").getTime();
+    return Number.isNaN(expiry) || expiry > now;
+  });
+  if (drill.publicTesters.length !== before) {
+    changed = true;
+  }
+  return changed;
+};
+
 // Middleware to verify JWT
 const authenticateJWT = (req, res, next) => {
   const publicPrefixes = ["/api/auth", "/api/drills/public"];
@@ -169,6 +232,9 @@ app.get("/api/drills/public/:drillId", (req, res) => {
   if (!drill) {
     return res.status(404).json({ error: "Drill not found" });
   }
+  if (purgeExpiredTesters(drill)) {
+    saveDrill(drill);
+  }
   res.json({
     drillId: drill.drillId,
     name: drill.name,
@@ -177,6 +243,24 @@ app.get("/api/drills/public/:drillId", (req, res) => {
     sheets: drill.sheets || [],
     schedule: drill.schedule || null,
   });
+});
+
+app.post("/api/drills/public/:drillId/tester-session", (req, res) => {
+  const drill = getDrillById(req.params.drillId);
+  if (!drill) {
+    return res.status(404).json({ error: "Drill not found" });
+  }
+  const identity = sanitizeTesterIdentity(req.body || {});
+  if (!identity) {
+    return res
+      .status(400)
+      .json({ error: "testerId and testerName are required" });
+  }
+  purgeExpiredTesters(drill);
+  const tester = touchDrillTester(drill, identity);
+  drill.updatedAt = new Date().toISOString();
+  saveDrill(drill);
+  return res.status(200).json(tester);
 });
 
 app.put(
@@ -197,6 +281,15 @@ app.put(
       return res.status(404).json({ error: "Row not found" });
     }
 
+    const identity = sanitizeTesterIdentity(req.body || {});
+    if (identity) {
+      purgeExpiredTesters(drill);
+      touchDrillTester(drill, identity);
+      row.lastUpdatedByTesterId = identity.testerId;
+      row.lastUpdatedByTesterName = identity.testerName;
+      row.lastUpdatedAt = new Date().toISOString();
+    }
+
     if (req.body && req.body.evaluation) {
       row.evaluation = normalizeEvaluation(req.body.evaluation);
     }
@@ -209,6 +302,51 @@ app.put(
     res.json(row);
   },
 );
+
+app.post("/api/drills/public/:drillId/schedule/events/:eventId/ack", (req, res) => {
+  const drill = getDrillById(req.params.drillId);
+  if (!drill) {
+    return res.status(404).json({ error: "Drill not found" });
+  }
+  const identity = sanitizeTesterIdentity(req.body || {});
+  if (!identity) {
+    return res
+      .status(400)
+      .json({ error: "testerId and testerName are required" });
+  }
+  const eventId = toSafeString(req.params.eventId);
+  if (!eventId) {
+    return res.status(400).json({ error: "eventId is required" });
+  }
+  const scheduleEvents = drill.schedule?.events || [];
+  const targetEvent = scheduleEvents.find((event) => event.id === eventId);
+  if (!targetEvent) {
+    return res.status(404).json({ error: "Schedule event not found" });
+  }
+
+  purgeExpiredTesters(drill);
+  touchDrillTester(drill, identity);
+  targetEvent.acks = Array.isArray(targetEvent.acks) ? targetEvent.acks : [];
+
+  const existingAck = targetEvent.acks.find(
+    (ack) => ack.testerId === identity.testerId,
+  );
+  const ackedAt = new Date().toISOString();
+  if (existingAck) {
+    existingAck.testerName = identity.testerName;
+    existingAck.ackedAt = ackedAt;
+  } else {
+    targetEvent.acks.push({
+      testerId: identity.testerId,
+      testerName: identity.testerName,
+      ackedAt,
+    });
+  }
+
+  drill.updatedAt = ackedAt;
+  saveDrill(drill);
+  return res.status(200).json(targetEvent);
+});
 
 // Drills
 app.get("/api/drills", (req, res) => {

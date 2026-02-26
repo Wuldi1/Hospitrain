@@ -1,4 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DeleteIcon from "@mui/icons-material/Delete";
+import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
+import SaveIcon from "@mui/icons-material/Save";
 import {
   Alert,
   Box,
@@ -10,6 +13,8 @@ import {
   InputLabel,
   MenuItem,
   Paper,
+  Radio,
+  RadioGroup,
   Select,
   Stack,
   Tab,
@@ -21,63 +26,78 @@ import {
   TableRow,
   Tabs,
   TextField,
-  Radio,
-  RadioGroup,
   Tooltip,
   Typography,
-} from '@mui/material';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import DeleteIcon from '@mui/icons-material/Delete';
-import SaveIcon from '@mui/icons-material/Save';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+} from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useEffect, useMemo, useState } from "react";
 import {
-  getTemplates,
   getTemplateBundle,
+  getTemplates,
   saveBakaraTemplate,
   saveScheduleTemplate,
-} from '../../api/drillsApi';
+} from "../../api/drillsApi";
 
 const columnLabels = {
-  component: 'מרכיב',
-  category: 'קטגוריה',
-  metric: 'מדד',
-  evaluation: 'הערכה',
-  comment: 'הערות',
-  serial: 'מספר',
-  time: 'שעה',
-  from: 'מאת',
-  to: 'אל',
-  message: 'הודעה',
-  notes: 'הערות',
+  component: "מרכיב",
+  category: "קטגוריה",
+  metric: "מדד",
+  evaluation: "הערכה",
+  comment: "הערות",
+  serial: "מספר",
+  time: "שעה",
+  from: "מאת",
+  to: "אל",
+  message: "הודעה",
+  notes: "הערות",
 };
 
-const defaultBakaraOrder = ['component', 'category', 'metric', 'evaluation', 'comment'];
-const defaultScheduleOrder = ['serial', 'time', 'from', 'to', 'message', 'notes'];
-
-const evaluationOptions = [
-  { key: 'yes', label: 'כן' },
-  { key: 'no', label: 'לא' },
-  { key: 'partial', label: 'חלקי' },
-  { key: 'notRelevant', label: 'לא רלוונטי' },
-  { key: 'redFlag', label: 'קו אדום' },
+const defaultBakaraOrder = [
+  "component",
+  "category",
+  "metric",
+  "evaluation",
+  "comment",
+];
+const defaultScheduleOrder = [
+  "serial",
+  "time",
+  "from",
+  "to",
+  "message",
+  "notes",
 ];
 
-const createId = () => (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`);
-const emptyEvaluation = () => ({ yes: false, no: false, partial: false, notRelevant: false, redFlag: false });
+const evaluationOptions = [
+  { key: "yes", label: "כן" },
+  { key: "no", label: "לא" },
+  { key: "partial", label: "חלקי" },
+  { key: "notRelevant", label: "לא רלוונטי" },
+  // { key: "redFlag", label: "קו אדום" },
+];
+
+const createId = () =>
+  crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
+const emptyEvaluation = () => ({
+  yes: false,
+  no: false,
+  partial: false,
+  notRelevant: false,
+  redFlag: false,
+});
 
 const createColumnsFromRows = (rows = [], preferredOrder = []) => {
   const seen = new Set();
   const columns = [];
   const addKey = (key) => {
-    if (!key || key === 'id' || seen.has(key)) {
+    if (!key || key === "id" || seen.has(key)) {
       return;
     }
     seen.add(key);
     columns.push({
       key,
       label: columnLabels[key] || key,
-      type: key === 'evaluation' ? 'evaluation' : 'text',
+      type: key === "evaluation" ? "evaluation" : "text",
     });
   };
 
@@ -87,18 +107,28 @@ const createColumnsFromRows = (rows = [], preferredOrder = []) => {
   });
 
   if (!columns.length) {
-    columns.push({ key: 'value', label: 'ערך', type: 'text' });
+    columns.push({ key: "value", label: "ערך", type: "text" });
   }
 
   return columns;
 };
 
 const ColumnHeader = ({ column, onRemove, disableRemove }) => (
-  <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
+  <Stack
+    direction="row"
+    alignItems="center"
+    justifyContent="space-between"
+    spacing={1}
+    sx={{ direction: "rtl" }}
+  >
     <Typography fontWeight={600}>{column.label}</Typography>
     {!disableRemove && (
       <Tooltip title="הסר עמודה">
-        <IconButton size="small" onClick={() => onRemove(column.key)} sx={compactIconButtonSx('neutral')}>
+        <IconButton
+          size="small"
+          onClick={() => onRemove(column.key)}
+          sx={compactIconButtonSx("neutral")}
+        >
           <DeleteIcon fontSize="small" />
         </IconButton>
       </Tooltip>
@@ -109,9 +139,9 @@ const ColumnHeader = ({ column, onRemove, disableRemove }) => (
 const EvaluationCell = ({ value, onChange }) => {
   const selectedKey = useMemo(() => {
     if (!value) {
-      return '';
+      return "";
     }
-    return evaluationOptions.find((option) => value[option.key])?.key || '';
+    return evaluationOptions.find((option) => value[option.key])?.key || "";
   }, [value]);
 
   return (
@@ -120,7 +150,12 @@ const EvaluationCell = ({ value, onChange }) => {
         row
         value={selectedKey}
         onChange={(event) => onChange(event.target.value)}
-        sx={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: 0.5 }}
+        sx={{
+          direction: "rtl",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 0.5,
+        }}
       >
         {evaluationOptions.map((option) => (
           <FormControlLabel
@@ -128,10 +163,11 @@ const EvaluationCell = ({ value, onChange }) => {
             value={option.key}
             control={<Radio size="small" />}
             label={option.label}
+            labelPlacement="start"
             sx={{
               m: 0,
-              minWidth: '48%',
-              '.MuiFormControlLabel-label': { fontSize: '0.8rem' },
+              minWidth: "48%",
+              ".MuiFormControlLabel-label": { fontSize: "0.8rem" },
             }}
           />
         ))}
@@ -141,58 +177,59 @@ const EvaluationCell = ({ value, onChange }) => {
 };
 
 const iconButtonBaseSx = {
-  border: '1px solid',
-  borderColor: 'divider',
+  border: "1px solid",
+  borderColor: "divider",
   borderRadius: 2,
-  bgcolor: 'background.paper',
-  transition: 'transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease, border-color 0.16s ease',
-  '&:hover': {
-    transform: 'translateY(-1px)',
-    boxShadow: '0 8px 18px rgba(15,23,42,0.08)',
+  bgcolor: "background.paper",
+  transition:
+    "transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease, border-color 0.16s ease",
+  "&:hover": {
+    transform: "translateY(-1px)",
+    boxShadow: "0 8px 18px rgba(15,23,42,0.08)",
   },
-  '&.Mui-disabled': {
+  "&.Mui-disabled": {
     opacity: 0.5,
-    color: 'action.disabled',
-    borderColor: 'divider',
-    bgcolor: 'action.hover',
-    boxShadow: 'none',
-    transform: 'none',
+    color: "action.disabled",
+    borderColor: "divider",
+    bgcolor: "action.hover",
+    boxShadow: "none",
+    transform: "none",
   },
 };
 
 const iconToneSx = {
   primary: {
-    borderColor: 'primary.light',
-    color: 'primary.main',
-    bgcolor: 'rgba(25,118,210,0.10)',
-    '&:hover': { bgcolor: 'rgba(25,118,210,0.18)' },
+    borderColor: "primary.light",
+    color: "primary.main",
+    bgcolor: "rgba(25,118,210,0.10)",
+    "&:hover": { bgcolor: "rgba(25,118,210,0.18)" },
   },
   success: {
-    borderColor: 'success.light',
-    color: 'success.main',
-    bgcolor: 'rgba(46,125,50,0.10)',
-    '&:hover': { bgcolor: 'rgba(46,125,50,0.18)' },
+    borderColor: "success.light",
+    color: "success.main",
+    bgcolor: "rgba(46,125,50,0.10)",
+    "&:hover": { bgcolor: "rgba(46,125,50,0.18)" },
   },
   danger: {
-    borderColor: 'error.light',
-    color: 'error.main',
-    bgcolor: 'rgba(211,47,47,0.08)',
-    '&:hover': { bgcolor: 'rgba(211,47,47,0.16)' },
+    borderColor: "error.light",
+    color: "error.main",
+    bgcolor: "rgba(211,47,47,0.08)",
+    "&:hover": { bgcolor: "rgba(211,47,47,0.16)" },
   },
   neutral: {
-    borderColor: 'divider',
-    color: 'text.secondary',
-    bgcolor: 'background.paper',
-    '&:hover': { bgcolor: 'action.hover' },
+    borderColor: "divider",
+    color: "text.secondary",
+    bgcolor: "background.paper",
+    "&:hover": { bgcolor: "action.hover" },
   },
 };
 
-const iconButtonSx = (tone = 'neutral') => ({
+const iconButtonSx = (tone = "neutral") => ({
   ...iconButtonBaseSx,
   ...iconToneSx[tone],
 });
 
-const compactIconButtonSx = (tone = 'neutral') => ({
+const compactIconButtonSx = (tone = "neutral") => ({
   ...iconButtonSx(tone),
   width: 30,
   height: 30,
@@ -200,18 +237,18 @@ const compactIconButtonSx = (tone = 'neutral') => ({
 });
 
 const TemplatesPage = () => {
-  const isMobile = useMediaQuery('(max-width:900px)');
+  const isMobile = useMediaQuery("(max-width:900px)");
   const [templates, setTemplates] = useState([]);
-  const [selectedTemplateId, setSelectedTemplateId] = useState('');
+  const [selectedTemplateId, setSelectedTemplateId] = useState("");
   const [bakara, setBakara] = useState(null);
   const [schedule, setSchedule] = useState(null);
-  const [selectedSheetId, setSelectedSheetId] = useState('');
-  const [activeTab, setActiveTab] = useState('bakara');
+  const [selectedSheetId, setSelectedSheetId] = useState("");
+  const [activeTab, setActiveTab] = useState("bakara");
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState({ bakara: false, schedule: false });
   const [dirty, setDirty] = useState({ bakara: false, schedule: false });
-  const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     const fetchTemplates = async () => {
@@ -222,7 +259,7 @@ const TemplatesPage = () => {
           setSelectedTemplateId(data[0].templateId);
         }
       } catch (err) {
-        setError('טעינת התבניות נכשלה.');
+        setError("טעינת התבניות נכשלה.");
       }
     };
 
@@ -235,8 +272,8 @@ const TemplatesPage = () => {
     }
     const fetchTemplateDetails = async () => {
       setLoading(true);
-      setError('');
-      setSuccessMessage('');
+      setError("");
+      setSuccessMessage("");
       try {
         const data = await getTemplateBundle(selectedTemplateId);
         const normalizedBakara = data?.bakara
@@ -252,7 +289,9 @@ const TemplatesPage = () => {
                   sheetName: sheet.sheetName || `גיליון ${index + 1}`,
                   columns: columns.map((col) => ({
                     ...col,
-                    type: col.type || (col.key === 'evaluation' ? 'evaluation' : 'text'),
+                    type:
+                      col.type ||
+                      (col.key === "evaluation" ? "evaluation" : "text"),
                     label: col.label || columnLabels[col.key] || col.key,
                   })),
                   rows: (sheet.rows || []).map((row) => ({
@@ -274,16 +313,19 @@ const TemplatesPage = () => {
               })),
               columns: data.schedule.columns?.length
                 ? data.schedule.columns
-                : createColumnsFromRows(data.schedule.events || [], defaultScheduleOrder),
+                : createColumnsFromRows(
+                    data.schedule.events || [],
+                    defaultScheduleOrder,
+                  ),
             }
           : null;
 
         setBakara(normalizedBakara);
         setSchedule(normalizedSchedule);
-        setSelectedSheetId(normalizedBakara?.sheets?.[0]?.sheetId || '');
+        setSelectedSheetId(normalizedBakara?.sheets?.[0]?.sheetId || "");
         setDirty({ bakara: false, schedule: false });
       } catch (err) {
-        setError('טעינת התבנית נכשלה.');
+        setError("טעינת התבנית נכשלה.");
       } finally {
         setLoading(false);
       }
@@ -310,7 +352,7 @@ const TemplatesPage = () => {
     };
     setBakara((prev) => ({ ...prev, sheets: [...prev.sheets, newSheet] }));
     setSelectedSheetId(newSheetId);
-    markDirty('bakara');
+    markDirty("bakara");
   };
 
   const handleRemoveBakaraColumn = (columnKey) => {
@@ -332,7 +374,7 @@ const TemplatesPage = () => {
       });
       return { ...prev, sheets };
     });
-    markDirty('bakara');
+    markDirty("bakara");
   };
 
   const handleBakaraRowChange = (rowId, key, value) => {
@@ -348,7 +390,7 @@ const TemplatesPage = () => {
           if (row.id !== rowId) {
             return row;
           }
-          if (key === 'evaluation') {
+          if (key === "evaluation") {
             const nextEvaluation = emptyEvaluation();
             if (value && nextEvaluation.hasOwnProperty(value)) {
               nextEvaluation[value] = true;
@@ -361,14 +403,16 @@ const TemplatesPage = () => {
       });
       return { ...prev, sheets };
     });
-    markDirty('bakara');
+    markDirty("bakara");
   };
 
   const handleDuplicateBakaraSheet = () => {
     if (!bakara || !selectedSheetId) {
       return;
     }
-    const sourceSheet = bakara.sheets.find((sheet) => sheet.sheetId === selectedSheetId);
+    const sourceSheet = bakara.sheets.find(
+      (sheet) => sheet.sheetId === selectedSheetId,
+    );
     if (!sourceSheet) {
       return;
     }
@@ -376,7 +420,7 @@ const TemplatesPage = () => {
     const newSheet = {
       ...sourceSheet,
       sheetId: newSheetId,
-      sheetName: `${sourceSheet.sheetName || 'גיליון'} (העתק)`,
+      sheetName: `${sourceSheet.sheetName || "גיליון"} (העתק)`,
       rows: sourceSheet.rows.map((row) => ({
         ...row,
         id: createId(),
@@ -388,17 +432,23 @@ const TemplatesPage = () => {
       sheets: [...prev.sheets, newSheet],
     }));
     setSelectedSheetId(newSheetId);
-    markDirty('bakara');
+    markDirty("bakara");
   };
 
   const handleDeleteBakaraSheet = () => {
-    if (!bakara?.sheets?.length || !selectedSheetId || bakara.sheets.length <= 1) {
+    if (
+      !bakara?.sheets?.length ||
+      !selectedSheetId ||
+      bakara.sheets.length <= 1
+    ) {
       return;
     }
-    const nextSheets = bakara.sheets.filter((sheet) => sheet.sheetId !== selectedSheetId);
+    const nextSheets = bakara.sheets.filter(
+      (sheet) => sheet.sheetId !== selectedSheetId,
+    );
     setBakara((prev) => ({ ...prev, sheets: nextSheets }));
-    setSelectedSheetId(nextSheets[0]?.sheetId || '');
-    markDirty('bakara');
+    setSelectedSheetId(nextSheets[0]?.sheetId || "");
+    markDirty("bakara");
   };
 
   const handleRenameBakaraSheet = (value) => {
@@ -408,10 +458,12 @@ const TemplatesPage = () => {
     setBakara((prev) => ({
       ...prev,
       sheets: prev.sheets.map((sheet) =>
-        sheet.sheetId === selectedSheetId ? { ...sheet, sheetName: value } : sheet
+        sheet.sheetId === selectedSheetId
+          ? { ...sheet, sheetName: value }
+          : sheet,
       ),
     }));
-    markDirty('bakara');
+    markDirty("bakara");
   };
 
   const handleReorderBakaraSheets = (sourceId, targetId) => {
@@ -428,7 +480,7 @@ const TemplatesPage = () => {
     sheets.splice(targetIndex, 0, moved);
     setBakara((prev) => ({ ...prev, sheets }));
     setSelectedSheetId(moved.sheetId);
-    markDirty('bakara');
+    markDirty("bakara");
   };
 
   const handleAddBakaraRow = () => {
@@ -442,13 +494,13 @@ const TemplatesPage = () => {
         }
         const row = { id: createId() };
         sheet.columns.forEach((col) => {
-          row[col.key] = col.key === 'evaluation' ? emptyEvaluation() : '';
+          row[col.key] = col.key === "evaluation" ? emptyEvaluation() : "";
         });
         return { ...sheet, rows: [...sheet.rows, row] };
       });
       return { ...prev, sheets };
     });
-    markDirty('bakara');
+    markDirty("bakara");
   };
 
   const handleDeleteBakaraRow = (rowId) => {
@@ -464,7 +516,7 @@ const TemplatesPage = () => {
       });
       return { ...prev, sheets };
     });
-    markDirty('bakara');
+    markDirty("bakara");
   };
 
   const handleRemoveScheduleColumn = (columnKey) => {
@@ -480,7 +532,7 @@ const TemplatesPage = () => {
         return next;
       }),
     }));
-    markDirty('schedule');
+    markDirty("schedule");
   };
 
   const handleScheduleRowChange = (rowId, key, value) => {
@@ -489,9 +541,11 @@ const TemplatesPage = () => {
     }
     setSchedule((prev) => ({
       ...prev,
-      events: prev.events.map((event) => (event.id === rowId ? { ...event, [key]: value } : event)),
+      events: prev.events.map((event) =>
+        event.id === rowId ? { ...event, [key]: value } : event,
+      ),
     }));
-    markDirty('schedule');
+    markDirty("schedule");
   };
 
   const handleAddScheduleRow = () => {
@@ -500,18 +554,21 @@ const TemplatesPage = () => {
     }
     const row = { id: createId() };
     schedule.columns.forEach((col) => {
-      row[col.key] = '';
+      row[col.key] = "";
     });
     setSchedule((prev) => ({ ...prev, events: [...prev.events, row] }));
-    markDirty('schedule');
+    markDirty("schedule");
   };
 
   const handleDeleteScheduleRow = (rowId) => {
     if (!schedule) {
       return;
     }
-    setSchedule((prev) => ({ ...prev, events: prev.events.filter((row) => row.id !== rowId) }));
-    markDirty('schedule');
+    setSchedule((prev) => ({
+      ...prev,
+      events: prev.events.filter((row) => row.id !== rowId),
+    }));
+    markDirty("schedule");
   };
 
   const handleSaveBakara = async () => {
@@ -519,14 +576,17 @@ const TemplatesPage = () => {
       return;
     }
     setSaving((prev) => ({ ...prev, bakara: true }));
-    setError('');
-    setSuccessMessage('');
+    setError("");
+    setSuccessMessage("");
     try {
-      await saveBakaraTemplate(selectedTemplateId, { ...bakara, type: 'Bakara' });
+      await saveBakaraTemplate(selectedTemplateId, {
+        ...bakara,
+        type: "Bakara",
+      });
       setDirty((prev) => ({ ...prev, bakara: false }));
-      setSuccessMessage('תבנית הבקרה נשמרה בהצלחה.');
+      setSuccessMessage("תבנית הבקרה נשמרה בהצלחה.");
     } catch (err) {
-      setError('שמירת תבנית הבקרה נכשלה.');
+      setError("שמירת תבנית הבקרה נכשלה.");
     } finally {
       setSaving((prev) => ({ ...prev, bakara: false }));
     }
@@ -537,14 +597,17 @@ const TemplatesPage = () => {
       return;
     }
     setSaving((prev) => ({ ...prev, schedule: true }));
-    setError('');
-    setSuccessMessage('');
+    setError("");
+    setSuccessMessage("");
     try {
-      await saveScheduleTemplate(selectedTemplateId, { ...schedule, type: 'Schedule' });
+      await saveScheduleTemplate(selectedTemplateId, {
+        ...schedule,
+        type: "Schedule",
+      });
       setDirty((prev) => ({ ...prev, schedule: false }));
-      setSuccessMessage('תבנית הסדרה נשמרה בהצלחה.');
+      setSuccessMessage("תבנית הסדרה נשמרה בהצלחה.");
     } catch (err) {
-      setError('שמירת סדרת ג׳ נכשלה.');
+      setError("שמירת סדרת ג׳ נכשלה.");
     } finally {
       setSaving((prev) => ({ ...prev, schedule: false }));
     }
@@ -554,20 +617,29 @@ const TemplatesPage = () => {
     if (!bakara) {
       return null;
     }
-    return bakara.sheets.find((sheet) => sheet.sheetId === selectedSheetId) || bakara.sheets[0] || null;
+    return (
+      bakara.sheets.find((sheet) => sheet.sheetId === selectedSheetId) ||
+      bakara.sheets[0] ||
+      null
+    );
   }, [bakara, selectedSheetId]);
 
   const scheduleToOptions = useMemo(() => {
-    const sheetNames = (bakara?.sheets || []).map((sheet) => sheet.sheetName).filter(Boolean);
-    return ['כולם', ...sheetNames.filter((name) => name !== 'כולם')];
+    const sheetNames = (bakara?.sheets || [])
+      .map((sheet) => sheet.sheetName)
+      .filter(Boolean);
+    return ["כולם", ...sheetNames.filter((name) => name !== "כולם")];
   }, [bakara]);
 
-  const isActiveTabSaving = activeTab === 'bakara' ? saving.bakara : saving.schedule;
-  const isActiveTabDirty = activeTab === 'bakara' ? dirty.bakara : dirty.schedule;
-  const hasActiveTabData = activeTab === 'bakara' ? Boolean(bakara) : Boolean(schedule);
+  const isActiveTabSaving =
+    activeTab === "bakara" ? saving.bakara : saving.schedule;
+  const isActiveTabDirty =
+    activeTab === "bakara" ? dirty.bakara : dirty.schedule;
+  const hasActiveTabData =
+    activeTab === "bakara" ? Boolean(bakara) : Boolean(schedule);
 
   const handleSaveActiveTab = () => {
-    if (activeTab === 'bakara') {
+    if (activeTab === "bakara") {
       handleSaveBakara();
       return;
     }
@@ -596,38 +668,40 @@ const TemplatesPage = () => {
         sx={{
           p: { xs: 2, md: 3 },
           mt: 3,
-          width: '100%',
-          border: '1px solid',
-          borderColor: 'primary.main',
-          boxShadow: '0 14px 40px rgba(0,0,0,0.06)',
+          width: "100%",
+          border: "1px solid",
+          borderColor: "primary.main",
+          boxShadow: "0 14px 40px rgba(0,0,0,0.06)",
           borderRadius: 3,
         }}
       >
         <Stack
-          direction={{ xs: 'column', md: 'row' }}
+          direction={{ xs: "column", md: "row" }}
           spacing={2}
           justifyContent="space-between"
-          alignItems={{ xs: 'stretch', md: 'center' }}
-          sx={{ flexWrap: { xs: 'wrap', md: 'nowrap' } }}
+          alignItems={{ xs: "stretch", md: "center" }}
+          sx={{ flexWrap: { xs: "wrap", md: "nowrap" } }}
         >
           <Tabs
             value={selectedBakaraSheet?.sheetId || false}
             onChange={(event, val) => setSelectedSheetId(val)}
             variant="scrollable"
             scrollButtons="auto"
-            sx={{ flexGrow: 1, minWidth: 0 }}
+            sx={{ flexGrow: 1, minWidth: 0, direction: "rtl" }}
           >
             {bakara.sheets.map((sheet) => (
               <Tab
                 key={sheet.sheetId}
                 value={sheet.sheetId}
-                label={sheet.sheetName || 'גיליון'}
+                label={sheet.sheetName || "גיליון"}
                 draggable
-                onDragStart={(e) => e.dataTransfer.setData('text/plain', sheet.sheetId)}
+                onDragStart={(e) =>
+                  e.dataTransfer.setData("text/plain", sheet.sheetId)
+                }
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => {
                   e.preventDefault();
-                  const sourceId = e.dataTransfer.getData('text/plain');
+                  const sourceId = e.dataTransfer.getData("text/plain");
                   handleReorderBakaraSheets(sourceId, sheet.sheetId);
                 }}
               />
@@ -639,16 +713,16 @@ const TemplatesPage = () => {
             justifyContent="flex-end"
             sx={{
               flexShrink: 0,
-              flexWrap: 'nowrap',
-              minWidth: 'fit-content',
-              alignSelf: { xs: 'flex-end', md: 'auto' },
+              flexWrap: "nowrap",
+              minWidth: "fit-content",
+              alignSelf: { xs: "flex-end", md: "auto" },
             }}
           >
             <Tooltip title="הוסף גיליון חדש">
               <span>
                 <IconButton
                   onClick={handleAddBakaraSheet}
-                  sx={iconButtonSx('primary')}
+                  sx={iconButtonSx("primary")}
                 >
                   <LibraryAddIcon />
                 </IconButton>
@@ -659,7 +733,7 @@ const TemplatesPage = () => {
                 <IconButton
                   onClick={handleDuplicateBakaraSheet}
                   disabled={!selectedBakaraSheet}
-                  sx={iconButtonSx('success')}
+                  sx={iconButtonSx("success")}
                 >
                   <ContentCopyIcon />
                 </IconButton>
@@ -669,8 +743,10 @@ const TemplatesPage = () => {
               <span>
                 <IconButton
                   onClick={handleDeleteBakaraSheet}
-                  disabled={!selectedBakaraSheet || (bakara?.sheets?.length || 0) <= 1}
-                  sx={iconButtonSx('danger')}
+                  disabled={
+                    !selectedBakaraSheet || (bakara?.sheets?.length || 0) <= 1
+                  }
+                  sx={iconButtonSx("danger")}
                 >
                   <DeleteIcon />
                 </IconButton>
@@ -679,16 +755,23 @@ const TemplatesPage = () => {
           </Stack>
         </Stack>
 
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems={{ xs: 'stretch', md: 'center' }} sx={{ mt: 2 }}>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          spacing={2}
+          alignItems={{ xs: "stretch", md: "center" }}
+          sx={{ mt: 2 }}
+        >
           <TextField
             label="שם הגיליון"
-            value={selectedBakaraSheet?.sheetName || ''}
+            value={selectedBakaraSheet?.sheetName || ""}
             onChange={(event) => handleRenameBakaraSheet(event.target.value)}
             fullWidth
           />
         </Stack>
 
-        <TableContainer sx={{ mt: 2, overflowX: 'auto', width: '100%' }}>
+        <TableContainer
+          sx={{ mt: 2, overflowX: "auto", width: "100%", direction: "rtl" }}
+        >
           <Table size="small">
             <TableHead>
               <TableRow>
@@ -706,7 +789,11 @@ const TemplatesPage = () => {
             </TableHead>
             <TableBody>
               <TableRow>
-                <TableCell colSpan={(selectedBakaraSheet?.columns?.length || 0) + 1} align="center" sx={{ py: 1.25, bgcolor: 'action.hover' }}>
+                <TableCell
+                  colSpan={(selectedBakaraSheet?.columns?.length || 0) + 1}
+                  align="center"
+                  sx={{ py: 1.25, bgcolor: "action.hover" }}
+                >
                   <Button size="small" onClick={handleAddBakaraRow}>
                     הוספת שורה חדשה
                   </Button>
@@ -716,24 +803,35 @@ const TemplatesPage = () => {
                 <TableRow key={row.id}>
                   {selectedBakaraSheet.columns.map((column) => (
                     <TableCell key={column.key}>
-                      {column.type === 'evaluation' ? (
+                      {column.type === "evaluation" ? (
                         <EvaluationCell
                           value={row[column.key]}
-                          onChange={(val) => handleBakaraRowChange(row.id, column.key, val)}
+                          onChange={(val) =>
+                            handleBakaraRowChange(row.id, column.key, val)
+                          }
                         />
                       ) : (
                         <TextField
                           fullWidth
                           variant="standard"
-                          value={row[column.key] || ''}
-                          onChange={(event) => handleBakaraRowChange(row.id, column.key, event.target.value)}
+                          value={row[column.key] || ""}
+                          onChange={(event) =>
+                            handleBakaraRowChange(
+                              row.id,
+                              column.key,
+                              event.target.value,
+                            )
+                          }
                         />
                       )}
                     </TableCell>
                   ))}
                   <TableCell align="center">
                     <Tooltip title="מחק שורה">
-                      <IconButton onClick={() => handleDeleteBakaraRow(row.id)} sx={compactIconButtonSx('danger')}>
+                      <IconButton
+                        onClick={() => handleDeleteBakaraRow(row.id)}
+                        sx={compactIconButtonSx("danger")}
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </Tooltip>
@@ -761,19 +859,30 @@ const TemplatesPage = () => {
         sx={{
           p: { xs: 2, md: 3 },
           mt: 3,
-          width: '100%',
-          border: '1px solid',
-          borderColor: 'secondary.main',
-          boxShadow: '0 14px 40px rgba(0,0,0,0.06)',
+          width: "100%",
+          border: "1px solid",
+          borderColor: "secondary.main",
+          boxShadow: "0 14px 40px rgba(0,0,0,0.06)",
           borderRadius: 3,
         }}
       >
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} justifyContent="space-between" alignItems={{ xs: 'stretch', md: 'center' }}>
-          <Typography variant="h5" fontWeight={700}>סדרה ג׳</Typography>
-          <Typography variant="body2" color="text.secondary">עריכת אירועי הסדרה לפי המבנה הקיים</Typography>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          spacing={2}
+          justifyContent="space-between"
+          alignItems={{ xs: "stretch", md: "center" }}
+        >
+          <Typography variant="h5" fontWeight={700}>
+            סדרה ג׳
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            עריכת אירועי הסדרה לפי המבנה הקיים
+          </Typography>
         </Stack>
 
-        <TableContainer sx={{ mt: 2, overflowX: 'auto', width: '100%' }}>
+        <TableContainer
+          sx={{ mt: 2, overflowX: "auto", width: "100%", direction: "rtl" }}
+        >
           <Table size="small">
             <TableHead>
               <TableRow>
@@ -791,7 +900,11 @@ const TemplatesPage = () => {
             </TableHead>
             <TableBody>
               <TableRow>
-                <TableCell colSpan={schedule.columns.length + 1} align="center" sx={{ py: 1.25, bgcolor: 'action.hover' }}>
+                <TableCell
+                  colSpan={schedule.columns.length + 1}
+                  align="center"
+                  sx={{ py: 1.25, bgcolor: "action.hover" }}
+                >
                   <Button size="small" onClick={handleAddScheduleRow}>
                     הוספת שורה חדשה
                   </Button>
@@ -801,15 +914,28 @@ const TemplatesPage = () => {
                 <TableRow key={row.id}>
                   {schedule.columns.map((column) => (
                     <TableCell key={column.key}>
-                      {column.key === 'to' ? (
+                      {column.key === "to" ? (
                         <Box>
                           <TextField
                             select
                             fullWidth
                             variant="standard"
                             label="יעד"
-                            value={row[column.key] || ''}
-                            onChange={(event) => handleScheduleRowChange(row.id, column.key, event.target.value)}
+                            value={row[column.key] || ""}
+                            onChange={(event) =>
+                              handleScheduleRowChange(
+                                row.id,
+                                column.key,
+                                event.target.value,
+                              )
+                            }
+                            SelectProps={{
+                              MenuProps: {
+                                PaperProps: {
+                                  sx: { direction: "rtl", textAlign: "right" },
+                                },
+                              },
+                            }}
                           >
                             {scheduleToOptions.map((option) => (
                               <MenuItem key={option} value={option}>
@@ -817,30 +943,54 @@ const TemplatesPage = () => {
                               </MenuItem>
                             ))}
                           </TextField>
-                          {row[column.key] && !scheduleToOptions.includes(row[column.key]) && (
-                            <Typography variant="caption" color="error" sx={{ mt: 0.5, display: 'block' }}>
-                              ערך זה אינו תואם לגיליונות הבקרה. בחר יעד תקף.
-                            </Typography>
-                          )}
+                          {row[column.key] &&
+                            !scheduleToOptions.includes(row[column.key]) && (
+                              <Typography
+                                variant="caption"
+                                color="error"
+                                sx={{ mt: 0.5, display: "block" }}
+                              >
+                                ערך זה אינו תואם לגיליונות הבקרה. בחר יעד תקף.
+                              </Typography>
+                            )}
                         </Box>
                       ) : (
                         <TextField
                           fullWidth
                           variant="standard"
-                          type={column.key === 'time' ? 'time' : 'text'}
-                          inputProps={column.key === 'time' ? { step: 60 } : undefined}
-                          InputLabelProps={column.key === 'time' ? { shrink: true } : undefined}
-                          value={row[column.key] || ''}
-                          onChange={(event) => handleScheduleRowChange(row.id, column.key, event.target.value)}
-                          multiline={column.key === 'message' || column.key === 'notes'}
-                          minRows={column.key === 'message' || column.key === 'notes' ? 2 : 1}
+                          type={column.key === "time" ? "time" : "text"}
+                          inputProps={
+                            column.key === "time" ? { step: 60 } : undefined
+                          }
+                          InputLabelProps={
+                            column.key === "time" ? { shrink: true } : undefined
+                          }
+                          value={row[column.key] || ""}
+                          onChange={(event) =>
+                            handleScheduleRowChange(
+                              row.id,
+                              column.key,
+                              event.target.value,
+                            )
+                          }
+                          multiline={
+                            column.key === "message" || column.key === "notes"
+                          }
+                          minRows={
+                            column.key === "message" || column.key === "notes"
+                              ? 2
+                              : 1
+                          }
                         />
                       )}
                     </TableCell>
                   ))}
                   <TableCell align="center">
                     <Tooltip title="מחק שורה">
-                      <IconButton onClick={() => handleDeleteScheduleRow(row.id)} sx={compactIconButtonSx('danger')}>
+                      <IconButton
+                        onClick={() => handleDeleteScheduleRow(row.id)}
+                        sx={compactIconButtonSx("danger")}
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </Tooltip>
@@ -855,7 +1005,11 @@ const TemplatesPage = () => {
   };
 
   return (
-    <Box className="page-shell" dir="rtl" sx={{ maxWidth: 'none', width: '100%', px: { xs: 2, md: 3 } }}>
+    <Box
+      className="page-shell"
+      dir="rtl"
+      sx={{ maxWidth: "none", width: "100%", px: { xs: 2, md: 3 } }}
+    >
       <Typography variant="h4" fontWeight={700}>
         תבניות
       </Typography>
@@ -863,7 +1017,13 @@ const TemplatesPage = () => {
         בחר תבנית, ערוך את הבקרה והסדרה ושמור כדי לדרוס את הקובץ הקיים.
       </Typography>
 
-      <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-start', direction: 'ltr' }}>
+      <Box
+        sx={{
+          mt: 2,
+          display: "flex",
+          justifyContent: "flex-start",
+        }}
+      >
         <Stack
           direction="row"
           spacing={1}
@@ -871,19 +1031,25 @@ const TemplatesPage = () => {
           sx={{
             p: 0.75,
             borderRadius: 2.5,
-            border: '1px solid',
-            borderColor: 'divider',
-            bgcolor: 'background.paper',
+            border: "1px solid",
+            borderColor: "divider",
+            bgcolor: "background.paper",
           }}
         >
           <Tooltip title="שמור שינויים">
             <span>
               <IconButton
                 onClick={handleSaveActiveTab}
-                disabled={!hasActiveTabData || !isActiveTabDirty || isActiveTabSaving}
-                sx={iconButtonSx('primary')}
+                disabled={
+                  !hasActiveTabData || !isActiveTabDirty || isActiveTabSaving
+                }
+                sx={iconButtonSx("primary")}
               >
-                {isActiveTabSaving ? <CircularProgress size={18} /> : <SaveIcon />}
+                {isActiveTabSaving ? (
+                  <CircularProgress size={18} />
+                ) : (
+                  <SaveIcon />
+                )}
               </IconButton>
             </span>
           </Tooltip>
@@ -898,6 +1064,12 @@ const TemplatesPage = () => {
             label="בחר תבנית"
             value={selectedTemplateId}
             onChange={(event) => setSelectedTemplateId(event.target.value)}
+            sx={{ textAlign: "right" }}
+            MenuProps={{
+              PaperProps: {
+                sx: { direction: "rtl", textAlign: "right" },
+              },
+            }}
           >
             {templates.map((template) => (
               <MenuItem key={template.templateId} value={template.templateId}>
@@ -920,27 +1092,53 @@ const TemplatesPage = () => {
       )}
 
       {loading ? (
-        <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
+        <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
           <CircularProgress />
         </Box>
       ) : (
-        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '70vh' }}>
-          <Paper sx={{ mt: 3, borderRadius: 3, border: '1px solid', borderColor: 'divider' }}>
+        <Box
+          sx={{ display: "flex", flexDirection: "column", minHeight: "70vh" }}
+        >
+          <Paper
+            sx={{
+              mt: 3,
+              borderRadius: 3,
+              border: "1px solid",
+              borderColor: "divider",
+            }}
+          >
             <Tabs
               value={activeTab}
               onChange={(event, val) => setActiveTab(val)}
               centered={!isMobile}
-              variant={isMobile ? 'fullWidth' : 'standard'}
+              variant={isMobile ? "fullWidth" : "standard"}
               indicatorColor="primary"
               textColor="primary"
               TabIndicatorProps={{ sx: { height: 4, borderRadius: 2 } }}
+              sx={{ direction: "rtl" }}
             >
-              <Tab value="bakara" label="בקרה" sx={{ fontWeight: 800, fontSize: isMobile ? 14 : 16, letterSpacing: 0.2 }} />
-              <Tab value="schedule" label="סדרה ג׳" sx={{ fontWeight: 800, fontSize: isMobile ? 14 : 16, letterSpacing: 0.2 }} />
+              <Tab
+                value="bakara"
+                label="בקרה"
+                sx={{
+                  fontWeight: 800,
+                  fontSize: isMobile ? 14 : 16,
+                  letterSpacing: 0.2,
+                }}
+              />
+              <Tab
+                value="schedule"
+                label="סדרה ג׳"
+                sx={{
+                  fontWeight: 800,
+                  fontSize: isMobile ? 14 : 16,
+                  letterSpacing: 0.2,
+                }}
+              />
             </Tabs>
           </Paper>
           <Box sx={{ flex: 1 }}>
-            {activeTab === 'bakara' ? renderBakaraTab() : renderScheduleTab()}
+            {activeTab === "bakara" ? renderBakaraTab() : renderScheduleTab()}
           </Box>
         </Box>
       )}

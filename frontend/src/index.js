@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import Hospitals from './pages/Hospitals';
 import Drills from './pages/Drills';
+import ActiveDrillsDashboard from './pages/ActiveDrillsDashboard';
 import NewDrillPage from './pages/NewDrillPage';
 import DrillEditorPage from './pages/DrillEditorPage';
 import PublicTesterPage from './pages/PublicTesterPage';
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/home" element={<Home />} />
             <Route path="/hospitals" element={<Hospitals />} />
             <Route path="/drills" element={<Drills />} />
+            <Route path="/drills/active" element={<ActiveDrillsDashboard />} />
             <Route path="/drills/new" element={<NewDrillPage />} />
             <Route path="/drills/:drillId/edit" element={<DrillEditorPage />} />
             <Route path="/public/:drillId" element={<PublicTesterPage />} />

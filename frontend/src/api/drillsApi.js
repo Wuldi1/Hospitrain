@@ -144,3 +144,17 @@ export function updatePublicRow(drillId, sheetId, rowId, data) {
     body: JSON.stringify(data),
   });
 }
+
+export function registerPublicTesterSession(drillId, payload) {
+  return request(`/api/drills/public/${drillId}/tester-session`, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+export function ackPublicScheduleEvent(drillId, eventId, payload) {
+  return request(`/api/drills/public/${drillId}/schedule/events/${eventId}/ack`, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}

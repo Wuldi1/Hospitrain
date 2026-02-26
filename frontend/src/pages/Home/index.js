@@ -69,6 +69,18 @@ const Home = () => {
     })
     .sort((a, b) => new Date(a.date || 0) - new Date(b.date || 0))
     .slice(0, 6);
+  const activeDrillNow = [...drills]
+    .filter((d) => {
+      const start = new Date(d.date || '');
+      if (Number.isNaN(start.getTime())) return false;
+      const now = new Date();
+      const isSameDay =
+        start.getFullYear() === now.getFullYear() &&
+        start.getMonth() === now.getMonth() &&
+        start.getDate() === now.getDate();
+      return isSameDay && start.getTime() <= now.getTime();
+    })
+    .sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime())[0] || null;
 
   return (
     <Box className="page-shell" dir="rtl">
@@ -103,6 +115,11 @@ const Home = () => {
             <Button variant="outlined" color="inherit" onClick={() => navigate('/drills')} sx={{ borderColor: 'rgba(255,255,255,0.5)', color: 'white' }}>
               <RtlIconLabel icon={<ArrowBack />}>לכל התרגילים</RtlIconLabel>
             </Button>
+            {activeDrillNow ? (
+              <Button variant="contained" color="success" onClick={() => navigate('/drills/active')}>
+                {`ניהול תרגיל ${activeDrillNow.name || ''}`.trim()}
+              </Button>
+            ) : null}
           </Stack>
         </Stack>
       </Box>
